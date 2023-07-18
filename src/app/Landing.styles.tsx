@@ -54,6 +54,7 @@ export const StripThree = styled(StripOne)`
 
 export const FormsContainer = styled(BigLogoContainer)`
     width: 35%;
+    min-width: 500px;
     background-color: white;
     display: flex;
     flex-direction: column;
