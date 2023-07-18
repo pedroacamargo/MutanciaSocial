@@ -21,7 +21,7 @@ export const BigLogoContainer = styled.div`
 
 
 interface StripContainerProps {
-    linesAlignment: 'left' | 'center' | 'right',
+    linesalignment: 'left' | 'center' | 'right',
 }
 
 export const StripsContainer = styled.div<StripContainerProps>`
@@ -29,7 +29,7 @@ export const StripsContainer = styled.div<StripContainerProps>`
     display: flex;
     flex-direction: column;
     justify-content: end;
-    align-items: ${({ linesAlignment }) => linesAlignment === 'left' ? 'flex-start' : linesAlignment === 'center' ? 'center' : linesAlignment === 'right' ? 'flex-end' : 'stretch'};
+    align-items: ${(props) => props.linesalignment === 'left' ? 'flex-start' : props.linesalignment === 'center' ? 'center' : props.linesalignment === 'right' ? 'flex-end' : 'stretch'};
     margin: 125px;
     
     `
