@@ -18,21 +18,51 @@ import {
   ButtonBase,
   ButtonInverted,
 } from "./Landing.styles"
-import GlobalStyle from "./GlobalStyles.styles"
 import Image from "next/image"
 import { FaUser, FaLock, FaGoogle, FaEnvelope } from 'react-icons/fa';
-
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from '../redux/user/user.action'
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const [signUp, setSignUp] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const schema = yup.object().shape({
+    username: yup.string().required('Username field is required.'),
+    email: yup.string().email().required('Email field is required'),
+    password: yup.string().min(4).max(20).required('Password field is required'),
+    confirmPassword: yup.string().oneOf([yup.ref("password"), "Password don't match!"]).required('Password is required'),
+  })
+
+  const {register, handleSubmit, formState: {errors}} = useForm({
+    resolver: yupResolver(schema)
+  })
+
+  const onSubmit = (user: {
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  }) => {
+    dispatch(setCurrentUser(user))
+  }
+
   return (
     <>
-      <GlobalStyle />
-
       <main style={{display: "flex", overflow: "hidden"}}>
 
         <BigLogoContainer>
 
-          <StripsContainer linesAlignment="right">
+          <StripsContainer linesalignment="right">
             <StripOne />
             <StripTwo />
             <StripThree />
@@ -40,7 +70,7 @@ export default function Home() {
   
           <Image src="/Mutancia-Social.png" alt="Mutancia Social Logo" width={300} height={300}/>
 
-          <StripsContainer linesAlignment="left">
+          <StripsContainer linesalignment="left">
             <StripThree />
             <StripTwo />
             <StripOne />
@@ -94,38 +124,38 @@ export default function Home() {
             <DividerRow style={{width: "100%", marginTop: "30px"}}/>
           </HeaderDividerContainer>
 
-          <SignUpForm action="#">
+          <SignUpForm onSubmit={handleSubmit(onSubmit)}>
 
             <InputContainer>
               <FaUser size={20} color="white" style={{
                 margin: "auto"
               }}/>
-              <InputForm type="text" placeholder="Username..."/>
+              <InputForm type="text" placeholder="Username..." {...register("username")}/>
             </InputContainer>
 
             <InputContainer>
               <FaEnvelope size={20} color="white" style={{
                 margin: "auto"                
               }}/>
-              <InputForm type="text" placeholder="Email..."/>
+              <InputForm type="email" placeholder="Email..." {...register("email")}/>
             </InputContainer>
 
             <InputContainer>
               <FaLock size={20} color="white" style={{
                 margin: "auto"
               }}/>
-              <InputForm type="text" placeholder="Password..."/>
+              <InputForm type="password" placeholder="Password..." {...register("password")}/>
             </InputContainer>
 
             <InputContainer>
               <FaLock size={20} color="white" style={{
                 margin: "auto"                
               }}/>
-              <InputForm type="text" placeholder="Confirm Password..."/>
+              <InputForm type="password" placeholder="Confirm Password..." {...register("confirmPassword")}/>
             </InputContainer>
 
             <SignUpSubmitButtonsContainer>
-              <ButtonInverted type="button">Sign Up</ButtonInverted>
+              <ButtonInverted type="submit">Sign Up</ButtonInverted>
               <span style={{fontFamily: "monospace"}}>OR</span>
               <ButtonInverted type="button"><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonInverted>
             </SignUpSubmitButtonsContainer>
