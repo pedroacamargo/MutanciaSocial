@@ -18,15 +18,17 @@ import {
   ButtonBase,
   ButtonInverted,
 } from "./Landing.styles"
-import GlobalStyle from "./GlobalStyles.styles"
 import Image from "next/image"
 import { FaUser, FaLock, FaGoogle, FaEnvelope } from 'react-icons/fa';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from '../redux/user/user.action'
 
 export default function Home() {
+  const dispatch = useDispatch();
   const [signUp, setSignUp] = useState({
     username: "",
     email: "",
@@ -45,19 +47,17 @@ export default function Home() {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: {
+  const onSubmit = (user: {
     username: string,
     email: string,
     password: string,
     confirmPassword: string
   }) => {
-    console.log(data)
+    dispatch(setCurrentUser(user))
   }
 
   return (
     <>
-      <GlobalStyle />
-
       <main style={{display: "flex", overflow: "hidden"}}>
 
         <BigLogoContainer>

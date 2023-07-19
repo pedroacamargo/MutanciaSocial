@@ -1,9 +1,5 @@
 // This file supports server side rendering for styled components
-
-
 'use client'
-
-
 
 import React, {useState} from "react"
 import { useServerInsertedHTML } from 'next/navigation'
@@ -26,7 +22,9 @@ export default function StyledComponentsRegistry({
 
     return (
 
-        <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
+        <StyleSheetManager 
+        sheet={styledComponentsStyleSheet.instance} 
+        enableVendorPrefixes>
             {children}
         </StyleSheetManager>
 
