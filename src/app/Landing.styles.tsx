@@ -9,6 +9,36 @@ const randomizeStripSize = keyframes`
     }
 `
 
+const wobble1 = keyframes`
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(calc(var(--uib-size) * 0.2)) scale(1.1);
+    }
+`
+
+const wobble2 = keyframes`
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(calc(var(--uib-size) * -0.2)) scale(1.1);
+    }
+`
+
+const rotate01561 = keyframes`
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+`
+
 export const BigLogoContainer = styled.div`
     width: 65%;
     height: 100vh;
@@ -160,5 +190,52 @@ export const ButtonInverted = styled(ButtonBase)`
     &:hover {
         background-color: black;
         color: white;
+    }
+`
+
+
+export const ErrorBox = styled.div`
+    padding: 10px;
+    background-color: #f74242;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin: 10px;
+    font-weight: bold;
+    font-size: .9em;
+`
+interface LoadingMomentumProps {
+    display: boolean,
+}
+
+export const LoadingMomentum = styled.div<LoadingMomentumProps>`
+    --uib-size: 40px;
+    --uib-speed: 1s;
+    --uib-color: black;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display:  ${(props) => props.display === true ? 'flex' : 'none'};
+    align-items: center;
+    justify-content: center;
+    height: var(--uib-size);
+    width: var(--uib-size);
+    animation: ${rotate01561} var(--uib-speed) linear infinite;
+
+    &::before, &::after {
+        content: '';
+        height: 25%;
+        width: 25%;
+        border-radius: 50%;
+        background-color: var(--uib-color);
+    }
+
+    &::before {
+        animation: ${wobble2} calc(var(--uib-speed) * 1.25) ease-in-out infinite;
+        margin-right: 10%;
+    }
+
+    &::after {
+        animation: ${wobble1} calc(var(--uib-speed) * 1.25) ease-in-out infinite;
     }
 `

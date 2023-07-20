@@ -22,3 +22,12 @@ export const userReducer = (state = INITIAL_STATE, action) => {
 
 
 }
+
+
+/* 
+currentUser: {
+    displayName: string,
+    email: string,
+    uid: string,
+}
+*/
