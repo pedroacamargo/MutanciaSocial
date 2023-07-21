@@ -24,7 +24,9 @@ export async function SignUp({
             email: auth.currentUser?.email,
             uid: auth.currentUser?.uid,
         });
+        return true; // signin success
     } catch (err) {
         console.error(err)
+        return false; // signup failure
     }
 }

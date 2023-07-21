@@ -107,60 +107,6 @@ export const DividerRow = styled.div`
     background-color: black;
 `
 
-export const SignInForm = styled.form`
-    margin-top: 10px;
-    width: 450px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-`
-export const SignUpForm = styled(SignInForm)``
-
-
-export const InputContainer = styled.div`
-    width: 80%;
-    border: 1px solid #00000092;
-    box-shadow: 2px 2px 10px #00000061;
-    background-color: black;
-    border-radius: 10px;
-    display: flex;
-    justify-content: end;
-    margin: 5px;
-`
-
-export const InputForm = styled.input`
-    padding: 6px;
-    border: none;
-    width: 82%;
-    border-radius: 9px;
-    outline: none;
-    font-size: 1.3em;
-`
-
-export const RememberMeContainer = styled.div`
-    display: flex;
-    width: 350px;
-    margin-top: 7px;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: row;
-`
-
-export const SignInSubmitButtonsContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    margin-top: 5px;
-    width: 100%;
-`
-
-export const SignUpSubmitButtonsContainer = styled(SignInSubmitButtonsContainer)`
-    margin-top: 10px;
-    flex-direction: column;
-`
-
 export const ButtonBase = styled.button`
     padding: 10px;
     font-size: 1.2em;
@@ -205,7 +151,7 @@ export const ErrorBox = styled.div`
     font-size: .9em;
 `
 interface LoadingMomentumProps {
-    display: boolean,
+    display: string,
 }
 
 export const LoadingMomentum = styled.div<LoadingMomentumProps>`
@@ -215,7 +161,7 @@ export const LoadingMomentum = styled.div<LoadingMomentumProps>`
     position: absolute;
     bottom: 10px;
     right: 10px;
-    display:  ${(props) => props.display === true ? 'flex' : 'none'};
+    display:  ${(props) => props.display === 'true' ? 'flex' : 'none'};
     align-items: center;
     justify-content: center;
     height: var(--uib-size);
