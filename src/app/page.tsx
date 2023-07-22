@@ -13,11 +13,33 @@ import {
   LoadingMomentum
 } from "./Landing.styles"
 import Image from "next/image"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { auth } from "@/utils/firebase";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "@/redux/user/user.action";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
-
+  const dispatch = useDispatch();
+  const router = useRouter();
+  console.log(auth)
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth , (user) => {
+      dispatch(setCurrentUser({
+        displayName: user?.displayName,
+        email: user?.email,
+        uid: user?.uid,
+      }));
+    })
+    
+    // if (auth) router.push('/home');
+    
+    return unsubscribe; 
+  })
+  
   return (
     <>
       <main style={{display: "flex", overflow: "hidden"}}>

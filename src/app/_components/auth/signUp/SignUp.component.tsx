@@ -23,8 +23,9 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { setCurrentUser } from '@/redux/user/user.action';
 import { SignUp } from './SignUp.server';
-import { auth } from '@/utils/firebase';
 import { useRouter } from 'next/navigation';
+import { updateProfile, getAuth } from 'firebase/auth';
+import { useState } from 'react';
 
 interface SignUpComponentProps {
     setIsLoading: (isLoading: boolean) => void,
@@ -32,6 +33,7 @@ interface SignUpComponentProps {
 
 export default function SignUpComponent(props: SignUpComponentProps) {
     const { setIsLoading } = props;
+    const [usernameAlreadyExistsError, setUsernameAlreadyExistsError] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
     
@@ -54,25 +56,44 @@ export default function SignUpComponent(props: SignUpComponentProps) {
         confirmPassword: string
     }) => {
         setIsLoading(true);
-
+        const auth: any = getAuth();
+        
+        console.log(user);
         try {
             const response = await SignUp(user);
-            dispatch(setCurrentUser({
-                displayName: user.username,
-                email: auth.currentUser?.email,
-                uid: auth.currentUser?.uid,
-            }))
-
+            
             if (response) {
+
+                try {
+                    updateProfile(auth.currentUser, {
+                        displayName: user.username
+                    })
+                } catch (err) {
+                    console.error("Display name wasn't updated!");
+                }
+
+
+                dispatch(setCurrentUser({
+                    displayName: user.username,
+                    email: auth.currentUser?.email,
+                    uid: auth.currentUser?.uid,
+                }));
+                
                 console.log("Signed up Successfully");
                 router.push("/home");
-            } else console.log("Sign Up failed :(");
-
+            } else {
+                console.log("Sign Up failed :(");
+                setUsernameAlreadyExistsError(true);
+            } 
         } catch (err) {
             console.error(err);
         }
 
         setIsLoading(false);
+    }
+
+    const resetErrorBoxes = () => {
+        setUsernameAlreadyExistsError(false);
     }
 
     return (
@@ -82,34 +103,35 @@ export default function SignUpComponent(props: SignUpComponentProps) {
                 <FaUser size={20} color="white" style={{
                 margin: "auto"
                 }}/>
-                <InputForm type="text" placeholder="Username..." {...register("username")}/>
+                <InputForm type="text" placeholder="Username..." {...register("username")} onChange={resetErrorBoxes}/>
             </InputContainer>
 
             <InputContainer>
                 <FaEnvelope size={20} color="white" style={{
                 margin: "auto"                
                 }}/>
-                <InputForm type="email" placeholder="Email..." {...register("email")}/>
+                <InputForm type="email" placeholder="Email..." {...register("email")} onChange={resetErrorBoxes}/>
             </InputContainer>
 
             <InputContainer>
                 <FaLock size={20} color="white" style={{
                 margin: "auto"
                 }}/>
-                <InputForm type="password" placeholder="Password..." {...register("password")}/>
+                <InputForm type="password" placeholder="Password..." {...register("password")} onChange={resetErrorBoxes}/>
             </InputContainer>
 
             <InputContainer>
                 <FaLock size={20} color="white" style={{
                 margin: "auto"                
                 }}/>
-                <InputForm type="password" placeholder="Confirm Password..." {...register("confirmPassword")}/>
+                <InputForm type="password" placeholder="Confirm Password..." {...register("confirmPassword")} onChange={resetErrorBoxes}/>
             </InputContainer>
 
             {errors.confirmPassword ? ( <ErrorBox>{errors.confirmPassword?.message}</ErrorBox> 
             ) : errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox>
             ) : errors.email ? (<ErrorBox>{errors.email?.message}</ErrorBox>
             ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> ) : <></>} 
+            {usernameAlreadyExistsError && <ErrorBox> Username already exists! </ErrorBox>}
 
             <SignUpSubmitButtonsContainer>
                 <ButtonInverted type="submit">Sign Up</ButtonInverted>
