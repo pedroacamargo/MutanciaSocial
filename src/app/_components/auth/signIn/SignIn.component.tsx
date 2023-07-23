@@ -90,8 +90,8 @@ export default function SignInComponent(props: SignInComponentProps) {
                 <label htmlFor="rememberme">Remember me</label>
             </RememberMeContainer>
 
-            {errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox> && !usernameWrongErrorBox
-            ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> && !usernameWrongErrorBox) : <></>}
+            {errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox> || !usernameWrongErrorBox
+            ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> || !usernameWrongErrorBox) : <></>}
             {usernameWrongErrorBox && <ErrorBox>Please enter a valid Username or Password</ErrorBox>}
 
             <SignInSubmitButtonsContainer>

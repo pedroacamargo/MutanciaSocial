@@ -39,6 +39,19 @@ const rotate01561 = keyframes`
     }
 `
 
+export const MobileMutantial = styled.h1`
+    font-size: 10vw;
+    width: 100vw;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    opacity: .8;
+    padding-top: 30px;
+    @media screen and (min-width: 800px) {
+        display: none;
+    }
+`
+
 export const BigLogoContainer = styled.div`
     width: 65%;
     height: 100vh;
@@ -47,6 +60,10 @@ export const BigLogoContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    @media screen and (max-width: 800px) {
+        display: none;
+    }
 `
 
 
@@ -90,6 +107,32 @@ export const FormsContainer = styled(BigLogoContainer)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: auto;
+    box-sizing: border-box;
+    
+    @media screen and (max-width: 800px) {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Firefox custom scrollbar */
+    &::-webkit-scrollbar {
+        display: block; /* Safari and Chrome */
+    }
+
+    /* Webkit, Edge, and Opera custom scrollbar */
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #f1eeee; /* Change the track background color */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #000000; /* Change the thumb color */
+        border-radius: 5px; /* Round the edges of the thumb */
+    }
 `
 
 export const HeaderDividerContainer = styled.div`
@@ -98,6 +141,17 @@ export const HeaderDividerContainer = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: row;
+`
+
+export const DividerSquare = styled.div`
+    width: 20px;
+    height: 9px;
+    position: relative;
+    margin-left: -10px;
+    margin-right: -10px;
+    top: 10px;
+    background-color: black;
+    transform: rotate(45deg);
 `
 
 export const DividerRow = styled.div`

@@ -2,6 +2,7 @@
 import SignUpComponent from "./_components/auth/signUp/SignUp.component";
 import SignInComponent from "./_components/auth/signIn/SignIn.component";
 import {
+  MobileMutantial,
   BigLogoContainer,
   FormsContainer,
   StripsContainer,
@@ -9,8 +10,9 @@ import {
   StripTwo,
   StripThree,
   HeaderDividerContainer,
+  DividerSquare,
   DividerRow,
-  LoadingMomentum
+  LoadingMomentum,
 } from "./Landing.styles"
 import Image from "next/image"
 import { useEffect, useState } from "react";
@@ -24,7 +26,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  console.log(auth)
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth , (user) => {
@@ -33,16 +34,15 @@ export default function Home() {
         email: user?.email,
         uid: user?.uid,
       }));
+      if (user) router.push('/home');
     })
-    
-    // if (auth) router.push('/home');
-    
+        
     return unsubscribe; 
   })
   
   return (
     <>
-      <main style={{display: "flex", overflow: "hidden"}}>
+      <main style={{display: "flex", overflow: "hidden",height: "100vh"}}>
 
         <BigLogoContainer>
 
@@ -78,6 +78,8 @@ export default function Home() {
 
 
           <HeaderDividerContainer>
+            <DividerRow style={{width: "100%", marginTop: "30px"}}/>
+            <DividerSquare/>
             <DividerRow style={{width: "100%", marginTop: "30px"}}/>
           </HeaderDividerContainer>
 

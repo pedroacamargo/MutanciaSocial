@@ -7,6 +7,10 @@ export const SignInForm = styled.form`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    @media screen and (max-width: 500px) {
+        width: 100%;
+    }
 `
 export const SignUpForm = styled(SignInForm)``
 
@@ -38,6 +42,9 @@ export const RememberMeContainer = styled.div`
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
+    @media screen and (max-width: 500px) {
+        width: 80%;
+    }
 `
 
 export const SignInSubmitButtonsContainer = styled.div`
@@ -47,6 +54,13 @@ export const SignInSubmitButtonsContainer = styled.div`
     flex-direction: row;
     margin-top: 5px;
     width: 100%;
+    @media screen and (max-width: 500px) {
+        font-size: .9em;
+    }
+
+    @media screen and (max-width: 340px) {
+        flex-direction: column;
+    }
 `
 
 export const SignUpSubmitButtonsContainer = styled(SignInSubmitButtonsContainer)`
