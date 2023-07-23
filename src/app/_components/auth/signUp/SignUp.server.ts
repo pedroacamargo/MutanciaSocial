@@ -1,6 +1,6 @@
 import { auth, db } from "@/utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, getDocs, collection } from "firebase/firestore";
 
 export async function SignUp({
     username,
@@ -13,9 +13,21 @@ export async function SignUp({
     password: string,
     confirmPassword: string,
 }) {
+    const usersDBRef = collection(db, "authentication");
+    const data = await getDocs(usersDBRef);
+
+
     if (password != confirmPassword) return;
 
-    const usersDBRef = collection(db, "authentication");
+    const repeatedUser = data.docs.some((doc) => {
+        if (doc.data().displayName != username) return false;
+        return true;
+    });
+
+    if (repeatedUser) {
+        console.error("Username already exists!");
+        return false;
+    }
 
     try {
         await createUserWithEmailAndPassword(auth, email, password);

@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/redux/user/user.action";
 import { useRouter } from "next/navigation";
 import { auth } from "@/utils/firebase";
+import { useState } from "react";
 
 interface SignInComponentProps {
     setIsLoading: (isLoading: boolean) => void,
@@ -25,6 +26,7 @@ interface SignInComponentProps {
 
 export default function SignInComponent(props: SignInComponentProps) {
     const { setIsLoading } = props;
+    const [usernameWrongErrorBox, setUsernameWrongErrorBox] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -54,7 +56,10 @@ export default function SignInComponent(props: SignInComponentProps) {
             if (response) {
                 console.log("Signed up Successfully");
                 router.push("/home");
-            } else console.log("Sign Up failed :(");
+            } else {
+                console.log("Sign Up failed :(");
+                setUsernameWrongErrorBox(true);
+            } 
 
         } catch(err) {
             console.error(err);
@@ -85,8 +90,9 @@ export default function SignInComponent(props: SignInComponentProps) {
                 <label htmlFor="rememberme">Remember me</label>
             </RememberMeContainer>
 
-            {errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox>
-            ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> ) : <></>} 
+            {errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox> || !usernameWrongErrorBox
+            ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> || !usernameWrongErrorBox) : <></>}
+            {usernameWrongErrorBox && <ErrorBox>Please enter a valid Username or Password</ErrorBox>}
 
             <SignInSubmitButtonsContainer>
                 <ButtonBase type="submit">Sign In</ButtonBase>
