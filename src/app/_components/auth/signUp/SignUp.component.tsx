@@ -80,7 +80,7 @@ export default function SignUpComponent(props: SignUpComponentProps) {
                 }));
                 
                 console.log("Signed up Successfully");
-                router.push("/home");
+                router.push("/dashboard");
             } else {
                 console.log("Sign Up failed :(");
                 setUsernameAlreadyExistsError(true);

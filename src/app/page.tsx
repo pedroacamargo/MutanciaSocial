@@ -35,9 +35,8 @@ export default function Home() {
         email: user?.email,
         uid: user?.uid,
       }));
-      if (user) router.push('/home');
+      if (user) router.push('/dashboard');
     })
-        
     return unsubscribe; 
   })
   

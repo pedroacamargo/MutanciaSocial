@@ -55,7 +55,7 @@ export default function SignInComponent(props: SignInComponentProps) {
 
             if (response) {
                 console.log("Signed up Successfully");
-                router.push("/home");
+                router.push("/dashboard");
             } else {
                 console.log("Sign Up failed :(");
                 setUsernameWrongErrorBox(true);
