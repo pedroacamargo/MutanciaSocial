@@ -21,6 +21,7 @@ import { auth } from "@/utils/firebase";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/redux/user/user.action";
 import { onAuthStateChanged } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +43,13 @@ export default function Home() {
   
   return (
     <>
+      <Helmet>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Oswald:wght@400;500&display=swap" rel="stylesheet" />
+      </Helmet>
+
+
       <main style={{display: "flex", overflow: "hidden",height: "100vh"}}>
 
         <BigLogoContainer>
