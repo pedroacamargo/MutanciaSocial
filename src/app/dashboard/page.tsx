@@ -10,6 +10,7 @@ import { setCurrentUser } from "@/redux/user/user.action";
 
 export default function Dashboard() {
     const router = useRouter();
+
     const signOutUser = async () => {
         await signOut(auth);
         router.push("/");
@@ -22,25 +23,25 @@ export default function Dashboard() {
         console.log(isLogged);
     }
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth , (user) => {
-            dispatch(setCurrentUser({
-            displayName: user?.displayName,
-            email: user?.email,
-            uid: user?.uid,
-            }));
-            if (user) router.push('/dashboard');
-        })
-        return unsubscribe; 
-        })
+    // useEffect(() => {
+    //     const unsubscribe = onAuthStateChanged(auth , (user) => {
+    //         dispatch(setCurrentUser({
+    //             displayName: user?.displayName,
+    //             email: user?.email,
+    //             uid: user?.uid,
+    //         }));
+    //         if (!user) router.push('/');
+    //     })
+    //     return unsubscribe; 
+    //     })
 
 
     return (
         <>
             <Helmet>
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" />
-                <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Oswald:wght@400;500&display=swap" rel="stylesheet" />
+                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com"/>
+                <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Oswald:wght@400;500&family=Raleway:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet"/>
             </Helmet>
         </>
     );

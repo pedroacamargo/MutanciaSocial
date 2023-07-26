@@ -5,7 +5,7 @@ import { Providers } from '@/lib/providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Mutancia Social',
+  title: 'Mutantial',
   description: 'The best gymbros network is here',
   icons: {
     icon: [
