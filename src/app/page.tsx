@@ -5,7 +5,8 @@ import {
   MobileMutantial,
   BigLogoContainer,
   FormsContainer,
-  StripsContainer,
+  StripsContainerLeft,
+  StripsContainerRight,
   StripOne,
   StripTwo,
   StripThree,
@@ -53,19 +54,19 @@ export default function Home() {
 
         <BigLogoContainer>
 
-          <StripsContainer linesalignment="right">
+          <StripsContainerRight>
             <StripOne />
             <StripTwo />
             <StripThree />
-          </StripsContainer>
+          </StripsContainerRight>
   
-          <Image src="/Mutancia-Social.png" alt="Mutancia Social Logo" width={300} height={300}/>
+          <Image src="/Mutancia-Social.png" alt="Mutancia Social Logo" width={300} height={300} priority={true}/>
 
-          <StripsContainer linesalignment="left">
+          <StripsContainerLeft>
             <StripThree />
             <StripTwo />
             <StripOne />
-          </StripsContainer>
+          </StripsContainerLeft>
   
         </BigLogoContainer>
 
