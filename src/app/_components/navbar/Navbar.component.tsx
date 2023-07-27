@@ -32,6 +32,7 @@ export default function Navbar() {
 
     const signOutUser = async () => {
         router.push("/");
+        window.localStorage.clear();
         await signOut(auth);
     }
 

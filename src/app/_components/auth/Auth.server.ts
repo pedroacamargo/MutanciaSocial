@@ -10,3 +10,17 @@ export async function isLoggedIn() {
         })
     })
 }
+
+
+export async function statePersist() {
+    const statePersistFunc = async () => {
+        const isLogged = await isLoggedIn();
+        const currentUserJson = window.localStorage.getItem("currentUser");
+
+        if(isLogged && currentUserJson) {
+            const user = JSON.parse(currentUserJson);
+            return user;
+        }
+    }
+    return statePersistFunc();
+}
