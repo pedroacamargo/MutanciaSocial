@@ -47,15 +47,22 @@ export default function SignInComponent(props: SignInComponentProps) {
 
         try {
             const response = await SignIn(user);
-            dispatch(setCurrentUser({
+            const userData = {
                 displayName: user.username,
                 email: auth.currentUser?.email,
+            }
+
+            dispatch(setCurrentUser({
+                ...userData,
                 uid: auth.currentUser?.uid,
             }))
 
             if (response) {
-                console.log("Signed up Successfully");
+
+                window.localStorage.clear();
+                window.localStorage.setItem('currentUser', JSON.stringify({...userData, uid: auth.currentUser?.uid}));
                 router.push("/dashboard");
+                
             } else {
                 console.log("Sign Up failed :(");
                 setUsernameWrongErrorBox(true);

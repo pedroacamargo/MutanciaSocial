@@ -7,3 +7,4 @@ const enhancers = compose(applyMiddleware(logger))
 export const store = configureStore({
     reducer: rootReducer,
 })
+

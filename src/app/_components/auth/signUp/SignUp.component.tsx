@@ -57,8 +57,13 @@ export default function SignUpComponent(props: SignUpComponentProps) {
     }) => {
         setIsLoading(true);
         const auth: any = getAuth();
+
+        const userData = {
+            displayName: user.username,
+            email: user.email,
+        }
         
-        console.log(user);
+        // console.log(user);
         try {
             const response = await SignUp(user);
             
@@ -74,12 +79,12 @@ export default function SignUpComponent(props: SignUpComponentProps) {
 
 
                 dispatch(setCurrentUser({
-                    displayName: user.username,
-                    email: auth.currentUser?.email,
+                    ...userData,
                     uid: auth.currentUser?.uid,
                 }));
-                
-                console.log("Signed up Successfully");
+
+                window.localStorage.clear();
+                window.localStorage.setItem('currentUser', JSON.stringify({...userData, uid: auth.currentUser?.uid}));
                 router.push("/dashboard");
             } else {
                 console.log("Sign Up failed :(");

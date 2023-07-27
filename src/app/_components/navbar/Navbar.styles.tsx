@@ -104,7 +104,7 @@ export const DecorationPopUp = styled.div`
     height: 10px;
     transform: rotate(45deg);
     position: absolute;
-    left: 126px;
+    left: 50%;
     top: -6px;
     border-radius: 0 0 100px 0;
     background-color: #202020;

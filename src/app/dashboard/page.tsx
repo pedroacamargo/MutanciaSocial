@@ -7,33 +7,29 @@ import { Helmet } from "react-helmet-async";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/redux/user/user.action";
+import { statePersist } from "../_components/auth/Auth.server";
+
+interface User {
+    displayName: string,
+    email: string,
+}
 
 export default function Dashboard() {
     const router = useRouter();
-
-    const signOutUser = async () => {
-        await signOut(auth);
-        router.push("/");
-    }
-
     const dispatch = useDispatch();
 
+
     const checkIfLogged = async () => {
-        const isLogged = await isLoggedIn();
-        console.log(isLogged);
+        return await isLoggedIn();
     }
 
-    // useEffect(() => {
-    //     const unsubscribe = onAuthStateChanged(auth , (user) => {
-    //         dispatch(setCurrentUser({
-    //             displayName: user?.displayName,
-    //             email: user?.email,
-    //             uid: user?.uid,
-    //         }));
-    //         if (!user) router.push('/');
-    //     })
-    //     return unsubscribe; 
-    //     })
+    useEffect(() => {
+        const statePersistFunc = async () => {
+            const user = await statePersist();
+            dispatch(setCurrentUser(user))
+        }
+        statePersistFunc();
+    }, []);
 
 
     return (
