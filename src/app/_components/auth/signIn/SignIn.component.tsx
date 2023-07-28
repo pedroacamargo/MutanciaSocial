@@ -5,11 +5,11 @@ import {
     InputForm,
     RememberMeContainer,
     SignInSubmitButtonsContainer,
-} from "../Auth.styles";
+} from "../AuthForms.styles";
 import {
     ButtonBase,
     ErrorBox,
-} from "@/app/Landing.styles";
+} from "@/app/GlobalStyles.styles";
 import { FaLock, FaUser, FaGoogle } from "react-icons/fa";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -61,7 +61,7 @@ export default function SignInComponent(props: SignInComponentProps) {
 
                 window.localStorage.clear();
                 window.localStorage.setItem('currentUser', JSON.stringify({...userData, uid: auth.currentUser?.uid}));
-                router.push("/dashboard");
+                router.push("/");
                 
             } else {
                 console.log("Sign Up failed :(");
