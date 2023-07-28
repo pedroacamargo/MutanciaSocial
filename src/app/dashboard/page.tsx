@@ -12,21 +12,17 @@ import { statePersist } from "../_components/auth/Auth.server";
 interface User {
     displayName: string,
     email: string,
+    uid: string,
 }
 
 export default function Dashboard() {
     const router = useRouter();
     const dispatch = useDispatch();
 
-
-    const checkIfLogged = async () => {
-        return await isLoggedIn();
-    }
-
     useEffect(() => {
         const statePersistFunc = async () => {
             const user = await statePersist();
-            dispatch(setCurrentUser(user))
+            dispatch(setCurrentUser(user as User));
         }
         statePersistFunc();
     }, []);
