@@ -29,6 +29,7 @@ export async function statePersist() {
             const user = JSON.parse(currentUserJson);
             return user;
         }
+        return null;
     }
     return statePersistFunc();
 }

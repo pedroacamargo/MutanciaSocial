@@ -3,12 +3,12 @@ import {
     InputContainer,
     InputForm,
     SignUpSubmitButtonsContainer
-} from '../Auth.styles';
+} from '../AuthForms.styles';
 
 import { 
     ErrorBox,
     ButtonInverted
-} from '@/app/Landing.styles';
+} from '@/app/GlobalStyles.styles';
 
 import { 
     FaUser,
@@ -85,7 +85,7 @@ export default function SignUpComponent(props: SignUpComponentProps) {
 
                 window.localStorage.clear();
                 window.localStorage.setItem('currentUser', JSON.stringify({...userData, uid: auth.currentUser?.uid}));
-                router.push("/dashboard");
+                router.push("/");
             } else {
                 console.log("Sign Up failed :(");
                 setUsernameAlreadyExistsError(true);
