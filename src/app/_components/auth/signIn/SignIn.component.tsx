@@ -19,6 +19,7 @@ import { setCurrentUser } from "@/redux/user/user.action";
 import { useRouter } from "next/navigation";
 import { auth } from "@/utils/firebase";
 import { useState } from "react";
+import { continueWithGoogle } from "../Auth.server";
 
 interface SignInComponentProps {
     setIsLoading: (isLoading: boolean) => void,
@@ -75,6 +76,21 @@ export default function SignInComponent(props: SignInComponentProps) {
         setIsLoading(false);
     }
 
+    const signInWithGoogle = async () => {
+        const user = await continueWithGoogle()
+        if (user) {
+            const userData = {
+                displayName: user.user.displayName,
+                email: user.user.email,
+                uid: user.user.uid,
+            }
+            window.localStorage.clear();
+            window.localStorage.setItem('currentUser', JSON.stringify(userData));
+            dispatch(setCurrentUser(userData));
+            router.push("/");
+        }
+    }
+
     return (
         <SignInForm onSubmit={handleSubmit(onSubmitSignIn)} method="POST">
 
@@ -104,7 +120,7 @@ export default function SignInComponent(props: SignInComponentProps) {
             <SignInSubmitButtonsContainer>
                 <ButtonBase type="submit">Sign In</ButtonBase>
                 <span style={{fontFamily: "monospace"}}>OR</span>
-                <ButtonBase type="button"><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonBase>
+                <ButtonBase type="button" onClick={signInWithGoogle}><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonBase>
             </SignInSubmitButtonsContainer>
 
         </SignInForm>

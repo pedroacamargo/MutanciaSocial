@@ -20,12 +20,14 @@ import {
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '@/redux/user/user.action';
 import { SignUp } from './SignUp.server';
 import { useRouter } from 'next/navigation';
 import { updateProfile, getAuth } from 'firebase/auth';
+import { continueWithGoogle } from '../Auth.server';
 import { useState } from 'react';
+
 
 interface SignUpComponentProps {
     setIsLoading: (isLoading: boolean) => void,
@@ -101,6 +103,21 @@ export default function SignUpComponent(props: SignUpComponentProps) {
         setUsernameAlreadyExistsError(false);
     }
 
+    const signUpWithGoogle = async () => {
+        const user = await continueWithGoogle()
+        if (user) {
+            const userData = {
+                displayName: user.user.displayName,
+                email: user.user.email,
+                uid: user.user.uid,
+            }
+            window.localStorage.clear();
+            window.localStorage.setItem('currentUser', JSON.stringify(userData));
+            dispatch(setCurrentUser(userData));
+            router.push("/");
+        }
+    }
+
     return (
         <SignUpForm onSubmit={handleSubmit(onSubmitSignUp)} method="POST">
 
@@ -141,7 +158,7 @@ export default function SignUpComponent(props: SignUpComponentProps) {
             <SignUpSubmitButtonsContainer>
                 <ButtonInverted type="submit">Sign Up</ButtonInverted>
                 <span style={{fontFamily: "monospace"}}>OR</span>
-                <ButtonInverted type="button"><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonInverted>
+                <ButtonInverted type="button" onClick={signUpWithGoogle}><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonInverted>
             </SignUpSubmitButtonsContainer>
 
         </SignUpForm>

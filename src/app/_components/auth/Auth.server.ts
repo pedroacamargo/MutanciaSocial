@@ -1,5 +1,5 @@
-import { auth } from "@/utils/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { auth, googleProvider } from "@/utils/firebase";
+import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 
 /**
  * 
@@ -32,4 +32,14 @@ export async function statePersist() {
         return null;
     }
     return statePersistFunc();
+}
+
+export async function continueWithGoogle() {
+    try {
+        const user = await signInWithPopup(auth, googleProvider);
+        return user
+    } catch (err) {
+        console.error(`An error ocurred: ${err}`);
+        return null;
+    }
 }
