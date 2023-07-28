@@ -66,20 +66,21 @@ export const BigLogoContainer = styled.div`
     }
 `
 
-
-interface StripContainerProps {
-    linesalignment: 'left' | 'center' | 'right',
-}
-
-export const StripsContainer = styled.div<StripContainerProps>`
+export const StripsContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: end;
-    align-items: ${(props) => props.linesalignment === 'left' ? 'flex-start' : props.linesalignment === 'center' ? 'center' : props.linesalignment === 'right' ? 'flex-end' : 'stretch'};
+    align-items: center;
     margin: 125px;
-    
-    `
+`
+export const StripsContainerRight = styled(StripsContainer)`
+    align-items: flex-end;
+`
+
+export const StripsContainerLeft = styled(StripsContainer)`
+    align-items: flex-start;
+`
 
 export const StripOne = styled.div`
     height: 1px;
