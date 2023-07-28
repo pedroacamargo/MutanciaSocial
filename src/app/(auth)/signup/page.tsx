@@ -1,13 +1,8 @@
 'use client'
 import SignUpComponent from "../../_components/auth/signUp/SignUp.component";
+import LogoContainer from "@/app/_components/auth/LogoContainer.component";
 import {
-  BigLogoContainer,
   FormsContainer,
-  StripsContainerLeft,
-  StripsContainerRight,
-  StripOne,
-  StripTwo,
-  StripThree,
   HeaderDividerContainer,
   DividerRow,
   LoadingMomentum,
@@ -44,26 +39,12 @@ export default function Home() {
 
 
       <main style={{display: "flex", overflow: "hidden",height: "100vh"}}>
-
-        <BigLogoContainer>
-
-          <StripsContainerRight>
-            <StripOne />
-            <StripTwo />
-            <StripThree />
-          </StripsContainerRight>
-  
-          <Image src="/Mutancia-Social.png" alt="Mutancia Social Logo" width={300} height={300} priority={true}/>
-
-          <StripsContainerLeft>
-            <StripThree />
-            <StripTwo />
-            <StripOne />
-          </StripsContainerLeft>
-  
-        </BigLogoContainer>
+        
+        <LogoContainer/>
 
         <FormsContainer>
+
+
           <HeaderDividerContainer>
             <DividerRow />
             <Image src="/Mutancia-Social-Black.png" alt="Mutancia Social Logo" width={50} height={50}/>
@@ -75,7 +56,6 @@ export default function Home() {
           <LoadingMomentum display={`${isLoading}`}/>
 
         </FormsContainer>
-
       </main>
     </>
   )

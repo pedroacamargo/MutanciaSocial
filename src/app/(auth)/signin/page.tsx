@@ -1,13 +1,7 @@
 'use client'
 import SignInComponent from "@/app/_components/auth/signIn/SignIn.component";
 import {
-  BigLogoContainer,
   FormsContainer,
-  StripsContainerLeft,
-  StripsContainerRight,
-  StripOne,
-  StripTwo,
-  StripThree,
   HeaderDividerContainer,
   DividerRow,
   LoadingMomentum,
@@ -20,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/redux/user/user.action";
 import { onAuthStateChanged } from "firebase/auth";
 import { Helmet } from "react-helmet-async";
+import LogoContainer from "@/app/_components/auth/LogoContainer.component";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,26 +44,7 @@ export default function Home() {
 
       <main style={{display: "flex", overflow: "hidden",height: "100vh"}}>
 
-        <BigLogoContainer>
-
-          <StripsContainerRight>
-            <StripOne />
-            <StripTwo />
-            <StripThree />
-          </StripsContainerRight>
-  
-          <Image src="/Mutancia-Social.png" alt="Mutancia Social Logo" width={300} height={300} priority={true}/>
-
-          <StripsContainerLeft>
-            <StripThree />
-            <StripTwo />
-            <StripOne />
-          </StripsContainerLeft>
-  
-        </BigLogoContainer>
-
-
-
+        <LogoContainer/>
 
         <FormsContainer>
 
