@@ -14,6 +14,7 @@ import {
     SignOutButton,
     LoggedInAsContainer
 } from "./Navbar.styles";
+import { ButtonInverted } from "@/app/GlobalStyles.styles";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from '@/redux/user/user.selector';
 import { useRouter } from "next/navigation";
@@ -31,9 +32,9 @@ export default function Navbar() {
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
 
     const signOutUser = async () => {
-        router.push("/");
         window.localStorage.clear();
         await signOut(auth);
+        router.push("/signin");
     }
 
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
@@ -87,6 +88,7 @@ export default function Navbar() {
                     <Image src="/Mutancia-Social-Black.png" alt="Mutancia Social Logo" width={45} height={45}/>
                     <NavbarLogoName>Mutantial</NavbarLogoName>
                 </NavbarLogoContainer>
+                <ButtonInverted onClick={() => router.push('/signup')}>Sign Up</ButtonInverted>
             </NavbarContainer>
         }
         </>

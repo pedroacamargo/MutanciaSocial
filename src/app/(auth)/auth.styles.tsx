@@ -39,19 +39,6 @@ const rotate01561 = keyframes`
     }
 `
 
-export const MobileMutantial = styled.h1`
-    font-size: 10vw;
-    width: 100vw;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    color: black;
-    opacity: .8;
-    padding-top: 30px;
-    @media screen and (min-width: 800px) {
-        display: none;
-    }
-`
-
 export const BigLogoContainer = styled.div`
     width: 65%;
     height: 100vh;
@@ -144,17 +131,6 @@ export const HeaderDividerContainer = styled.div`
     flex-direction: row;
 `
 
-export const DividerSquare = styled.div`
-    width: 20px;
-    height: 9px;
-    position: relative;
-    margin-left: -10px;
-    margin-right: -10px;
-    top: 10px;
-    background-color: black;
-    transform: rotate(45deg);
-`
-
 export const DividerRow = styled.div`
     width: 40%;
     margin: 10px;
@@ -162,49 +138,6 @@ export const DividerRow = styled.div`
     background-color: black;
 `
 
-export const ButtonBase = styled.button`
-    padding: 10px;
-    font-size: 1.2em;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: black;
-    color: white;
-    border: 1px solid black;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: .5s;
-    margin: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &:hover {
-        background-color: white;
-        color: black;
-    }
-`
-
-export const ButtonInverted = styled(ButtonBase)`
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-
-    &:hover {
-        background-color: black;
-        color: white;
-    }
-`
-
-
-export const ErrorBox = styled.div`
-    padding: 10px;
-    background-color: #f74242;
-    color: white;
-    border-radius: 5px;
-    border: 1px solid black;
-    margin: 10px;
-    font-weight: bold;
-    font-size: .9em;
-`
 interface LoadingMomentumProps {
     display: string,
 }
