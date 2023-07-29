@@ -3,7 +3,7 @@ import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 
 /**
  * 
- * @returns boolean: Returns true if theres an user logged in and false if not 
+ * @returns boolean: Returns true if there's an user logged in and false if not 
  */
 export async function isLoggedIn() {
     return new Promise((resolve) => {        

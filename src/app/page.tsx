@@ -15,8 +15,8 @@ interface User {
 
 export default function Dashboard() {
     const router = useRouter();
-    const dispatch = useDispatch();
     const pathName = usePathname();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const statePersistFunc = async () => {
@@ -35,9 +35,7 @@ export default function Dashboard() {
                 <link rel="preconnect" href="https://fonts.gstatic.com"/>
                 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Oswald:wght@400;500&family=Raleway:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet"/>
             </Helmet>
-            {
-                pathName !== '' ? <Navbar/> : null
-            }
+            <Navbar/>
         </>
     );
 }
