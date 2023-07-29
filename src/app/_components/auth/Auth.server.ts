@@ -21,18 +21,16 @@ export async function isLoggedIn() {
  * @returns JSON.parse(window.localStorage.getItem("currentUser"))
  */
 export async function statePersist() {
-    const statePersistFunc = async () => {
-        const isLogged = await isLoggedIn();
-        const currentUserJson = window.localStorage.getItem("currentUser");
+    const isLogged = await isLoggedIn();
+    const currentUserJson = window.localStorage.getItem("currentUser");
 
-        if(isLogged && currentUserJson) {
-            const user = JSON.parse(currentUserJson);
-            return user;
-        }
-        return null;
+    if(isLogged && currentUserJson) {
+        const user = JSON.parse(currentUserJson);
+        return user;
     }
-    return statePersistFunc();
+    return null;
 }
+
 
 export async function continueWithGoogle() {
     try {

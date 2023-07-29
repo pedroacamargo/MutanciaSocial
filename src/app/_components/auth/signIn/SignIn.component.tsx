@@ -7,6 +7,9 @@ import {
     SignInSubmitButtonsContainer,
 } from "../AuthForms.styles";
 import {
+    LoadingMomentum
+} from "@/app/(auth)/auth.styles";
+import {
     ButtonBase,
     ErrorBox,
 } from "@/app/GlobalStyles.styles";
@@ -14,19 +17,16 @@ import { FaLock, FaUser, FaGoogle } from "react-icons/fa";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { setCurrentUser } from "@/redux/user/user.action";
+import { fetchUserAsync, fetchUserFinished, fetchUserStart } from "@/redux/user/user.action";
 import { useRouter } from "next/navigation";
 import { auth } from "@/utils/firebase";
 import { useState } from "react";
 import { continueWithGoogle } from "../Auth.server";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUserIsLoading } from "@/redux/user/user.selector";
 
-interface SignInComponentProps {
-    setIsLoading: (isLoading: boolean) => void,
-}
-
-export default function SignInComponent(props: SignInComponentProps) {
-    const { setIsLoading } = props;
+export default function SignInComponent() {
+    const isLoading = useSelector(selectUserIsLoading);
     const [usernameWrongErrorBox, setUsernameWrongErrorBox] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -44,39 +44,35 @@ export default function SignInComponent(props: SignInComponentProps) {
         username: string,
         password: string,
     }) => {
-        setIsLoading(true);
-
+        dispatch(fetchUserStart())
         try {
             const response = await SignIn(user);
             const userData = {
                 displayName: user.username,
                 email: auth.currentUser?.email,
-            }
-
-            dispatch(setCurrentUser({
-                ...userData,
                 uid: auth.currentUser?.uid,
-            }))
-
+            }
+            
             if (response) {
-
+                dispatch(fetchUserAsync() as any);
                 window.localStorage.clear();
-                window.localStorage.setItem('currentUser', JSON.stringify({...userData, uid: auth.currentUser?.uid}));
+                window.localStorage.setItem('currentUser', JSON.stringify(userData));
                 router.push("/");
                 
             } else {
-                console.log("Sign Up failed :(");
+                console.error("Sign Up failed :(");
+                dispatch(fetchUserFinished());
                 setUsernameWrongErrorBox(true);
             } 
 
         } catch(err) {
             console.error(err);
+            dispatch(fetchUserFinished())
         }
-
-        setIsLoading(false);
     }
 
     const signInWithGoogle = async () => {
+        dispatch(fetchUserStart())
         const user = await continueWithGoogle()
         if (user) {
             const userData = {
@@ -84,9 +80,9 @@ export default function SignInComponent(props: SignInComponentProps) {
                 email: user.user.email,
                 uid: user.user.uid,
             }
+            dispatch(fetchUserAsync() as any);
             window.localStorage.clear();
             window.localStorage.setItem('currentUser', JSON.stringify(userData));
-            dispatch(setCurrentUser(userData));
             router.push("/");
         }
     }
@@ -122,6 +118,8 @@ export default function SignInComponent(props: SignInComponentProps) {
                 <span style={{fontFamily: "monospace"}}>OR</span>
                 <ButtonBase type="button" onClick={signInWithGoogle}><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonBase>
             </SignInSubmitButtonsContainer>
+
+            <LoadingMomentum display={`${isLoading}`}/>
 
         </SignInForm>
 

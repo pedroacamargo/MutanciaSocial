@@ -3,28 +3,21 @@ import { useRouter, usePathname } from "next/navigation";
 import { Helmet } from "react-helmet-async";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "@/redux/user/user.action";
-import { statePersist } from "./_components/auth/Auth.server";
+import { fetchUserAsync } from "@/redux/user/user.action";
 import Navbar from "./_components/navbar/Navbar.component";
 
 interface User {
-    displayName: string,
-    email: string,
-    uid: string,
+    displayName?: string,
+    email?: string,
+    uid?: string,
 }
 
 export default function Dashboard() {
     const router = useRouter();
-    const pathName = usePathname();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const statePersistFunc = async () => {
-            const user = await statePersist();
-            dispatch(setCurrentUser(user as User));
-            // if (!user) router.push('/signup')
-        }
-        statePersistFunc();
+        dispatch(fetchUserAsync() as any);
     }, []);
 
 

@@ -15,7 +15,8 @@ import {
     LoggedInAsContainer
 } from "./Navbar.styles";
 import { ButtonInverted } from "@/app/GlobalStyles.styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserAsync } from "@/redux/user/user.action";
 import { selectCurrentUser } from '@/redux/user/user.selector';
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
@@ -29,12 +30,15 @@ import { useState } from "react";
 export default function Navbar() {
     const user = useSelector(selectCurrentUser)
     const router = useRouter();
+    const dispatch = useDispatch();
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
 
     const signOutUser = async () => {
         window.localStorage.clear();
-        await signOut(auth);
-        router.push("/signin");
+        dispatch(fetchUserAsync() as any);
+        signOut(auth).then(() => {
+            return router.push("/signin");
+        });
     }
 
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);

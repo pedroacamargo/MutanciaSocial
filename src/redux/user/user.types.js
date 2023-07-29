@@ -1,3 +1,6 @@
 export const userActionTypes = {
-    setCurrentUser: 'user/setCurrentUser',
+    FETCH_USER_START: 'user/FETCH_USER_START',
+    FETCH_USER_SUCCESS: 'user/FETCH_USER_SUCCESS',
+    FETCH_USER_FAILED: 'user/FETCH_USER_FAILED',
+    FETCH_USER_FINISHED: 'user/FETCH_USER_FINISHED',
 }

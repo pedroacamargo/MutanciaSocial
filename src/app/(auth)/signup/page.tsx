@@ -10,23 +10,16 @@ import {
 import Image from "next/image"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setCurrentUser } from "@/redux/user/user.action";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserAsync } from "@/redux/user/user.action";
 import { Helmet } from "react-helmet-async";
-import { statePersist } from "@/app/_components/auth/Auth.server";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
   
   useEffect(() => {
-    const statePersistFunc = async () => {
-        const user = await statePersist();
-        dispatch(setCurrentUser(user));
-        if (user) router.push("/");
-    }
-    statePersistFunc();
+    dispatch(fetchUserAsync() as any);
   }, []);
   
   return (
@@ -51,9 +44,7 @@ export default function Home() {
             <DividerRow />
           </HeaderDividerContainer>
 
-          <SignUpComponent setIsLoading={setIsLoading}/>
-
-          <LoadingMomentum display={`${isLoading}`}/>
+          <SignUpComponent/>
 
         </FormsContainer>
       </main>
