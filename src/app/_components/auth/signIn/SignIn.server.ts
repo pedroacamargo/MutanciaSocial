@@ -1,6 +1,7 @@
 import { auth, db } from "@/utils/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { databases } from "@/lib/types/databases.types";
 
 export async function SignIn({
     username,
@@ -10,7 +11,7 @@ export async function SignIn({
     password: string,
 }) {
     let email = '';
-    const usersDBRef = collection(db, "authentication");
+    const usersDBRef = collection(db, databases.authDB);
     const data = await getDocs(usersDBRef);
 
     // Get the email of the username

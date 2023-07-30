@@ -5,21 +5,19 @@ import {
     SignUpSubmitButtonsContainer,
     AlreadyHaveAnAccount,
 } from '../AuthForms.styles';
-
-import { LoadingMomentum } from '@/app/(auth)/auth.styles';
-
+import {
+    LoadingMomentum
+} from '@/app/(auth)/auth.styles';
 import { 
     ErrorBox,
     ButtonInverted,
 } from '@/app/GlobalStyles.styles';
-
 import { 
     FaUser,
     FaLock,
     FaEnvelope,
     FaGoogle
 } from 'react-icons/fa';
-
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -29,8 +27,9 @@ import { fetchUserAsync, fetchUserFinished, fetchUserStart } from '@/redux/user/
 import { SignUp } from './SignUp.server';
 import { useRouter } from 'next/navigation';
 import { updateProfile, getAuth } from 'firebase/auth';
-import { continueWithGoogle } from '../Auth.server';
+import { SaveInDatabase, continueWithGoogle } from '../Auth.server';
 import { useState } from 'react';
+import { databases } from '@/lib/types/databases.types';
 
 export default function SignUpComponent() {
     const [usernameAlreadyExistsError, setUsernameAlreadyExistsError] = useState(false);
@@ -85,13 +84,8 @@ export default function SignUpComponent() {
     const signUpWithGoogle = async () => {
         dispatch(fetchUserStart());
         const user = await continueWithGoogle()
-        const userData = { displayName: user?.user.displayName, email: user?.user.email, uid: user?.user.uid }
-        if (user) {
-            dispatch(fetchUserAsync() as any);
-            window.localStorage.clear();
-            window.localStorage.setItem('currentUser', JSON.stringify(userData));
-            router.push("/");
-        }
+        if (user) router.push("/");
+        dispatch(fetchUserFinished());
     }
 
     const resetErrorBoxes = () => {

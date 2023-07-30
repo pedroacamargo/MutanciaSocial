@@ -74,19 +74,10 @@ export default function SignInComponent() {
     }
 
     const signInWithGoogle = async () => {
-        dispatch(fetchUserStart())
+        dispatch(fetchUserStart());
         const user = await continueWithGoogle()
-        if (user) {
-            const userData = {
-                displayName: user.user.displayName,
-                email: user.user.email,
-                uid: user.user.uid,
-            }
-            dispatch(fetchUserAsync() as any);
-            window.localStorage.clear();
-            window.localStorage.setItem('currentUser', JSON.stringify(userData));
-            router.push("/");
-        }
+        if (user) router.push("/");
+        dispatch(fetchUserFinished());
     }
 
     return (
