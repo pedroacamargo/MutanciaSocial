@@ -1,41 +1,36 @@
 import { auth, db } from "@/utils/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, getDocs, collection } from "firebase/firestore";
+import { collection } from "firebase/firestore";
+import { UserCredentials } from "@/lib/interfaces/UserCredentials.interface";
+import { SaveInDatabase, isInAuthDB } from "../Auth.server";
+import { databases } from "@/lib/types/databases.types";
 
-export async function SignUp({
-    username,
-    email,
-    password,
-    confirmPassword
-}: {
-    username: string,
-    email: string,
-    password: string,
-    confirmPassword: string,
-}) {
-    const usersDBRef = collection(db, "authentication");
-    const data = await getDocs(usersDBRef);
-
+export async function SignUp(user: UserCredentials) {
+    const { username, email, password, confirmPassword } = user;
+    
+    const usersDBRef = collection(db, databases.authDB);
 
     if (password != confirmPassword) return;
 
-    const repeatedUser = data.docs.some((doc) => {
-        if (doc.data().displayName != username) return false;
-        return true;
-    });
+    const alreadyExist = await isInAuthDB(email);
 
-    if (repeatedUser) {
+    if (alreadyExist) {
         console.error("Username already exists!");
         return false;
     }
 
     try {
         await createUserWithEmailAndPassword(auth, email, password);
-        await addDoc(usersDBRef, {
-            displayName: username,
-            email: auth.currentUser?.email,
-            uid: auth.currentUser?.uid,
-        });
+        
+        await SaveInDatabase({ 
+            dbName: databases.authDB, 
+            payload: {
+                displayName: username,
+                email: auth.currentUser?.email,
+                uid: auth.currentUser?.uid,
+            }});
+
+
         return true; // signin success
     } catch (err) {
         console.error(err)
