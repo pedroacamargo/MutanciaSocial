@@ -1,9 +1,9 @@
-import { auth } from "@/utils/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { auth, googleProvider } from "@/utils/firebase";
+import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 
 /**
  * 
- * @returns boolean: Returns true if theres an user logged in and false if not 
+ * @returns boolean: Returns true if there's an user logged in and false if not 
  */
 export async function isLoggedIn() {
     return new Promise((resolve) => {        
@@ -21,15 +21,23 @@ export async function isLoggedIn() {
  * @returns JSON.parse(window.localStorage.getItem("currentUser"))
  */
 export async function statePersist() {
-    const statePersistFunc = async () => {
-        const isLogged = await isLoggedIn();
-        const currentUserJson = window.localStorage.getItem("currentUser");
+    const isLogged = await isLoggedIn();
+    const currentUserJson = window.localStorage.getItem("currentUser");
 
-        if(isLogged && currentUserJson) {
-            const user = JSON.parse(currentUserJson);
-            return user;
-        }
+    if(isLogged && currentUserJson) {
+        const user = JSON.parse(currentUserJson);
+        return user;
+    }
+    return null;
+}
+
+
+export async function continueWithGoogle() {
+    try {
+        const user = await signInWithPopup(auth, googleProvider);
+        return user
+    } catch (err) {
+        console.error(`An error ocurred: ${err}`);
         return null;
     }
-    return statePersistFunc();
 }

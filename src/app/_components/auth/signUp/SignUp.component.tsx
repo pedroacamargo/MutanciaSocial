@@ -2,12 +2,15 @@ import {
     SignUpForm,
     InputContainer,
     InputForm,
-    SignUpSubmitButtonsContainer
+    SignUpSubmitButtonsContainer,
+    AlreadyHaveAnAccount,
 } from '../AuthForms.styles';
+
+import { LoadingMomentum } from '@/app/(auth)/auth.styles';
 
 import { 
     ErrorBox,
-    ButtonInverted
+    ButtonInverted,
 } from '@/app/GlobalStyles.styles';
 
 import { 
@@ -20,20 +23,18 @@ import {
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { setCurrentUser } from '@/redux/user/user.action';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserIsLoading } from '@/redux/user/user.selector';
+import { fetchUserAsync, fetchUserFinished, fetchUserStart } from '@/redux/user/user.action';
 import { SignUp } from './SignUp.server';
 import { useRouter } from 'next/navigation';
 import { updateProfile, getAuth } from 'firebase/auth';
+import { continueWithGoogle } from '../Auth.server';
 import { useState } from 'react';
 
-interface SignUpComponentProps {
-    setIsLoading: (isLoading: boolean) => void,
-}
-
-export default function SignUpComponent(props: SignUpComponentProps) {
-    const { setIsLoading } = props;
+export default function SignUpComponent() {
     const [usernameAlreadyExistsError, setUsernameAlreadyExistsError] = useState(false);
+    const isLoading = useSelector(selectUserIsLoading);
     const dispatch = useDispatch();
     const router = useRouter();
     
@@ -55,37 +56,21 @@ export default function SignUpComponent(props: SignUpComponentProps) {
         password: string,
         confirmPassword: string
     }) => {
-        setIsLoading(true);
         const auth: any = getAuth();
-
-        const userData = {
-            displayName: user.username,
-            email: user.email,
-        }
-        
-        // console.log(user);
+        dispatch(fetchUserStart());
         try {
             const response = await SignUp(user);
             
             if (response) {
+                // Create the username in auth
+                updateProfile(auth.currentUser, { displayName: user.username })
 
-                try {
-                    updateProfile(auth.currentUser, {
-                        displayName: user.username
-                    })
-                } catch (err) {
-                    console.error("Display name wasn't updated!");
-                }
-
-
-                dispatch(setCurrentUser({
-                    ...userData,
-                    uid: auth.currentUser?.uid,
-                }));
-
+                const userData = { displayName: user.username, email: user.email, uid: auth?.currentUser.uid }
+                dispatch(fetchUserAsync() as any);
                 window.localStorage.clear();
-                window.localStorage.setItem('currentUser', JSON.stringify({...userData, uid: auth.currentUser?.uid}));
+                window.localStorage.setItem('currentUser', JSON.stringify(userData));
                 router.push("/");
+
             } else {
                 console.log("Sign Up failed :(");
                 setUsernameAlreadyExistsError(true);
@@ -93,17 +78,28 @@ export default function SignUpComponent(props: SignUpComponentProps) {
         } catch (err) {
             console.error(err);
         }
+        dispatch(fetchUserFinished());
+    }
 
-        setIsLoading(false);
+    
+    const signUpWithGoogle = async () => {
+        dispatch(fetchUserStart());
+        const user = await continueWithGoogle()
+        const userData = { displayName: user?.user.displayName, email: user?.user.email, uid: user?.user.uid }
+        if (user) {
+            dispatch(fetchUserAsync() as any);
+            window.localStorage.clear();
+            window.localStorage.setItem('currentUser', JSON.stringify(userData));
+            router.push("/");
+        }
     }
 
     const resetErrorBoxes = () => {
         setUsernameAlreadyExistsError(false);
     }
-
+    
     return (
         <SignUpForm onSubmit={handleSubmit(onSubmitSignUp)} method="POST">
-
             <InputContainer>
                 <FaUser size={20} color="white" style={{
                 margin: "auto"
@@ -132,6 +128,10 @@ export default function SignUpComponent(props: SignUpComponentProps) {
                 <InputForm type="password" placeholder="Confirm Password..." {...register("confirmPassword")} onChange={resetErrorBoxes}/>
             </InputContainer>
 
+            <div style={{width: '80%', marginTop: '5px'}}>
+                <AlreadyHaveAnAccount href='/signin'>I already have an account - Go to Sign In</AlreadyHaveAnAccount>
+            </div>
+
             {errors.confirmPassword ? ( <ErrorBox>{errors.confirmPassword?.message}</ErrorBox> 
             ) : errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox>
             ) : errors.email ? (<ErrorBox>{errors.email?.message}</ErrorBox>
@@ -141,8 +141,12 @@ export default function SignUpComponent(props: SignUpComponentProps) {
             <SignUpSubmitButtonsContainer>
                 <ButtonInverted type="submit">Sign Up</ButtonInverted>
                 <span style={{fontFamily: "monospace"}}>OR</span>
-                <ButtonInverted type="button"><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonInverted>
+                <ButtonInverted type="button" onClick={signUpWithGoogle}><FaGoogle size={15} style={{marginRight: "10px"}}/> Continue With Google</ButtonInverted>
             </SignUpSubmitButtonsContainer>
+
+            
+            { isLoading ? <LoadingMomentum display={`${true}`}/> : <></>}
+
 
         </SignUpForm>
     );

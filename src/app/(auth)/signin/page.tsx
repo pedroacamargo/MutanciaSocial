@@ -4,34 +4,28 @@ import {
   FormsContainer,
   HeaderDividerContainer,
   DividerRow,
-  LoadingMomentum,
+  AuthCaption,
 } from "../auth.styles"
 import Image from "next/image"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/redux/user/user.selector";
 import { useRouter } from "next/navigation";
-import { auth } from "@/utils/firebase";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "@/redux/user/user.action";
-import { onAuthStateChanged } from "firebase/auth";
+import { fetchUserAsync } from "@/redux/user/user.action";
 import { Helmet } from "react-helmet-async";
 import LogoContainer from "@/app/_components/auth/LogoContainer.component";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
+  const userData = useSelector(selectCurrentUser);
+  
   
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth , (user) => {
-      dispatch(setCurrentUser({
-        displayName: user?.displayName,
-        email: user?.email,
-        uid: user?.uid,
-      }));
-      if (user) router.push('/');
-    })
-    return unsubscribe; 
-  })
+    dispatch(fetchUserAsync() as any);
+    if (userData) router.push('/');
+  }, [])
   
   return (
     <>
@@ -54,9 +48,10 @@ export default function Home() {
             <DividerRow />
           </HeaderDividerContainer>
 
-          <SignInComponent setIsLoading={setIsLoading}/>
+          <AuthCaption>Login</AuthCaption>
 
-          <LoadingMomentum display={`${isLoading}`}/>
+          <SignInComponent/>
+
         </FormsContainer>
 
       </main>

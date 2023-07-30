@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { styled } from "styled-components";
 
 export const SignInForm = styled.form`
@@ -66,4 +67,11 @@ export const SignInSubmitButtonsContainer = styled.div`
 export const SignUpSubmitButtonsContainer = styled(SignInSubmitButtonsContainer)`
     margin-top: 10px;
     flex-direction: column;
+`
+
+export const AlreadyHaveAnAccount = styled(Link)`
+    color: black;
+    padding: 5px;
+    font-weight: bold;
+    font-size: .8em;
 `

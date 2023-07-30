@@ -15,7 +15,8 @@ import {
     LoggedInAsContainer
 } from "./Navbar.styles";
 import { ButtonInverted } from "@/app/GlobalStyles.styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserAsync } from "@/redux/user/user.action";
 import { selectCurrentUser } from '@/redux/user/user.selector';
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
@@ -29,12 +30,13 @@ import { useState } from "react";
 export default function Navbar() {
     const user = useSelector(selectCurrentUser)
     const router = useRouter();
+    const dispatch = useDispatch();
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
 
     const signOutUser = async () => {
         window.localStorage.clear();
-        await signOut(auth);
-        router.push("/signin");
+        dispatch(fetchUserAsync() as any);
+        await signOut(auth)
     }
 
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
@@ -88,7 +90,33 @@ export default function Navbar() {
                     <Image src="/Mutancia-Social-Black.png" alt="Mutancia Social Logo" width={45} height={45}/>
                     <NavbarLogoName>Mutantial</NavbarLogoName>
                 </NavbarLogoContainer>
-                <ButtonInverted onClick={() => router.push('/signup')}>Sign Up</ButtonInverted>
+                <NavbarLinksContainer>
+                    <NavbarLink href='/dashboard'>Home</NavbarLink>
+                    <NavbarLink href='/dashboard'>Explore</NavbarLink>
+                    <NavbarLink href='/dashboard'>Guides</NavbarLink>
+                    <NavbarLink href='/dashboard'>Workouts</NavbarLink>
+                    <UserLoggedContainer onClick={toggleProfilePopUp}>
+                        <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s', cursor: 'pointer'}}/>
+                        <UsernameNavbar>Not logged in</UsernameNavbar>
+
+                        {user?.photoURL ? (
+                            <ProfilePic src={`${user.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
+                        ) : (
+                            <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
+                        )}
+
+                        <ProfileOptionsContainer isOpened={profilePopUpOpened}>
+                            <DecorationPopUp></DecorationPopUp>
+                            <LoggedInAsContainer>
+                                Logged in as <strong>None</strong>
+                            </LoggedInAsContainer>
+
+                            
+                            <SignOutButton onClick={signOutUser} href='/signin'>Sign In</SignOutButton>
+                        </ProfileOptionsContainer>
+
+                    </UserLoggedContainer>
+                </NavbarLinksContainer>
             </NavbarContainer>
         }
         </>

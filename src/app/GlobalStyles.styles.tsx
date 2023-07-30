@@ -16,14 +16,14 @@ const GlobalStyle = createGlobalStyle`
 export default GlobalStyle
 
 export const ButtonBase = styled.button`
-    padding: 10px;
+    padding: 7px;
     font-size: 1.2em;
     font-family: Arial, Helvetica, sans-serif;
     background-color: black;
     color: white;
     border: 1px solid black;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 5px;
     transition: .5s;
     margin: 5px;
     display: flex;
