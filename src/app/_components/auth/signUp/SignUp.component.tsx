@@ -3,6 +3,7 @@ import {
     InputContainer,
     InputForm,
     SignUpSubmitButtonsContainer,
+    AlreadyHaveAnAccount,
 } from '../AuthForms.styles';
 
 import { LoadingMomentum } from '@/app/(auth)/auth.styles';
@@ -34,7 +35,6 @@ import { useState } from 'react';
 export default function SignUpComponent() {
     const [usernameAlreadyExistsError, setUsernameAlreadyExistsError] = useState(false);
     const isLoading = useSelector(selectUserIsLoading);
-    console.log(isLoading)
     const dispatch = useDispatch();
     const router = useRouter();
     
@@ -78,6 +78,7 @@ export default function SignUpComponent() {
         } catch (err) {
             console.error(err);
         }
+        dispatch(fetchUserFinished());
     }
 
     
@@ -99,7 +100,6 @@ export default function SignUpComponent() {
     
     return (
         <SignUpForm onSubmit={handleSubmit(onSubmitSignUp)} method="POST">
-
             <InputContainer>
                 <FaUser size={20} color="white" style={{
                 margin: "auto"
@@ -127,6 +127,10 @@ export default function SignUpComponent() {
                 }}/>
                 <InputForm type="password" placeholder="Confirm Password..." {...register("confirmPassword")} onChange={resetErrorBoxes}/>
             </InputContainer>
+
+            <div style={{width: '80%', marginTop: '5px'}}>
+                <AlreadyHaveAnAccount href='/signin'>I already have an account - Go to Sign In</AlreadyHaveAnAccount>
+            </div>
 
             {errors.confirmPassword ? ( <ErrorBox>{errors.confirmPassword?.message}</ErrorBox> 
             ) : errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox>

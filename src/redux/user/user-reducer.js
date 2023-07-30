@@ -38,15 +38,4 @@ export const userReducer = (state = INITIAL_STATE, action = {}) => {
         default:
             return state;
     }
-
-
 }
-
-
-/* 
-currentUser: {
-    displayName: string,
-    email: string,
-    uid: string,
-}
-*/

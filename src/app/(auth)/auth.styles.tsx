@@ -138,6 +138,14 @@ export const DividerRow = styled.div`
     background-color: black;
 `
 
+export const AuthCaption = styled.h1`
+    margin: -2px;
+    padding: 0px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+`
+
+
 interface LoadingMomentumProps {
     display: string,
 }

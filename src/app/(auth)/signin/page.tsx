@@ -4,6 +4,7 @@ import {
   FormsContainer,
   HeaderDividerContainer,
   DividerRow,
+  AuthCaption,
 } from "../auth.styles"
 import Image from "next/image"
 import { useEffect } from "react";
@@ -46,6 +47,8 @@ export default function Home() {
             <Image src="/Mutancia-Social-Black.png" alt="Mutancia Social Logo" width={50} height={50}/>
             <DividerRow />
           </HeaderDividerContainer>
+
+          <AuthCaption>Login</AuthCaption>
 
           <SignInComponent/>
 

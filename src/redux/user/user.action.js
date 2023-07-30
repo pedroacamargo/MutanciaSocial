@@ -15,7 +15,6 @@ export const fetchUserAsync = () => async (dispatch) => {
     dispatch(fetchUserStart());
     try {
         const user = await statePersist();
-        console.log(user)
         dispatch(fetchUserSuccess(user));
     } catch (error) {
         dispatch(fetchUserFailed(error));

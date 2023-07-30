@@ -69,6 +69,7 @@ export const UsernameNavbar = styled.span`
     font-size: 0.8em;
     font-weight: bold;
     margin: 0 5px;
+    cursor: pointer;
 `
 
 export const ProfilePic = styled(Image)`
@@ -141,4 +142,8 @@ export const SignOutButton = styled(ProfilePopUpLink)`
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
 
+`
+
+export const NavbarButton = styled.button`
+    
 `

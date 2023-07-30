@@ -5,7 +5,9 @@ import {
     InputForm,
     RememberMeContainer,
     SignInSubmitButtonsContainer,
+    AlreadyHaveAnAccount as DontHaveAnAccount,
 } from "../AuthForms.styles";
+
 import {
     LoadingMomentum
 } from "@/app/(auth)/auth.styles";
@@ -104,10 +106,15 @@ export default function SignInComponent() {
                 <InputForm type="password" placeholder="Password..." {...register("password")} />
             </InputContainer>
 
+            <div style={{width: '80%'}}>
+                <DontHaveAnAccount href={`/signup`}>Don't have an account yet? Register now</DontHaveAnAccount>
+            </div>
+
             <RememberMeContainer>
                 <input type="checkbox" id="rememberme" style={{marginRight: "5px", marginTop: "-2px"}}/>
                 <label htmlFor="rememberme">Remember me</label>
             </RememberMeContainer>
+            
 
             {errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox> || !usernameWrongErrorBox
             ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> || !usernameWrongErrorBox) : <></>}
