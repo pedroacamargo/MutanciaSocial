@@ -68,7 +68,7 @@ export default function SignUpComponent() {
                 dispatch(fetchUserAsync() as any);
                 window.localStorage.clear();
                 window.localStorage.setItem('currentUser', JSON.stringify(userData));
-                router.push("/");
+                router.push("/welcome");
 
             } else {
                 console.log("Sign Up failed :(");

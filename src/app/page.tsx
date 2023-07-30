@@ -6,12 +6,6 @@ import { useDispatch } from "react-redux";
 import { fetchUserAsync } from "@/redux/user/user.action";
 import Navbar from "./_components/navbar/Navbar.component";
 
-interface User {
-    displayName?: string,
-    email?: string,
-    uid?: string,
-}
-
 export default function Dashboard() {
     const router = useRouter();
     const dispatch = useDispatch();
