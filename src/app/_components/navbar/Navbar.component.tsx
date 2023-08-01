@@ -14,32 +14,39 @@ import {
     SignOutButton,
     LoggedInAsContainer
 } from "./Navbar.styles";
-import { ButtonInverted } from "@/app/GlobalStyles.styles";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserAsync } from "@/redux/user/user.action";
-import { selectCurrentUser } from '@/redux/user/user.selector';
-import { useRouter } from "next/navigation";
+import { selectCurrentUser, selectUserIsLoading } from '@/redux/user/user.selector';
 import { signOut } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { FaCaretDown } from "react-icons/fa";
 
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import NavbarLoading from "./NavbarLoading.component";
 
 export default function Navbar() {
-    const user = useSelector(selectCurrentUser)
-    const router = useRouter();
     const dispatch = useDispatch();
+    const user = useSelector(selectCurrentUser)
+    const isUserLoading = useSelector(selectUserIsLoading);
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
+    
 
     const signOutUser = async () => {
-        window.localStorage.clear();
-        dispatch(fetchUserAsync() as any);
         await signOut(auth)
+        dispatch(fetchUserAsync() as any);
     }
 
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
+
+    useEffect(() => {
+        dispatch(fetchUserAsync() as any);
+    }, []);
+
+    if (isUserLoading) {
+        return <NavbarLoading />
+    }
 
     return (
         <>
