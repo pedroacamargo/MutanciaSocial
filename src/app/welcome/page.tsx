@@ -11,6 +11,7 @@ import {
     StepsContainer
 } from "./welcome.styles";
 import StepOne from "../_components/welcome/step1/StepOne.component";
+import StepTwo from "../_components/welcome/step2/StepTwo.component";
 import Image from "next/image";
 
 import { useRouter } from "next/navigation";
@@ -24,7 +25,6 @@ export default function Welcome() {
     useEffect(() => {
         dispatch(fetchUserAsync() as any);
     }, []);
-    console.log(100/stepsNumber * stepsLeft)
 
     const nextStep = () => setStepsLeft(stepsLeft - 1);
     const previousStep = () => setStepsLeft(stepsLeft + 1);
@@ -41,7 +41,8 @@ export default function Welcome() {
 
             <StepsContainer>
 
-                <StepOne nextStep={nextStep} skipSteps={skipSteps} isVisible={stepsLeft == 5 ? true : false}/>
+                <StepOne nextStep={nextStep} isVisible={stepsLeft == 5 ? true : false}/>
+                <StepTwo nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 4 ? true : false}/>
 
             </StepsContainer>
 
