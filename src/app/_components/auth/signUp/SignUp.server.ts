@@ -15,7 +15,7 @@ export async function SignUp(user: UserCredentials) {
     const alreadyExist = await isInAuthDB(email);
 
     if (alreadyExist) {
-        console.error("Username already exists!");
+        console.error("Email already in use!");
         return false;
     }
 

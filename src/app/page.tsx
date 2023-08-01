@@ -1,19 +1,8 @@
 'use client'
-import { useRouter, usePathname } from "next/navigation";
 import { Helmet } from "react-helmet-async";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { fetchUserAsync } from "@/redux/user/user.action";
 import Navbar from "./_components/navbar/Navbar.component";
 
 export default function Dashboard() {
-    const router = useRouter();
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchUserAsync() as any);
-    }, []);
-
 
     return (
         <>

@@ -61,13 +61,8 @@ export default function SignUpComponent() {
             const response = await SignUp(user);
             
             if (response) {
-                // Create the username in auth
                 updateProfile(auth.currentUser, { displayName: user.username })
-
-                const userData = { displayName: user.username, email: user.email, uid: auth?.currentUser.uid }
                 dispatch(fetchUserAsync() as any);
-                window.localStorage.clear();
-                window.localStorage.setItem('currentUser', JSON.stringify(userData));
                 router.push("/welcome");
 
             } else {
@@ -130,7 +125,7 @@ export default function SignUpComponent() {
             ) : errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox>
             ) : errors.email ? (<ErrorBox>{errors.email?.message}</ErrorBox>
             ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> ) : <></>} 
-            {usernameAlreadyExistsError && <ErrorBox> Username already exists! </ErrorBox>}
+            {usernameAlreadyExistsError && <ErrorBox> Email already in use! </ErrorBox>}
 
             <SignUpSubmitButtonsContainer>
                 <ButtonInverted type="submit">Sign Up</ButtonInverted>

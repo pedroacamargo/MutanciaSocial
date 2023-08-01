@@ -49,16 +49,9 @@ export default function SignInComponent() {
         dispatch(fetchUserStart())
         try {
             const response = await SignIn(user);
-            const userData = {
-                displayName: user.username,
-                email: auth.currentUser?.email,
-                uid: auth.currentUser?.uid,
-            }
             
             if (response) {
                 dispatch(fetchUserAsync() as any);
-                window.localStorage.clear();
-                window.localStorage.setItem('currentUser', JSON.stringify(userData));
                 router.push("/");
                 
             } else {
