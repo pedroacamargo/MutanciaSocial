@@ -21,21 +21,17 @@ import {
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectUserIsLoading } from '@/redux/user/user.selector';
-import { fetchUserAsync, fetchUserFinished, fetchUserStart } from '@/redux/user/user.action';
-import { SignUp } from './SignUp.server';
 import { useRouter } from 'next/navigation';
-import { updateProfile, getAuth } from 'firebase/auth';
-import { SaveInDatabase, continueWithGoogle } from '../Auth.server';
 import { useState } from 'react';
-import { databases } from '@/lib/types/databases.types';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function SignUpComponent() {
     const [usernameAlreadyExistsError, setUsernameAlreadyExistsError] = useState(false);
     const isLoading = useSelector(selectUserIsLoading);
-    const dispatch = useDispatch();
     const router = useRouter();
+    const { registerUser, login, loginWithGoogle } = useAuth();
     
     // React Forms Users Schema
     const schema = yup.object().shape({
@@ -55,32 +51,21 @@ export default function SignUpComponent() {
         password: string,
         confirmPassword: string
     }) => {
-        const auth: any = getAuth();
-        dispatch(fetchUserStart());
-        try {
-            const response = await SignUp(user);
-            
-            if (response) {
-                updateProfile(auth.currentUser, { displayName: user.username })
-                dispatch(fetchUserAsync() as any);
-                router.push("/welcome");
+        const { username, email, password, confirmPassword } = user;
 
-            } else {
-                console.log("Sign Up failed :(");
-                setUsernameAlreadyExistsError(true);
-            } 
-        } catch (err) {
-            console.error(err);
+        const response = await registerUser(username, email, password, confirmPassword);
+        if (response) {
+            await login(username, password);
+            router.push('/welcome');
+        } else {
+            setUsernameAlreadyExistsError(true);
         }
-        dispatch(fetchUserFinished());
     }
 
     
     const signUpWithGoogle = async () => {
-        dispatch(fetchUserStart());
-        const user = await continueWithGoogle()
-        if (user) router.push("/");
-        dispatch(fetchUserFinished());
+        const user = await loginWithGoogle();
+        if (user) router.push("/welcome");
     }
 
     const resetErrorBoxes = () => {

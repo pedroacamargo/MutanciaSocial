@@ -51,8 +51,6 @@ export async function continueWithGoogle() {
             } else console.log('User already exists in our db, redirecting to home page...')
         }
         
-        window.localStorage.clear();
-        window.localStorage.setItem('currentUser', JSON.stringify(userData));
         return user
     } catch (err) {
         console.error(`An error ocurred: ${err}`);

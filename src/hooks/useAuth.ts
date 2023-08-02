@@ -1,0 +1,59 @@
+import { SignIn } from "@/app/_components/auth/signIn/SignIn.server"
+import { fetchUserAsync, fetchUserFinished, fetchUserStart } from "@/redux/user/user.action";
+import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+import { auth } from "@/utils/firebase";
+import { SignUp } from "@/app/_components/auth/signUp/SignUp.server";
+import { updateProfile } from "firebase/auth";
+import { continueWithGoogle } from "@/app/_components/auth/Auth.server";
+
+export const useAuth = () => {
+    const dispatch = useDispatch();
+    
+    const login = async (username: string, password: string) => {
+        dispatch(fetchUserStart());
+        const isLogged = await SignIn({username, password});
+
+        if (isLogged) {
+            dispatch(fetchUserAsync() as any);
+            Cookies.set("currentUser", JSON.stringify(auth.currentUser), { secure: true });
+            return auth.currentUser
+        }
+
+        dispatch(fetchUserFinished());
+        return null;
+    }
+
+    const registerUser = async (username: string, email: string, password: string, confirmPassword: string) => {
+        dispatch(fetchUserStart());
+        try {
+            const response = await SignUp({ username, email, password, confirmPassword });
+            
+            if (response && auth.currentUser) {
+                updateProfile(auth.currentUser, { displayName: username })
+                dispatch(fetchUserAsync() as any);
+            } else {
+                console.log("Sign Up failed :(");
+            } 
+
+            return response;
+        } catch (err) {
+            console.error(err);
+        }
+        dispatch(fetchUserFinished());
+    }
+
+    const loginWithGoogle = async () => {
+        dispatch(fetchUserStart());
+        const user = await continueWithGoogle();
+        
+        if (user) {
+            Cookies.set('currentUser', JSON.stringify(user.user), { secure: true });
+        }
+
+        dispatch(fetchUserFinished());
+        return user ? true : false; 
+    }
+    
+    return { login, loginWithGoogle ,registerUser };
+}
