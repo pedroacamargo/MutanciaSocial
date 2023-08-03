@@ -17,8 +17,6 @@ export async function SignIn({
     // Get the email of the username
     const success = data.docs.some((doc) => {
 
-        //console.log(`displayName: ${doc.data().displayName} | username: ${username}`);
-
         if (doc.data().displayName == username) {
             email = doc.data().email;
             return true;
@@ -26,10 +24,6 @@ export async function SignIn({
 
         return false;
     });
-
-    // Debug:
-    //console.log(success)
-    //console.log(email);
 
     if (success) {
         try {
