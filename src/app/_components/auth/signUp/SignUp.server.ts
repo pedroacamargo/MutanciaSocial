@@ -28,10 +28,18 @@ export async function SignUp(user: UserCredentials) {
                 displayName: username,
                 email: auth.currentUser?.email,
                 uid: auth.currentUser?.uid,
+                bio: null,
+                age: null,
+                gender: null,
+                country: null,
+                height: null,
+                weight: null,
+                sports: [],
+                acceptedConditions: false,
             }});
 
 
-        return true; // signin success
+        return true; // signup success
     } catch (err) {
         console.error(err)
         return false; // signup failure

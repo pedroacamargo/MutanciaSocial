@@ -1,3 +1,3 @@
-export const databases = {
-    authDB: 'authentication',
+export enum databases {
+    authDB = 'authentication',
 }
