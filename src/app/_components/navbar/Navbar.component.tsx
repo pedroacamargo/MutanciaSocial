@@ -14,36 +14,24 @@ import {
     SignOutButton,
     LoggedInAsContainer
 } from "./Navbar.styles";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUserAsync } from "@/redux/user/user.action";
-import { selectCurrentUser, selectUserIsLoading } from '@/redux/user/user.selector';
-import { signOut } from "firebase/auth";
-import { auth } from "@/utils/firebase";
+import { useSelector } from "react-redux";
+import { selectUserIsLoading } from '@/redux/user/user.selector';
 import { FaCaretDown } from "react-icons/fa";
-
-
+import { useSignOut } from "@/hooks/useSignOut";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavbarLoading from "./NavbarLoading.component";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function Navbar() {
-    const dispatch = useDispatch();
-    const user = useSelector(selectCurrentUser)
+    const { user, setUser } = useCurrentUser();
+    const { signOutUser } = useSignOut(setUser);
     const isUserLoading = useSelector(selectUserIsLoading);
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
     
-
-    const signOutUser = async () => {
-        await signOut(auth)
-        dispatch(fetchUserAsync() as any);
-    }
-
+    const signOut = async () => await signOutUser();
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
-
-    useEffect(() => {
-        dispatch(fetchUserAsync() as any);
-    }, []);
-
+    
     if (isUserLoading) {
         return <NavbarLoading />
     }
@@ -119,7 +107,7 @@ export default function Navbar() {
                             </LoggedInAsContainer>
 
                             
-                            <SignOutButton onClick={signOutUser} href='/signin'>Sign In</SignOutButton>
+                            <SignOutButton onClick={signOut} href='/signin'>Sign In</SignOutButton>
                         </ProfileOptionsContainer>
 
                     </UserLoggedContainer>
