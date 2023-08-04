@@ -1,10 +1,10 @@
-import { StepsProps } from "@/lib/interfaces/welcome-steps.interface";
+import { StepOneProps } from "@/lib/interfaces/welcome-steps.interface";
 import { HeaderSteps, SubHeaderSteps, StepsContainer } from "@/app/welcome/welcome.styles";
 import { StepOneContainer, ButtonsContainer } from "../steps.styles";
 import { ButtonBase, ButtonInverted } from "@/app/GlobalStyles.styles";
 
-export default function StepOne(props: StepsProps) {
-    const { isVisible, nextStep, previousStep } = props
+export default function StepOne(props: StepOneProps) {
+    const { isVisible, nextStep } = props
 
     return (
         <StepOneContainer style={{display: isVisible ? 'flex' : 'none'}}>

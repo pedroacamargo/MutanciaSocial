@@ -26,10 +26,31 @@ export const FormsContainer = styled.form`
     justify-content: center;
     align-items: center;
     width: 600px;
+    column-gap: 8px;
 `
+
+export const FormsContainerStepsThree = styled.div`
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    column-gap: 8px;
+`
+
+export const FormsContainerGender = styled(FormsContainer)`
+    flex-direction: row;
+`
+
 interface CheckBoxWelcomeProps {
     ischecked: string,
+    bgcolor: string,
+    bordercolor: string
 }
+
+const bordercolor = "#0572ffb5"
+const bgcolor = "#8ff1ab3a"
 
 export const CheckBoxContainer = styled.div<CheckBoxWelcomeProps>`
     cursor: pointer;
@@ -38,8 +59,8 @@ export const CheckBoxContainer = styled.div<CheckBoxWelcomeProps>`
     align-items: center;
     width: 100%;
     border-radius: 5px;
-    background-color: ${(props) => props.ischecked == 'true' ? '#8ff1ab3a' : 'none'};
-    border: 1px solid ${(props) => props.ischecked == 'true' ? '#34eb67' : 'black'};
+    background-color: ${(props) => props.ischecked == 'true' ? props.bgcolor : 'none'};
+    border: 1px solid ${(props) => props.ischecked == 'true' ? props.bordercolor : 'black'};
     padding: 15px;
 `
 
@@ -60,6 +81,39 @@ export const CheckBoxWelcome = styled.div<CheckBoxWelcomeProps>`
 export const LabelWelcome = styled.label<CheckBoxWelcomeProps>`
     cursor: pointer;
     font-family: ${font1};
-    color: ${(props) => props.ischecked == 'true' ? '#1eee59' : 'black'};
+    color: ${(props) => props.ischecked == 'true' ? props.bordercolor : 'black'};
     font-weight: 600;
+    flex: 1;
+`
+
+export const Select = styled.select`
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 5px;
+    font-family: ${font1};
+    font-size: 1em;
+`
+
+export const Option = styled.option`
+    font-family: ${font1};
+    font-size: 1.1em;
+    height: 100px;
+`
+
+export const SelectContainer = styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+`
+
+export const InputNumber = styled.input`
+    margin: 10px 0;
+    padding: 11px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    border: 1px solid black;
 `
