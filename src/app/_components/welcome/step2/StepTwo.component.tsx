@@ -7,11 +7,7 @@ import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 
 export default function StepTwo(props: StepsProps) {
-    const { isVisible, nextStep, previousStep } = props
-    const [forms, setForms] = useState({
-        isConditionsAccepted: false,
-        grantDataSavePermission: false,
-    });
+    const { isVisible, nextStep, previousStep, forms, setForms } = props
     const [showErrorBox, setShowErrorBox] = useState(false)
 
 
@@ -19,7 +15,10 @@ export default function StepTwo(props: StepsProps) {
         if (!forms.grantDataSavePermission || !forms.isConditionsAccepted) {
             setShowErrorBox(true);
             return;
-        } else nextStep();
+        } else {
+            nextStep();
+            setShowErrorBox(false);
+        } 
     }
 
     return (
@@ -29,20 +28,20 @@ export default function StepTwo(props: StepsProps) {
 
 
             <FormsContainer>
-                <CheckBoxContainer ischecked={`${forms.isConditionsAccepted}`} onClick={() => setForms({...forms, isConditionsAccepted: !forms.isConditionsAccepted})}>
-                    <CheckBoxWelcome ischecked={`${forms.isConditionsAccepted}`} id="conditions">
+                <CheckBoxContainer bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.isConditionsAccepted}`} onClick={() => setForms({...forms, isConditionsAccepted: !forms.isConditionsAccepted})}>
+                    <CheckBoxWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.isConditionsAccepted}`} id="conditions">
                         <FaCheck style={{display: forms.isConditionsAccepted ? 'block' : 'none', width: '15px', height: '15px'}} color="white"></FaCheck>
                     </CheckBoxWelcome>
-                    <LabelWelcome ischecked={`${forms.isConditionsAccepted}`} htmlFor="conditions">I accept the terms of condition and use</LabelWelcome>
+                    <LabelWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.isConditionsAccepted}`} htmlFor="conditions">I accept the terms of condition and use</LabelWelcome>
                 </CheckBoxContainer>
             </FormsContainer>
 
             <FormsContainer style={{marginTop: '0px'}}>
-                <CheckBoxContainer ischecked={`${forms.grantDataSavePermission}`} onClick={() => setForms({...forms, grantDataSavePermission: !forms.grantDataSavePermission})}>
-                    <CheckBoxWelcome ischecked={`${forms.grantDataSavePermission}`} id="conditions">
+                <CheckBoxContainer bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.grantDataSavePermission}`} onClick={() => setForms({...forms, grantDataSavePermission: !forms.grantDataSavePermission})}>
+                    <CheckBoxWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.grantDataSavePermission}`} id="conditions">
                         <FaCheck style={{display: forms.grantDataSavePermission ? 'block' : 'none', width: '15px', height: '15px'}} color="white"></FaCheck>
                     </CheckBoxWelcome>
-                    <LabelWelcome ischecked={`${forms.grantDataSavePermission}`} htmlFor="conditions">I grant permission to Mutantial store my user data</LabelWelcome>
+                    <LabelWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.grantDataSavePermission}`} htmlFor="conditions">I grant permission to Mutantial store my user data</LabelWelcome>
                 </CheckBoxContainer>
             </FormsContainer>
 
