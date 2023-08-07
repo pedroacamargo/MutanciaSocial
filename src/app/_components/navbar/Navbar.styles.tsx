@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled, keyframes } from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -144,6 +144,89 @@ export const SignOutButton = styled(ProfilePopUpLink)`
 
 `
 
-export const NavbarButton = styled.button`
-    
+export const NavbarLoadingSkeletonContainer = styled.div`
+    margin-right: 10px;
+    height: 40px;
+    overflow: hidden;
+    width: 100px;
+    border: 1px solid white;
+    border-radius: 10px;
+`
+
+
+
+export const NavbarLoadingSkeleton = styled.div`
+    position: relative;
+    left: -200px;
+    height: 40px;
+    width: 300px;
+    opacity: .6;
+    background-image: linear-gradient(to right, #cfcfcf 10%, #e9e2e2 50%, #bdbdbd);
+    background-color: #e0dede;
+    animation: swipe .5s infinite alternate;
+    border-radius: 10px;
+
+    @keyframes swipe {
+        from {
+            left: 0;
+        }
+        to {
+            left: -200px;
+        }
+    }
+    @-webkit-keyframes swipe {
+        from {
+            left: 0;
+        }
+        to {
+            left: -200px;
+        }
+    }
+`
+
+export const UserNameLoadingContainer = styled.div`
+    height: 20px;
+    width: 60px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-left: 5px;
+`
+
+export const UserNameLoadingSkeleton = styled.div`
+position: relative;
+    height: 20px;
+    width: 180px;
+    background-image: linear-gradient(to right, #cfcfcf 10%, #e9e2e2 50%, #bdbdbd);
+    background-color: #e0dede;
+    border-radius: 5px;
+    animation: swipe2 .5s infinite alternate;
+    @keyframes swipe2 {
+        from {
+            left: 0;
+        }
+        to {
+            left: -120px;
+        }
+    }
+    @-webkit-keyframes swipe2 {
+        from {
+            left: 0;
+        }
+        to {
+            left: -120px;
+        }
+    }
+
+`
+
+export const UserProfilePictureLoadingContainer = styled.div`
+    height: 40px;
+    width: 40px;
+    border-radius: 100px;
+    overflow: hidden;
+    margin-left: 10px;
+`
+
+export const UserProfilePictureLoadingSkeleton = styled(UserNameLoadingSkeleton)`
+    height: 40px;
 `

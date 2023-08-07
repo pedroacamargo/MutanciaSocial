@@ -2,7 +2,7 @@ import { databases } from "@/lib/types/databases.types";
 import { SaveInDatabaseProps } from "@/lib/interfaces/SaveDataProps.interface";
 import { auth, googleProvider, db } from "@/utils/firebase";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 
 /**
  * Checks if there's a session live
@@ -20,18 +20,14 @@ export async function isLoggedIn() {
 
 /**
  * Will check if an user is logged in, if is logged and there's an user stored in localStorage as "currentUser", will parse the JSON and return the user data.
- * Use this function with a dispatch(setCurrentUser(await statePersist())) in a useEffect to persist the data in Redux
- * @returns JSON.parse(window.localStorage.getItem("currentUser"))
+ * @returns User | null
  * 
  */
 export async function statePersist() {
     const isLogged = await isLoggedIn();
-    const currentUserJson = window.localStorage.getItem("currentUser");
+    const currentUser = auth.currentUser;
 
-    if(isLogged && currentUserJson) {
-        const user = JSON.parse(currentUserJson);
-        return user;
-    }
+    if (isLogged) return currentUser;
     return null;
 }
 
@@ -55,8 +51,6 @@ export async function continueWithGoogle() {
             } else console.log('User already exists in our db, redirecting to home page...')
         }
         
-        window.localStorage.clear();
-        window.localStorage.setItem('currentUser', JSON.stringify(userData));
         return user
     } catch (err) {
         console.error(`An error ocurred: ${err}`);
@@ -77,7 +71,7 @@ export const SaveInDatabase = async (props: SaveInDatabaseProps) => {
     const dbRef = collection(db, props.dbName);
 
     console.log('adding user in the db...')
-    await addDoc(dbRef, {...props.payload, modifiedAt});
+    await setDoc(doc(dbRef, props.payload.uid), {...props.payload, modifiedAt});
 }
 
 /**

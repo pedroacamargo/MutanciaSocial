@@ -18,7 +18,7 @@ export default GlobalStyle
 export const ButtonBase = styled.button`
     padding: 7px;
     font-size: 1.2em;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-color: black;
     color: white;
     border: 1px solid black;

@@ -1,4 +1,3 @@
-import { SignIn } from "./SignIn.server";
 import {
     SignInForm,
     InputContainer,
@@ -19,18 +18,16 @@ import { FaLock, FaUser, FaGoogle } from "react-icons/fa";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from "react-hook-form";
-import { fetchUserAsync, fetchUserFinished, fetchUserStart } from "@/redux/user/user.action";
 import { useRouter } from "next/navigation";
-import { auth } from "@/utils/firebase";
 import { useState } from "react";
-import { continueWithGoogle } from "../Auth.server";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUserIsLoading } from "@/redux/user/user.selector";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function SignInComponent() {
     const isLoading = useSelector(selectUserIsLoading);
+    const { login, loginWithGoogle } = useAuth()
     const [usernameWrongErrorBox, setUsernameWrongErrorBox] = useState(false);
-    const dispatch = useDispatch();
     const router = useRouter();
 
     const schema = yup.object().shape({
@@ -42,42 +39,20 @@ export default function SignInComponent() {
         resolver: yupResolver(schema)
     })
 
-    const onSubmitSignIn = async (user: {
-        username: string,
-        password: string,
-    }) => {
-        dispatch(fetchUserStart())
+    const onSubmitSignIn = async (user: { username: string, password: string }) => {
         try {
-            const response = await SignIn(user);
-            const userData = {
-                displayName: user.username,
-                email: auth.currentUser?.email,
-                uid: auth.currentUser?.uid,
-            }
+            const currentUser = await login(user.username, user.password)
             
-            if (response) {
-                dispatch(fetchUserAsync() as any);
-                window.localStorage.clear();
-                window.localStorage.setItem('currentUser', JSON.stringify(userData));
-                router.push("/");
-                
-            } else {
-                console.error("Sign Up failed :(");
-                dispatch(fetchUserFinished());
-                setUsernameWrongErrorBox(true);
-            } 
-
+            if (currentUser) router.push("/") 
+            else setUsernameWrongErrorBox(true);
         } catch(err) {
             console.error(err);
-            dispatch(fetchUserFinished())
         }
     }
 
     const signInWithGoogle = async () => {
-        dispatch(fetchUserStart());
-        const user = await continueWithGoogle()
+        const user = await loginWithGoogle();
         if (user) router.push("/");
-        dispatch(fetchUserFinished());
     }
 
     return (

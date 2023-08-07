@@ -14,32 +14,27 @@ import {
     SignOutButton,
     LoggedInAsContainer
 } from "./Navbar.styles";
-import { ButtonInverted } from "@/app/GlobalStyles.styles";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUserAsync } from "@/redux/user/user.action";
-import { selectCurrentUser } from '@/redux/user/user.selector';
-import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { auth } from "@/utils/firebase";
+import { useSelector } from "react-redux";
+import { selectUserIsLoading } from '@/redux/user/user.selector';
 import { FaCaretDown } from "react-icons/fa";
-
-
+import { useSignOut } from "@/hooks/useSignOut";
 import Image from "next/image";
 import { useState } from "react";
+import NavbarLoading from "./NavbarLoading.component";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function Navbar() {
-    const user = useSelector(selectCurrentUser)
-    const router = useRouter();
-    const dispatch = useDispatch();
+    const { user, setUser } = useCurrentUser();
+    const { signOutUser } = useSignOut(setUser);
+    const isUserLoading = useSelector(selectUserIsLoading);
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
-
-    const signOutUser = async () => {
-        window.localStorage.clear();
-        dispatch(fetchUserAsync() as any);
-        await signOut(auth)
-    }
-
+    
+    const signOut = async () => await signOutUser();
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
+    
+    if (isUserLoading) {
+        return <NavbarLoading />
+    }
 
     return (
         <>
@@ -112,7 +107,7 @@ export default function Navbar() {
                             </LoggedInAsContainer>
 
                             
-                            <SignOutButton onClick={signOutUser} href='/signin'>Sign In</SignOutButton>
+                            <SignOutButton onClick={signOut} href='/signin'>Sign In</SignOutButton>
                         </ProfileOptionsContainer>
 
                     </UserLoggedContainer>
