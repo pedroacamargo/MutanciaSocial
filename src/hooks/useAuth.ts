@@ -51,7 +51,6 @@ export const useAuth = () => {
         } catch (err) {
             console.error(err);
         }
-        dispatch(fetchUserFinished());
     }
 
     const loginWithGoogle = async () => {

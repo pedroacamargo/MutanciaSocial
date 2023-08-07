@@ -12,7 +12,7 @@ export default function StepTwo(props: StepsProps) {
 
 
     const handleSubmit = () => {
-        if (!forms.grantDataSavePermission || !forms.isConditionsAccepted) {
+        if (!forms.grantDataSavePermission || !forms.acceptedConditions) {
             setShowErrorBox(true);
             return;
         } else {
@@ -28,11 +28,11 @@ export default function StepTwo(props: StepsProps) {
 
 
             <FormsContainer>
-                <CheckBoxContainer bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.isConditionsAccepted}`} onClick={() => setForms({...forms, isConditionsAccepted: !forms.isConditionsAccepted})}>
-                    <CheckBoxWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.isConditionsAccepted}`} id="conditions">
-                        <FaCheck style={{display: forms.isConditionsAccepted ? 'block' : 'none', width: '15px', height: '15px'}} color="white"></FaCheck>
+                <CheckBoxContainer bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.acceptedConditions}`} onClick={() => setForms({...forms, acceptedConditions: !forms.acceptedConditions})}>
+                    <CheckBoxWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.acceptedConditions}`} id="conditions">
+                        <FaCheck style={{display: forms.acceptedConditions ? 'block' : 'none', width: '15px', height: '15px'}} color="white"></FaCheck>
                     </CheckBoxWelcome>
-                    <LabelWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.isConditionsAccepted}`} htmlFor="conditions">I accept the terms of condition and use</LabelWelcome>
+                    <LabelWelcome bordercolor={`#22f35dc0`} bgcolor={`#8ff1ab3a`} ischecked={`${forms.acceptedConditions}`} htmlFor="conditions">I accept the terms of condition and use</LabelWelcome>
                 </CheckBoxContainer>
             </FormsContainer>
 
