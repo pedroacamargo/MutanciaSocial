@@ -18,4 +18,7 @@ export interface WelcomeForm {
     gender: string,
     country: string,
     age: number,
+    height: number,
+    weight: number,
+    sports: string[],
 }

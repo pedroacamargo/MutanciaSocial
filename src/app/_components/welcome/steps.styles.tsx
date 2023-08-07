@@ -9,6 +9,10 @@ export const StepOneContainer = styled.div`
     flex-direction: column;
 `
 
+export const StepFourContainer = styled(StepOneContainer)`
+    margin-top: 20px;
+`
+
 export const ButtonsContainer = styled.div`
     margin-top: 20px;
     margin-bottom: -100px;
@@ -116,4 +120,41 @@ export const InputNumber = styled.input`
     font-size: 1.2em;
     border-radius: 5px;
     border: 1px solid black;
+`
+
+export const SportsWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+`
+
+export const SportsCol = styled(SportsWrapper)`
+    flex-direction: column;
+`
+
+interface SportsChoice {
+    ischecked: string,
+    bordercolor: string
+}
+
+export const SportsChoice = styled.div<SportsChoice>`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 300px;
+    padding: 15px;
+    margin: 3px 5px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: ${props => props.ischecked};
+    border: 1px solid ${props => props.bordercolor};
+    cursor: pointer;
+
+    span {
+        font-family: ${font1};
+        margin-left: 5px;
+        font-weight: bold;
+        color: ${props => props.bordercolor}
+    }
 `

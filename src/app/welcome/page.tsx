@@ -13,6 +13,7 @@ import {
 import StepOne from "../_components/welcome/step1/StepOne.component";
 import StepTwo from "../_components/welcome/step2/StepTwo.component";
 import StepThree from "../_components/welcome/step3/StepThree.component";
+import StepFour from "../_components/welcome/step4/StepFour.component";
 import Image from "next/image";
 
 import { useRouter } from "next/navigation";
@@ -29,6 +30,9 @@ export default function Welcome() {
         gender: '',
         country: '',
         age: 0,
+        height: 0,
+        weight: 0,
+        sports: [],
     });
     console.table(welcomeForms)
 
@@ -53,6 +57,7 @@ export default function Welcome() {
                 <StepOne nextStep={nextStep} isVisible={stepsLeft == 5 ? true : false}/>
                 <StepTwo setForms={setWelcomeForms} forms={welcomeForms} nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 4 ? true : false}/>
                 <StepThree setForms={setWelcomeForms} forms={welcomeForms} nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 3 ? true : false}/>
+                <StepFour setForms={setWelcomeForms} forms={welcomeForms} nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 2 ? true : false}></StepFour>
 
             </StepsContainer>
 
