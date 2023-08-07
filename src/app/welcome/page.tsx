@@ -18,6 +18,7 @@ import Image from "next/image";
 
 import { useRouter } from "next/navigation";
 import { WelcomeForm } from "@/lib/interfaces/welcome-steps.interface";
+import StepSubmit from "../_components/welcome/stepSubmit/StepSubmit.component";
 
 export default function Welcome() {
     const stepsNumber = 5;
@@ -25,7 +26,7 @@ export default function Welcome() {
     const router = useRouter();
     const [stepsLeft, setStepsLeft] = useState(stepsNumber);
     const [welcomeForms, setWelcomeForms] = useState<WelcomeForm>({
-        isConditionsAccepted: false,
+        acceptedConditions: false,
         grantDataSavePermission: false,
         gender: '',
         country: '',
@@ -34,7 +35,6 @@ export default function Welcome() {
         weight: 0,
         sports: [],
     });
-    console.table(welcomeForms)
 
     useEffect(() => {
         dispatch(fetchUserAsync() as any);
@@ -57,7 +57,8 @@ export default function Welcome() {
                 <StepOne nextStep={nextStep} isVisible={stepsLeft == 5 ? true : false}/>
                 <StepTwo setForms={setWelcomeForms} forms={welcomeForms} nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 4 ? true : false}/>
                 <StepThree setForms={setWelcomeForms} forms={welcomeForms} nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 3 ? true : false}/>
-                <StepFour setForms={setWelcomeForms} forms={welcomeForms} nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 2 ? true : false}></StepFour>
+                <StepFour setForms={setWelcomeForms} forms={welcomeForms} nextStep={nextStep} previousStep={previousStep} isVisible={stepsLeft == 2 ? true : false}/>
+                <StepSubmit forms={welcomeForms} previousStep={previousStep} isVisible={stepsLeft == 1 ? true : false}/>
 
             </StepsContainer>
 

@@ -2,7 +2,7 @@ import { databases } from "@/lib/types/databases.types";
 import { SaveInDatabaseProps } from "@/lib/interfaces/SaveDataProps.interface";
 import { auth, googleProvider, db } from "@/utils/firebase";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 
 /**
  * Checks if there's a session live
@@ -71,7 +71,7 @@ export const SaveInDatabase = async (props: SaveInDatabaseProps) => {
     const dbRef = collection(db, props.dbName);
 
     console.log('adding user in the db...')
-    await addDoc(dbRef, {...props.payload, modifiedAt});
+    await setDoc(doc(dbRef, props.payload.uid), {...props.payload, modifiedAt});
 }
 
 /**

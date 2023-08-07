@@ -12,8 +12,14 @@ export interface StepOneProps {
     nextStep: () => void,
 }
 
+export interface SubmitStepsProps {
+    isVisible: boolean,
+    forms: WelcomeForm,
+    previousStep: () => void,
+}
+
 export interface WelcomeForm {
-    isConditionsAccepted: boolean,
+    acceptedConditions: boolean,
     grantDataSavePermission: boolean,
     gender: string,
     country: string,
