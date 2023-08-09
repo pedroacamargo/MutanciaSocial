@@ -41,6 +41,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.3"
+    "@types/js-cookie": "^3.0.3",
+    "encoding": "^0.1.13"
   }
 }
