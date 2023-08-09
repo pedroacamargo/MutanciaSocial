@@ -31,7 +31,7 @@ export default function StepSubmit(props: SubmitStepsProps) {
     return (
         <StepOneContainer style={{display: isVisible ? 'flex' : 'none'}}>
             <HeaderSteps>Registering completed</HeaderSteps>
-            <SubHeaderSteps>Hit submit to complete your survey and navigate to the home page, where you'll be able to enjoy Mutantial!</SubHeaderSteps>
+            <SubHeaderSteps>Hit submit to complete your survey and navigate to the home page, where you&apos;ll be able to enjoy Mutantial!</SubHeaderSteps>
             <ButtonsContainer>
                 <ButtonBase onClick={previousStep}>Previous</ButtonBase>
                 <ButtonInverted onClick={handleSubmit}>Submit</ButtonInverted>

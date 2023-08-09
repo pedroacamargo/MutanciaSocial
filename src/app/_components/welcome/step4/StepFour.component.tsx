@@ -48,15 +48,11 @@ export default function StepFour(props: StepsProps) {
 
             <div style={{width: '100%', display: 'flex', columnGap: '10px'}}>
                 <SelectContainer>
-                    <SubHeaderSteps style={{width: '100%', marginBottom: '-5px'}}>
-                        What's your weight?
-                    </SubHeaderSteps>
+                    <SubHeaderSteps style={{width: '100%', marginBottom: '-5px'}}>What&apos;s your weight?</SubHeaderSteps>
                     <InputNumber type="number" name="agenumber" id="age" max={300} min={30} placeholder="In Kgs" onChange={handleOnChangeWeight}/>
                 </SelectContainer>
                 <SelectContainer>
-                    <SubHeaderSteps style={{width: '100%', marginBottom: '-5px'}}>
-                        What's your height?
-                    </SubHeaderSteps>
+                    <SubHeaderSteps style={{width: '100%', marginBottom: '-5px'}}> What&apos;s your height? </SubHeaderSteps>
                     <InputNumber type="number" name="agenumber" id="age" max={250} min={50} placeholder="In centimeters" onChange={handleOnChangeHeight}/>
                 </SelectContainer>
             </div>
