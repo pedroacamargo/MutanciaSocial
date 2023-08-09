@@ -22,18 +22,20 @@ export async function SignUp(user: UserCredentials) {
     try {
         await createUserWithEmailAndPassword(auth, email, password);
         
+        /** @TODO -> Change SaveInDatabase to SaveUserInDatabase */
+
         await SaveInDatabase({ 
             dbName: databases.authDB, 
             payload: {
                 displayName: username,
                 email: auth.currentUser?.email,
                 uid: auth.currentUser?.uid,
-                bio: null,
-                age: null,
-                gender: null,
-                country: null,
-                height: null,
-                weight: null,
+                bio: '',
+                age: 0,
+                gender: '',
+                country: '',
+                height: 0,
+                weight: 0,
                 sports: [],
                 acceptedConditions: false,
             }});
