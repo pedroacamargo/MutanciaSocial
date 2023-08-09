@@ -73,7 +73,7 @@ export default function SignInComponent() {
             </InputContainer>
 
             <div style={{width: '80%'}}>
-                <DontHaveAnAccount href={`/signup`}>Don't have an account yet? Register now</DontHaveAnAccount>
+                <DontHaveAnAccount href="/signup">Don&apos;t have an account yet? Register now</DontHaveAnAccount>
             </div>
 
             <RememberMeContainer>
