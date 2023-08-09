@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Mutantial',
-  description: 'The best gymbros network is here',
+  description: 'The best gymbros network is here, sign up now!',
   icons: {
     icon: [
       '/favicon.ico?v=4',
