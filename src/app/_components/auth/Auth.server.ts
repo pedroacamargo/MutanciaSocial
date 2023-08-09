@@ -2,7 +2,10 @@ import { databases } from "@/lib/types/databases.types";
 import { SaveInDatabaseProps } from "@/lib/interfaces/SaveDataProps.interface";
 import { auth, googleProvider, db } from "@/utils/firebase";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { User } from "@/lib/interfaces/User.interface";
+import { UserCookies } from "@/lib/interfaces/UserCredentials.interface";
+import { User as UserAuth } from "firebase/auth";
 
 /**
  * Checks if there's a session live
@@ -20,10 +23,10 @@ export async function isLoggedIn() {
 
 /**
  * Will check if an user is logged in, if is logged and there's an user stored in localStorage as "currentUser", will parse the JSON and return the user data.
- * @returns User | null
+ * @returns User as UserAuth | null
  * 
  */
-export async function statePersist() {
+export async function statePersist(): Promise<UserAuth | null> {
     const isLogged = await isLoggedIn();
     const currentUser = auth.currentUser;
 
@@ -36,26 +39,40 @@ export async function statePersist() {
  * Will signUp or signIn an user with Google Provider automatically, testing if already exists in the DB
  * @returns User | null
  */
-export async function continueWithGoogle() {
+export async function continueWithGoogle(): Promise<UserCookies | null> {
     try {
         const user = await signInWithPopup(auth, googleProvider);
-        const userData = { displayName: user?.user.displayName, email: user?.user.email, uid: user?.user.uid }
 
-        if (user.user.email) {
+        if (user.user.email && user.user.displayName) {
             const alreadyExist = await isInAuthDB(user.user.email);
-            if (!alreadyExist) {
-                SaveInDatabase({
-                    dbName: databases.authDB,
-                    payload: userData,
+            if (!alreadyExist) { 
+                /** @TODO -> ERROR HANDLING WITH TRY/CATCH */
+                SaveUserInDataBase({
+                    acceptedConditions: false,
+                    age: 0,
+                    bio: '',
+                    country: '',
+                    displayName: user.user.displayName,
+                    email: user.user.email,
+                    gender: '',
+                    height: 0,
+                    modifiedAt: undefined,
+                    sports: [],
+                    uid: user.user.uid,
+                    weight: 0,
                 })
-            } else console.log('User already exists in our db, redirecting to home page...')
+                return { user: user.user, acceptedConditions: false }
+            } else {
+                console.log('User already exists in our db, redirecting to home page...');
+                const userData = await getUserFromAuthDBWithUid(user.user.uid);
+                return { user: user.user, acceptedConditions: userData.acceptedConditions }
+            } 
         }
         
-        return user
     } catch (err) {
         console.error(`An error ocurred: ${err}`);
-        return null;
     }
+    return null;
 }
 
 
@@ -70,8 +87,21 @@ export const SaveInDatabase = async (props: SaveInDatabaseProps) => {
     const modifiedAt = new Date();
     const dbRef = collection(db, props.dbName);
 
-    console.log('adding user in the db...')
+    console.log('adding user in the db ', props.dbName);
     await setDoc(doc(dbRef, props.payload.uid), {...props.payload, modifiedAt});
+}
+
+/**
+ * @async Function to save an user in authentication database 
+ *  
+ * @param user - An User that will be saved in the database 
+ */
+export const SaveUserInDataBase = async (user: User) => {
+    const modifiedAt = new Date();
+    const dbRef = collection(db, databases.authDB);
+
+    console.log('adding user to authentication database...');
+    await setDoc(doc(dbRef, user.uid), {...user, modifiedAt});
 }
 
 /**
@@ -88,4 +118,42 @@ export const isInAuthDB = async (email: string) => {
     });
     
     return repeatedUser;
+}
+
+/**
+ * @async - This function gives the user data located in the authentication database table giving the uid that you wish
+ * @param uid - Auth.currentUser.uid
+ * @returns User
+ */
+export const getUserFromAuthDBWithUid = async (uid: string): Promise<User> => {
+    const dbRef = doc(db, databases.authDB, uid);
+    const docSnap = await getDoc(dbRef);
+    const data = docSnap.data() as User;
+
+
+    return data;
+}
+
+
+/**
+ * @async - This function gives the user data located in the authentication database table giving the username that you wish
+ * 
+ * @param username - displayName or any string that you would like to give
+ * @returns User | null
+ */
+export const getUserFromAuthDBWithUsername = async (username: string): Promise<User | null> => {
+    const usersDBRef = collection(db, databases.authDB);
+    const data = await getDocs(usersDBRef);
+
+    const user: unknown = data.docs.find((doc) => {
+
+        if (doc.data().displayName == username) {
+            return doc;
+        }
+
+        return false;
+    })?.data();
+
+    if (user) return user as User;
+    else return null
 }

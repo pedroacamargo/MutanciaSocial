@@ -2,13 +2,10 @@ import { SignIn } from "@/app/_components/auth/signIn/SignIn.server"
 import { fetchUserAsync, fetchUserFinished, fetchUserStart } from "@/redux/user/user.action";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-import { auth, db } from "@/utils/firebase";
-import { DocumentData, collection, getDocs } from "firebase/firestore";
-import { databases } from "@/lib/types/databases.types";
+import { auth } from "@/utils/firebase";
 import { SignUp } from "@/app/_components/auth/signUp/SignUp.server";
 import { updateProfile } from "firebase/auth";
-import { User } from "@/lib/interfaces/User.interface";
-import { continueWithGoogle } from "@/app/_components/auth/Auth.server";
+import { continueWithGoogle, getUserFromAuthDBWithUid } from "@/app/_components/auth/Auth.server";
 
 export const useAuth = () => {
     const dispatch = useDispatch();
@@ -17,15 +14,8 @@ export const useAuth = () => {
         dispatch(fetchUserStart());
         const isLogged = await SignIn({username, password});
 
-        const usersDBRef = collection(db, databases.authDB);
-        const data = await getDocs(usersDBRef);
-        const userDoc = data.docs.find((user) => {
-            console.log('uid database: ',user.data().uid)
-            console.log('auth.uid: ',auth.currentUser?.uid)
-            return auth.currentUser && user.data().uid == auth.currentUser.uid
-        })?.data() as User;
-
-        if (isLogged) {
+        if (isLogged && auth.currentUser?.uid) {
+            const userDoc = await getUserFromAuthDBWithUid(auth.currentUser.uid);
             dispatch(fetchUserAsync() as any);
             Cookies.set("currentUser", JSON.stringify({ user: auth.currentUser, acceptedConditions: userDoc.acceptedConditions }), { secure: true });
             return auth.currentUser
@@ -58,11 +48,12 @@ export const useAuth = () => {
         const user = await continueWithGoogle();
         
         if (user) {
-            Cookies.set('currentUser', JSON.stringify(user.user), { secure: true });
+            Cookies.set('currentUser', JSON.stringify(user), { secure: true });
+            return true;
         }
 
         dispatch(fetchUserFinished());
-        return user ? true : false; 
+        return false; 
     }
     
     return { login, loginWithGoogle ,registerUser };
