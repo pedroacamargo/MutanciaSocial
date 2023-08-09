@@ -5,6 +5,10 @@ import { UserCookies } from "./lib/interfaces/UserCredentials.interface";
 
 export function middleware(request: NextRequest) {
     const currentUser = request.cookies.get("currentUser")?.value;
+
+    if (protectedRoutes.includes(request.nextUrl.pathname) && !currentUser) {
+        return NextResponse.redirect(new URL('/', request.url));
+    }
     
     if (authRoutes.includes(request.nextUrl.pathname) && currentUser) {
         return NextResponse.redirect(new URL('/', request.url));
