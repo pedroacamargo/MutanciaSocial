@@ -49,17 +49,22 @@ export async function continueWithGoogle(): Promise<UserCookies | null> {
                 /** @TODO -> ERROR HANDLING WITH TRY/CATCH */
                 SaveUserInDataBase({
                     acceptedConditions: false,
-                    age: 0,
-                    bio: '',
-                    country: '',
+                    age: null,
+                    bio: null,
+                    country: null,
+                    gender: null,
+                    height: null,
+                    sports: null,
+                    weight: null,
+                    headerName: null,
                     displayName: user.user.displayName,
-                    email: user.user.email,
-                    gender: '',
-                    height: 0,
-                    modifiedAt: undefined,
-                    sports: [],
                     uid: user.user.uid,
-                    weight: 0,
+                    email: user.user.email,
+                    followers: [],
+                    followersAmount: 0,
+                    following: [],
+                    followingAmount: 0,
+                    profilePictureURL: user.user.photoURL ? user.user.photoURL : '/Unknown_person.png',
                 })
                 return { user: user.user, acceptedConditions: false }
             } else {
