@@ -8,10 +8,13 @@ const font3 = 'Raleway';
 
 
 export const NavbarContainer = styled.div`
+    position: fixed;
+    width: 95%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    z-index: 99;
 
     font-family: 'Montserrat', sans-serif;
     margin-bottom: 5px;

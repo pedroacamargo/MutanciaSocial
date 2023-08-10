@@ -47,7 +47,7 @@ export default function Navbar() {
                 </NavbarLogoContainer>
 
                 <NavbarLinksContainer>
-                    <NavbarLink href='/dashboard'>Home</NavbarLink>
+                    <NavbarLink href='/'>Home</NavbarLink>
                     <NavbarLink href='/dashboard'>Explore</NavbarLink>
                     <NavbarLink href='/dashboard'>Guides</NavbarLink>
                     <NavbarLink href='/dashboard'>Workouts</NavbarLink>
@@ -67,7 +67,7 @@ export default function Navbar() {
                                 Logged in as <strong>{user.displayName}</strong>
                             </LoggedInAsContainer>
 
-                            <ProfilePopUpLink href='/teste'>My Profile</ProfilePopUpLink>
+                            <ProfilePopUpLink href={`/profile/${user.uid}`}>My Profile</ProfilePopUpLink>
                             <ProfilePopUpLink href='/teste'>My Posts</ProfilePopUpLink>
                             <ProfilePopUpLink href='/teste'>Settings</ProfilePopUpLink>
                             
