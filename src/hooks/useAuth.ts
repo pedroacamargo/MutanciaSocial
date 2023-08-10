@@ -16,9 +16,11 @@ export const useAuth = () => {
 
         if (isLogged && auth.currentUser?.uid) {
             const userDoc = await getUserFromAuthDBWithUid(auth.currentUser.uid);
-            dispatch(fetchUserAsync() as any);
-            Cookies.set("currentUser", JSON.stringify({ user: auth.currentUser, acceptedConditions: userDoc.acceptedConditions }), { secure: true });
-            return auth.currentUser
+            if (userDoc) {
+                dispatch(fetchUserAsync() as any);
+                Cookies.set("currentUser", JSON.stringify({ user: auth.currentUser, acceptedConditions: userDoc.acceptedConditions }), { secure: true });
+                return auth.currentUser
+            }
         }
 
         dispatch(fetchUserFinished());
