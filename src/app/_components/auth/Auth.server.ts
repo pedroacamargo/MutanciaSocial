@@ -2,7 +2,7 @@ import { databases } from "@/lib/types/databases.types";
 import { SaveInDatabaseProps } from "@/lib/interfaces/SaveDataProps.interface";
 import { auth, googleProvider, db } from "@/utils/firebase";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { DocumentData, addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { User } from "@/lib/interfaces/User.interface";
 import { UserCookies } from "@/lib/interfaces/UserCredentials.interface";
 import { User as UserAuth } from "firebase/auth";
@@ -65,7 +65,9 @@ export async function continueWithGoogle(): Promise<UserCookies | null> {
             } else {
                 console.log('User already exists in our db, redirecting to home page...');
                 const userData = await getUserFromAuthDBWithUid(user.user.uid);
-                return { user: user.user, acceptedConditions: userData.acceptedConditions }
+                if (userData) {
+                    return { user: user.user, acceptedConditions: userData.acceptedConditions }
+                }
             } 
         }
         
@@ -125,10 +127,10 @@ export const isInAuthDB = async (email: string) => {
  * @param uid - Auth.currentUser.uid
  * @returns User
  */
-export const getUserFromAuthDBWithUid = async (uid: string): Promise<User> => {
+export const getUserFromAuthDBWithUid = async (uid: string): Promise<DocumentData | undefined> => {
     const dbRef = doc(db, databases.authDB, uid);
     const docSnap = await getDoc(dbRef);
-    const data = docSnap.data() as User;
+    const data = docSnap.data();
 
 
     return data;
