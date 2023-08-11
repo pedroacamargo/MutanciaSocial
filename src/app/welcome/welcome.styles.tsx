@@ -6,6 +6,11 @@ const font2 = '"Oswald", sans-serif';
 export const HeaderSteps = styled.h1`
     font-family: ${font1};
     font-weight: 600;
+
+    @media screen and (max-width: 700px) {
+        font-size: 1.3em;
+    }
+
 `
 
 export const SubHeaderSteps = styled.h2`
@@ -13,6 +18,14 @@ export const SubHeaderSteps = styled.h2`
     font-weight: 400;
     font-size: 1.1em;
     padding: 5px;
+    width: 650px;
+    text-align: center;
+    @media screen and (max-width: 700px) {
+        width: 80%;
+        font-size: .9em;
+        text-align: center;
+    }
+
 `
 
 export const LoaderContainer = styled.div`
@@ -40,6 +53,11 @@ export const LoaderSkeleton = styled.div`
     height: 2px;
     margin-top: 10px;
     background-color: #c5c5c5;
+
+    @media screen and (max-width: 700px) {
+        width: 300px;
+    }
+
 `
 
 interface LoaderFillProps {
