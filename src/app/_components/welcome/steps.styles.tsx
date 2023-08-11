@@ -15,8 +15,6 @@ export const StepFourContainer = styled(StepOneContainer)`
 
 export const ButtonsContainer = styled.div`
     margin-top: 20px;
-    margin-bottom: -100px;
-    bottom: 15%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -31,6 +29,11 @@ export const FormsContainer = styled.form`
     align-items: center;
     width: 600px;
     column-gap: 8px;
+
+    @media screen and (max-width: 700px) {
+        width: 80%;
+    }
+
 `
 
 export const FormsContainerStepsThree = styled.div`
@@ -88,6 +91,9 @@ export const LabelWelcome = styled.label<CheckBoxWelcomeProps>`
     color: ${(props) => props.ischecked == 'true' ? props.bordercolor : 'black'};
     font-weight: 600;
     flex: 1;
+    @media screen and (max-width: 700px) {
+        font-size: .8em;
+    }
 `
 
 export const Select = styled.select`
@@ -127,6 +133,10 @@ export const SportsWrapper = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: row;
+
+    @media screen and (max-width: 440px) {
+        flex-direction: column;
+    }
 `
 
 export const SportsCol = styled(SportsWrapper)`
@@ -150,6 +160,18 @@ export const SportsChoice = styled.div<SportsChoice>`
     background-color: ${props => props.ischecked};
     border: 1px solid ${props => props.bordercolor};
     cursor: pointer;
+
+    @media screen and (max-width: 700px) {
+        width: 200px;
+    }
+
+    @media screen and (max-width: 530px) {
+        width: 150px;
+    }
+
+    @media screen and (max-width: 440px) {
+        width: 200px;
+    }
 
     span {
         font-family: ${font1};

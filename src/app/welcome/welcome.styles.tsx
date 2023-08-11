@@ -6,7 +6,7 @@ const font2 = '"Oswald", sans-serif';
 export const HeaderSteps = styled.h1`
     font-family: ${font1};
     font-weight: 600;
-
+    white-space: nowrap;
     @media screen and (max-width: 700px) {
         font-size: 1.3em;
     }
@@ -26,6 +26,10 @@ export const SubHeaderSteps = styled.h2`
         text-align: center;
     }
 
+    @media screen and (max-width: 400px) {
+        font-size: .75em;
+    }
+
 `
 
 export const LoaderContainer = styled.div`
@@ -33,10 +37,6 @@ export const LoaderContainer = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    position: absolute;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
 `
 
 export const StepsContainer = styled.div`
@@ -44,8 +44,9 @@ export const StepsContainer = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 100vw;
-    height: 80vh;
+    width: 100%;
+    margin: 30px;
+    box-sizing: border-box;
 `
 
 export const LoaderSkeleton = styled.div`
@@ -73,11 +74,7 @@ export const LoaderFill = styled.div<LoaderFillProps>`
 
 
 export const AuthStepsContainer = styled.div`
-    position: absolute;
-    bottom: 30px;
     height: 50px;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     display: flex;
     justify-content: space-around;

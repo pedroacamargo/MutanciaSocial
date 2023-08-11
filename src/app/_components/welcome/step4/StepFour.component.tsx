@@ -46,7 +46,7 @@ export default function StepFour(props: StepsProps) {
             <HeaderSteps>Your stats</HeaderSteps>
             <SubHeaderSteps>All of these information are optional and can be skipped</SubHeaderSteps>
 
-            <div style={{width: '100%', display: 'flex', columnGap: '10px'}}>
+            <div style={{width: '95%', display: 'flex', columnGap: '10px'}}>
                 <SelectContainer>
                     <SubHeaderSteps style={{width: '100%', marginBottom: '-5px'}}>What&apos;s your weight?</SubHeaderSteps>
                     <InputNumber type="number" name="agenumber" id="age" max={300} min={30} placeholder="In Kgs" onChange={handleOnChangeWeight}/>
