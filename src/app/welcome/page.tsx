@@ -44,7 +44,14 @@ export default function Welcome() {
     const previousStep = () => setStepsLeft(stepsLeft + 1);
 
     return (
-        <>
+        <div style={{
+            display: "flex",
+            width: "100%",
+            height: "100vh",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center"
+        }}>
             <LoaderContainer>
                 <Image alt="Logo" src={'/Mutancia-Social-Black.png'} width={50} height={50}></Image>
                 <LoaderSkeleton>
@@ -70,6 +77,6 @@ export default function Welcome() {
                 <StepBall style={{backgroundColor: stepsLeft == 1 ? 'black' : 'white'}}/>
             </AuthStepsContainer>
 
-        </>
+        </div>
     );
 }

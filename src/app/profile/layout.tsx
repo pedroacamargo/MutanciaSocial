@@ -2,13 +2,14 @@
 import Navbar from "../_components/navbar/Navbar.component"
 import { Helmet } from "react-helmet-async"
 
-export default function WelcomeLayout({
+export default function ProfileLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
     return (
         <>
+            <Navbar />
             <Helmet>
                 <link rel="preconnect" href="https://fonts.googleapis.com"/>
                 <link rel="preconnect" href="https://fonts.gstatic.com"/>

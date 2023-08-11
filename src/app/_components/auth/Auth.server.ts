@@ -2,7 +2,7 @@ import { databases } from "@/lib/types/databases.types";
 import { SaveInDatabaseProps } from "@/lib/interfaces/SaveDataProps.interface";
 import { auth, googleProvider, db } from "@/utils/firebase";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { DocumentData, addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { User } from "@/lib/interfaces/User.interface";
 import { UserCookies } from "@/lib/interfaces/UserCredentials.interface";
 import { User as UserAuth } from "firebase/auth";
@@ -49,23 +49,30 @@ export async function continueWithGoogle(): Promise<UserCookies | null> {
                 /** @TODO -> ERROR HANDLING WITH TRY/CATCH */
                 SaveUserInDataBase({
                     acceptedConditions: false,
-                    age: 0,
-                    bio: '',
-                    country: '',
+                    age: null,
+                    bio: null,
+                    country: null,
+                    gender: null,
+                    height: null,
+                    sports: null,
+                    weight: null,
+                    headerName: null,
                     displayName: user.user.displayName,
-                    email: user.user.email,
-                    gender: '',
-                    height: 0,
-                    modifiedAt: undefined,
-                    sports: [],
                     uid: user.user.uid,
-                    weight: 0,
+                    email: user.user.email,
+                    followers: [],
+                    followersAmount: 0,
+                    following: [],
+                    followingAmount: 0,
+                    profilePictureURL: user.user.photoURL ? user.user.photoURL : '/Unknown_person.png',
                 })
                 return { user: user.user, acceptedConditions: false }
             } else {
                 console.log('User already exists in our db, redirecting to home page...');
                 const userData = await getUserFromAuthDBWithUid(user.user.uid);
-                return { user: user.user, acceptedConditions: userData.acceptedConditions }
+                if (userData) {
+                    return { user: user.user, acceptedConditions: userData.acceptedConditions }
+                }
             } 
         }
         
@@ -125,10 +132,10 @@ export const isInAuthDB = async (email: string) => {
  * @param uid - Auth.currentUser.uid
  * @returns User
  */
-export const getUserFromAuthDBWithUid = async (uid: string): Promise<User> => {
+export const getUserFromAuthDBWithUid = async (uid: string): Promise<DocumentData | undefined> => {
     const dbRef = doc(db, databases.authDB, uid);
     const docSnap = await getDoc(dbRef);
-    const data = docSnap.data() as User;
+    const data = docSnap.data();
 
 
     return data;
