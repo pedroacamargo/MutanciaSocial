@@ -9,7 +9,7 @@ export async function SignIn(userCredentials: SignInCredentials) {
 
     if (userData) {
         try {
-            await signInWithEmailAndPassword(auth,userData?.email,password);
+            await signInWithEmailAndPassword(auth,userData.email,password);
             return true; // signin success
         } catch (err) {
             console.error(err)

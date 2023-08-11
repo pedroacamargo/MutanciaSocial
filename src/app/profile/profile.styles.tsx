@@ -99,7 +99,7 @@ export const UserCardStatusWrapper = styled.div`
 
 export const UserFirstName = styled.h1`
     font-family: ${font1};
-    font-size: 2em;
+    font-size: 1.7em;
     font-weight: bold;
     white-space: nowrap;
 `
@@ -107,6 +107,7 @@ export const UserFirstName = styled.h1`
 export const UserDisplayName = styled(UserFirstName)`
     font-size: 1em;
     font-weight: normal;
+    margin-bottom: 5px;
 `
 export const UserCardBio = styled.textarea`
     width: 100%;
