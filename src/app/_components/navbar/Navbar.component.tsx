@@ -12,7 +12,8 @@ import {
     DecorationPopUp,
     ProfilePopUpLink,
     SignOutButton,
-    LoggedInAsContainer
+    LoggedInAsContainer,
+    NavbarLinkDisabled
 } from "./Navbar.styles";
 import { useSelector } from "react-redux";
 import { selectUserIsLoading } from '@/redux/user/user.selector';
@@ -48,9 +49,9 @@ export default function Navbar() {
 
                 <NavbarLinksContainer>
                     <NavbarLink href='/'>Home</NavbarLink>
-                    <NavbarLink href='/dashboard'>Explore</NavbarLink>
-                    <NavbarLink href='/dashboard'>Guides</NavbarLink>
-                    <NavbarLink href='/dashboard'>Workouts</NavbarLink>
+                    <NavbarLinkDisabled href='/'>Explore</NavbarLinkDisabled>
+                    <NavbarLinkDisabled href='/'>Guides</NavbarLinkDisabled>
+                    <NavbarLinkDisabled href='/'>Workouts</NavbarLinkDisabled>
                     <UserLoggedContainer onClick={toggleProfilePopUp}>
                         <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s'}}/>
                         <UsernameNavbar>@{user.displayName}</UsernameNavbar>
@@ -68,8 +69,8 @@ export default function Navbar() {
                             </LoggedInAsContainer>
 
                             <ProfilePopUpLink href={`/profile/${user.uid}`}>My Profile</ProfilePopUpLink>
-                            <ProfilePopUpLink href='/teste'>My Posts</ProfilePopUpLink>
-                            <ProfilePopUpLink href='/teste'>Settings</ProfilePopUpLink>
+                            <ProfilePopUpLink href='/'>My Posts</ProfilePopUpLink>
+                            <ProfilePopUpLink href='/'>Settings</ProfilePopUpLink>
                             
                             <SignOutButton onClick={signOutUser} href='/'>Sign Out</SignOutButton>
                         </ProfileOptionsContainer>

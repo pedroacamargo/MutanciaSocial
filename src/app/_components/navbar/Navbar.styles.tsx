@@ -41,8 +41,7 @@ export const NavbarLinksContainer = styled.div`
     align-items: center;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.2em;
-    cursor: pointer;
-    `
+`
 
 export const NavbarLink = styled(Link)`
     font-family: 'Montserrat', sans-serif;
@@ -58,6 +57,15 @@ export const NavbarLink = styled(Link)`
     }
 `
 
+export const NavbarLinkDisabled = styled(NavbarLink)`
+    cursor: default;
+    color: #cacaca;
+
+    &:hover {
+        background-color: #f1f0f0;
+    }
+`
+
 export const UserLoggedContainer = styled.div`
     display: flex;
     position: relative;
@@ -65,6 +73,7 @@ export const UserLoggedContainer = styled.div`
     align-items: center;
     padding: 5px 10px;
     border-left: 1px solid #0000002b;
+    cursor: pointer;
 `
 
 export const UsernameNavbar = styled.span`
