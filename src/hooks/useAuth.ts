@@ -32,16 +32,22 @@ export const useAuth = () => {
         try {
             const response = await SignUp({ username, email, password, confirmPassword });
             
-            if (response && auth.currentUser) {
+            if (!response.emailError && !response.passwordError && !response.usernameError && auth.currentUser) {
                 updateProfile(auth.currentUser, { displayName: username })
                 dispatch(fetchUserAsync() as any);
             } else {
                 console.log("Sign Up failed :(");
             } 
 
-            return response;
+            return {...response, generalError: false};
         } catch (err) {
             console.error(err);
+            return {
+                emailError: false,
+                usernameError: false,
+                passwordError: false,
+                generalError: true,
+            }
         }
     }
 
@@ -54,7 +60,6 @@ export const useAuth = () => {
             return true;
         }
 
-        dispatch(fetchUserFinished());
         return false; 
     }
     

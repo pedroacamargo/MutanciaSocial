@@ -24,7 +24,6 @@ export async function isLoggedIn() {
 /**
  * Will check if an user is logged in, if is logged and there's an user stored in localStorage as "currentUser", will parse the JSON and return the user data.
  * @returns User as UserAuth | null
- * 
  */
 export async function statePersist(): Promise<UserAuth | null> {
     const isLogged = await isLoggedIn();
@@ -44,8 +43,8 @@ export async function continueWithGoogle(): Promise<UserCookies | null> {
         const user = await signInWithPopup(auth, googleProvider);
 
         if (user.user.email && user.user.displayName) {
-            const alreadyExist = await isInAuthDB(user.user.email);
-            if (!alreadyExist) { 
+            const alreadyExist = await isInAuthDB(user.user.email, user.user.displayName);
+            if (!alreadyExist.emailRepeated && !alreadyExist.usernameRepeated) { 
                 /** @TODO -> ERROR HANDLING WITH TRY/CATCH */
                 SaveUserInDataBase({
                     acceptedConditions: false,
@@ -116,15 +115,20 @@ export const SaveUserInDataBase = async (user: User) => {
  * @param email - Email to be tested if it's present in the database
  * @return Boolean
  */
-export const isInAuthDB = async (email: string) => {
+export const isInAuthDB = async (email: string, username: string): Promise<{ usernameRepeated: boolean, emailRepeated: boolean }> => {
     const dbRef = collection(db, databases.authDB);
     const data = await getDocs(dbRef);
-    const repeatedUser = data.docs.some((doc) => {
+    const repeatedEmail = data.docs.some((doc) => {
         if (doc.data().email != email) return false;
         return true;
     });
     
-    return repeatedUser;
+    const repeatedUsername = data.docs.some((doc) => {
+        if (doc.data().displayName != username) return false;
+        return true;
+    });
+    
+    return { emailRepeated: repeatedEmail, usernameRepeated: repeatedUsername };
 }
 
 /**
