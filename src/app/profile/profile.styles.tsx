@@ -109,16 +109,25 @@ export const UserDisplayName = styled(UserFirstName)`
     font-weight: normal;
     margin-bottom: 5px;
 `
+
 export const UserCardBio = styled.textarea`
     width: 100%;
-    height: 50px;
-    border: none;
-    margin-top: 10px;
+    height: 75px;
+    border: 1px solid #b8b8b8;
+    border-radius: 5px;
     font-family: ${font1};
     resize: none;
-    padding: 0px;
+    padding: 5px;
     color: black;
-    background-color: white;
+    background-color: #ececec;
+
+    &:disabled {
+        height: auto;
+        padding: 0;
+        background-color: white;
+        border: none;
+        margin-bottom: 10px;
+    }
 `
 
 export const AccountStatusWrapper = styled.div`
@@ -138,4 +147,40 @@ export const ProfileDashboardContainer = styled.div`
     max-width: 800px;
     height: 100vh;
     padding: 20px;
+`
+
+export const EditProfileInputLabel = styled.label`
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 2px;
+    font-family: ${font1};
+`
+
+export const EditProfileName = styled.input`
+    font-size: 1em;
+    font-family: ${font1};
+    padding: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    border: 1px solid #b8b8b8;
+    background-color: #ececec;
+    border-radius: 5px;
+`
+
+export const EditProfileDisplayName = styled.input`
+    font-size: 1em;
+    font-weight: normal;
+    font-family: ${font1};
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left;
+    padding: 5px;
+    margin-bottom: 10px;
+
+    &:disabled {
+        background-color: #57575757;
+        border: 1px solid #9b9b9b;
+        border-radius: 5px;
+        color: #707070;
+    }
 `

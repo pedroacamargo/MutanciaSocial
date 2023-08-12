@@ -2,7 +2,7 @@
 import { getUserFromAuthDBWithUid } from "@/app/_components/auth/Auth.server"
 import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { User } from "@/lib/interfaces/User.interface";
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import {
     ProfileContainer,
     PictureContainer,
@@ -17,7 +17,10 @@ import {
     UserCardBio,
     AccountStatusWrapper,
     FollowersStatus,
-    ProfileDashboardContainer
+    ProfileDashboardContainer,
+    EditProfileInputLabel,
+    EditProfileName,
+    EditProfileDisplayName
 } from "../profile.styles";
 import { ButtonBase, ButtonInverted } from "@/app/GlobalStyles.styles";
 import { BsPeopleFill } from "react-icons/bs";
@@ -33,11 +36,13 @@ export default function Page({ params }: { params: { uid: string }}) {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [userProfile, setUserProfile] = useState<User | undefined>(undefined);
     const isUserLoading = useSelector(selectUserIsLoading);
+    const [changed, setChanged] = useState(false); // check if some form changed, state used to optimize the usability
     const currentUser = useCurrentUser();
     const [forms, setForms] = useState({
         headerName: '',
         bio: '',
     });
+    const [uploadedImage, setUploadedImage] = useState<string | ArrayBuffer | null>();
     const profilePic = auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
 
     useEffect(() => {
@@ -59,9 +64,12 @@ export default function Page({ params }: { params: { uid: string }}) {
     } 
 
     const handleSubmit = async () => {
-        if (currentUser.user) {
+        if (currentUser.user && changed) {
             const docRef = doc(db, databases.authDB, currentUser.user.uid);
             await updateDoc(docRef, {...forms});
+            setEditMode(false);
+            setChanged(false);
+        } else {
             setEditMode(false);
         }
     }
@@ -88,7 +96,7 @@ export default function Page({ params }: { params: { uid: string }}) {
                             <UserDisplayName>@{userProfile?.displayName}</UserDisplayName>
         
                             {
-                                userProfile.bio ? <UserCardBio disabled>{userProfile.bio}</UserCardBio> : <></>
+                                userProfile.bio ? <UserCardBio defaultValue={userProfile.bio as string} disabled></UserCardBio> : <></>
                             }
         
                             <AccountStatusWrapper>
@@ -120,17 +128,22 @@ export default function Page({ params }: { params: { uid: string }}) {
                             </UserStatusPinPop>
                         </PictureContainer>
                         <UserCardStatusWrapper>
+                            <EditProfileInputLabel>Change profile Picture</EditProfileInputLabel>
+
+                            <EditProfileInputLabel htmlFor="editName">Name</EditProfileInputLabel>
                             {
-                                <input min={4} onChange={(e) => setForms({...forms, headerName: e.target.value})} type="text" placeholder="Your name..." value={forms.headerName}/>
+                                <EditProfileName id="editName" min={4} onChange={(e) => {setForms({...forms, headerName: e.target.value}); if (!changed) setChanged(true)}} type="text" placeholder="Your name..." value={forms.headerName}/>
                             }
         
-                            <UserDisplayName>@{userProfile?.displayName}</UserDisplayName>
+                            <EditProfileInputLabel htmlFor="editUsername">Username</EditProfileInputLabel>
+                            <EditProfileDisplayName id="editUsername" disabled value={`@${userProfile.displayName}`} />
 
-                            <UserCardBio onChange={(e) => setForms({...forms, bio: e.target.value})} placeholder="Edit your bio...">{userProfile.bio}</UserCardBio>
+                            <EditProfileInputLabel>Bio</EditProfileInputLabel>
+                            <UserCardBio defaultValue={userProfile.bio as string} onChange={(e) => {setForms({...forms, bio: e.target.value}); if (!changed) setChanged(true)}} placeholder="Edit your bio..."></UserCardBio>
         
                         </UserCardStatusWrapper>
                         
-                        <ButtonBase onClick={handleSubmit} style={{width: '70%'}}>Submit</ButtonBase>
+                        <ButtonBase onClick={handleSubmit} style={{width: '100%'}}>Submit</ButtonBase>
                     </UserCardWrapper>
         
                     <ProfileDashboardContainer>
