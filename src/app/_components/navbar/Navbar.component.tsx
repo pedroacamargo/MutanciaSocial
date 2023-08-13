@@ -87,10 +87,10 @@ export default function Navbar() {
                     <NavbarLogoName>Mutantial</NavbarLogoName>
                 </NavbarLogoContainer>
                 <NavbarLinksContainer>
-                    <NavbarLink href='/dashboard'>Home</NavbarLink>
-                    <NavbarLink href='/dashboard'>Explore</NavbarLink>
-                    <NavbarLink href='/dashboard'>Guides</NavbarLink>
-                    <NavbarLink href='/dashboard'>Workouts</NavbarLink>
+                    <NavbarLink href='/'>Home</NavbarLink>
+                    <NavbarLinkDisabled href='/'>Explore</NavbarLinkDisabled>
+                    <NavbarLinkDisabled href='/'>Guides</NavbarLinkDisabled>
+                    <NavbarLinkDisabled href='/'>Workouts</NavbarLinkDisabled>
                     <UserLoggedContainer onClick={toggleProfilePopUp}>
                         <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s', cursor: 'pointer'}}/>
                         <UsernameNavbar>Not logged in</UsernameNavbar>
