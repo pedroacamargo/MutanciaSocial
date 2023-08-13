@@ -23,12 +23,14 @@ import Image from "next/image";
 import { useState } from "react";
 import NavbarLoading from "./NavbarLoading.component";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { auth } from "@/utils/firebase";
 
 export default function Navbar() {
     const { user, setUser } = useCurrentUser();
     const { signOutUser } = useSignOut(setUser);
     const isUserLoading = useSelector(selectUserIsLoading);
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
+    console.log(auth.currentUser)
     
     const signOut = async () => await signOutUser();
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
@@ -56,8 +58,8 @@ export default function Navbar() {
                         <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s'}}/>
                         <UsernameNavbar>@{user.displayName}</UsernameNavbar>
 
-                        {user?.photoURL ? (
-                            <ProfilePic src={`${user.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
+                        {auth.currentUser?.photoURL ? (
+                            <ProfilePic src={`${auth.currentUser.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
                         ) : (
                             <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
                         )}
@@ -95,8 +97,8 @@ export default function Navbar() {
                         <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s', cursor: 'pointer'}}/>
                         <UsernameNavbar>Not logged in</UsernameNavbar>
 
-                        {user?.photoURL ? (
-                            <ProfilePic src={`${user.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
+                        {auth.currentUser?.photoURL ? (
+                            <ProfilePic src={`${auth.currentUser.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
                         ) : (
                             <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
                         )}

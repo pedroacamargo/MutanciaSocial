@@ -27,11 +27,18 @@ export const PictureContainer = styled.div`
     position: relative;
 `
 
-export const ProfilePicture = styled(Image)`
+type ProfilePicProps = {
+    src: string,
+}
+
+export const ProfilePicture = styled.div<ProfilePicProps>`
     width: 300px;
     height: 300px;
     border-radius: 100%;
     border: 1px solid black;
+    background-image: url(${props => props.src});
+    background-position: center center;
+    background-size: cover;
 `
 
 export const UserStatusPinPopPhrase = styled.span`

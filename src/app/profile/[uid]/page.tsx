@@ -25,12 +25,15 @@ import {
 import { ButtonBase, ButtonInverted } from "@/app/GlobalStyles.styles";
 import { BsPeopleFill } from "react-icons/bs";
 import { BiSolidBarChartSquare } from "react-icons/bi";
-import { auth, db } from "@/utils/firebase";
+import { auth, db, storage } from "@/utils/firebase";
 import { useSelector } from "react-redux";
 import { selectUserIsLoading } from "@/redux/user/user.selector";
 import Spinner from "@/app/_components/spinner/Spinner.component";
-import { doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { databases } from "@/lib/types/databases.types";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { updateProfile } from "firebase/auth";
+
 
 export default function Page({ params }: { params: { uid: string }}) {
     const [editMode, setEditMode] = useState<boolean>(false);
@@ -42,9 +45,9 @@ export default function Page({ params }: { params: { uid: string }}) {
         headerName: '',
         bio: '',
     });
-    const [uploadedImage, setUploadedImage] = useState<string | ArrayBuffer | null>();
-    const profilePic = auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
-
+    const [image, setImage] = useState<string | null | undefined>(null);
+    const [imageExtension, setImageExtension] = useState("");
+    console.log(auth.currentUser)
     useEffect(() => {
         const getUser = async () => {
             const user = await getUserFromAuthDBWithUid(params.uid) as User;
@@ -67,10 +70,46 @@ export default function Page({ params }: { params: { uid: string }}) {
         if (currentUser.user && changed) {
             const docRef = doc(db, databases.authDB, currentUser.user.uid);
             await updateDoc(docRef, {...forms});
+
+            if (image) {
+                const profileStorageRef = ref(storage, `profile/${currentUser.user.uid}.${imageExtension}`);
+                uploadString(profileStorageRef, image, "data_url").then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        console.log(url)
+                        const dbRef = collection(db, databases.authDB);
+                        setDoc(doc(dbRef, currentUser.user?.uid), { profilePic: url }, { merge: true })
+
+                        if (auth.currentUser) {
+                            console.log('Updating user profile picture... -> ',url);
+                            updateProfile(auth.currentUser, { photoURL: url })
+                        }
+                    })
+                })
+                removeImage()
+            }
+            
             setEditMode(false);
             setChanged(false);
         } else {
             setEditMode(false);
+        }
+    }
+    
+    const removeImage = () => setImage(null);
+    
+    const handleImageInput = (e: ChangeEvent<HTMLInputElement>) => {
+        const reader = new FileReader();
+        
+        if (e.target.files) {
+            const file = e.target.files[0];
+            const extension = file.type.split('/')[1];
+            setImageExtension(extension)
+            reader.readAsDataURL(file);
+        }
+        
+        reader.onload = (readerEvent) => {
+            setImage(readerEvent.target?.result as string);
+            setChanged(true);
         }
     }
 
@@ -84,7 +123,9 @@ export default function Page({ params }: { params: { uid: string }}) {
                 <ProfileContainer>
                     <UserCardWrapper>
                         <PictureContainer>
-                            <ProfilePicture width={200} height={200} alt="Profile picture" src={profilePic} />
+                            <ProfilePicture src={
+                                userProfile.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'
+                            } />
                             <UserStatusPinPop>
                                 <UserStatusPinEmoji> 🦍</UserStatusPinEmoji>
                                 <UserStatusPinPopPhrase>Training</UserStatusPinPopPhrase>
@@ -121,7 +162,9 @@ export default function Page({ params }: { params: { uid: string }}) {
                 <ProfileContainer>
                     <UserCardWrapper>
                         <PictureContainer>
-                            <ProfilePicture width={200} height={200} alt="Profile picture" src={profilePic} />
+                            <ProfilePicture src={
+                                userProfile.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'
+                            } />
                             <UserStatusPinPop>
                                 <UserStatusPinEmoji> 🦍</UserStatusPinEmoji>
                                 <UserStatusPinPopPhrase>Training</UserStatusPinPopPhrase>
@@ -129,6 +172,8 @@ export default function Page({ params }: { params: { uid: string }}) {
                         </PictureContainer>
                         <UserCardStatusWrapper>
                             <EditProfileInputLabel>Change profile Picture</EditProfileInputLabel>
+                            <input accept="image/x-png,image/gif,image/jpeg" type="file" name="readFile" id="fileInput" onChange={handleImageInput}/>
+                            
 
                             <EditProfileInputLabel htmlFor="editName">Name</EditProfileInputLabel>
                             {

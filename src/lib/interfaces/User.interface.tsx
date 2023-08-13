@@ -4,7 +4,7 @@ export interface User {
     uid?: string,
     email: string,
     acceptedConditions: boolean,
-    profilePictureURL: string,
+    profilePic: string,
     followersAmount: number,
     followers: string[],
     followingAmount: number,
