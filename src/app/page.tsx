@@ -1,8 +1,30 @@
 'use client'
 import { Helmet } from "react-helmet-async";
 import Navbar from "./_components/navbar/Navbar.component";
+import { useEffect } from "react";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+import { databases } from "@/lib/types/databases.types";
+import { User } from "@/lib/interfaces/User.interface";
 
 export default function Dashboard() {
+    const { user } = useCurrentUser()
+
+    // function to update old users that aren't registered with followers data
+    useEffect(() => {
+        const updateUsers = async () => {
+            if (user) {
+                const uid = user?.uid;
+                const docRef = doc(db, databases.authDB, uid);
+                const docSnap = (await getDoc(docRef)).data() as User;
+                if (docSnap.followersAmount == null) {
+                    await updateDoc(docRef, { followers: [], following: [], followersAmount: 0, followingAmount: 0 })
+                }
+            }
+        }
+        updateUsers();
+    }, [user])
 
     return (
         <>

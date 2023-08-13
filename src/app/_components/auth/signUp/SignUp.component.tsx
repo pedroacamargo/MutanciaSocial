@@ -21,17 +21,31 @@ import {
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUserIsLoading } from '@/redux/user/user.selector';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { fetchUserFinished } from '@/redux/user/user.action';
+
+type ErrorState = {
+    emailError: boolean,
+    generalError: boolean,
+    passwordError: boolean,
+    usernameError: boolean
+}
 
 export default function SignUpComponent() {
-    const [usernameAlreadyExistsError, setUsernameAlreadyExistsError] = useState(false);
+    const [errorsRegister, setErrorsRegister] = useState<ErrorState>({
+        emailError: false,
+        generalError: false,
+        passwordError: false,
+        usernameError: false,
+    });
     const isLoading = useSelector(selectUserIsLoading);
     const router = useRouter();
     const { registerUser, login, loginWithGoogle } = useAuth();
+    const dispatch = useDispatch();
     
     // React Forms Users Schema
     const schema = yup.object().shape({
@@ -53,23 +67,37 @@ export default function SignUpComponent() {
     }) => {
         const { username, email, password, confirmPassword } = user;
 
-        const response = await registerUser(username, email, password, confirmPassword);
-        if (response) {
+        const { emailError, generalError, passwordError, usernameError } = await registerUser(username, email, password, confirmPassword);
+        if (!emailError && !generalError && !passwordError && !usernameError) {
             await login(username, password);
+            dispatch(fetchUserFinished());
             router.push('/welcome');
-        } else {
-            setUsernameAlreadyExistsError(true);
+        } else if (emailError) {
+            setErrorsRegister({...errorsRegister, emailError: true});
+        } else if (generalError) {
+            setErrorsRegister({...errorsRegister, generalError: true});
+        } else if (passwordError) {
+            setErrorsRegister({...errorsRegister, passwordError: true});
+        } else if (usernameError) {
+            setErrorsRegister({...errorsRegister, usernameError: true});
         }
+        dispatch(fetchUserFinished());
     }
 
     
     const signUpWithGoogle = async () => {
         const user = await loginWithGoogle();
+        dispatch(fetchUserFinished());
         if (user) router.push("/welcome");
     }
 
     const resetErrorBoxes = () => {
-        setUsernameAlreadyExistsError(false);
+        setErrorsRegister({
+            emailError: false,
+            generalError: false,
+            passwordError: false,
+            usernameError: false,
+        });
     }
     
     return (
@@ -110,7 +138,10 @@ export default function SignUpComponent() {
             ) : errors.username ? ( <ErrorBox>{errors.username?.message}</ErrorBox>
             ) : errors.email ? (<ErrorBox>{errors.email?.message}</ErrorBox>
             ) : errors.password ? ( <ErrorBox>{errors.password?.message}</ErrorBox> ) : <></>} 
-            {usernameAlreadyExistsError && <ErrorBox> Email already in use! </ErrorBox>}
+            {errorsRegister.emailError && <ErrorBox> Email already in use! </ErrorBox>}
+            {errorsRegister.usernameError && <ErrorBox> Username already in use! </ErrorBox>}
+            {errorsRegister.passwordError && <ErrorBox> Passwords do not match! </ErrorBox>}
+            {errorsRegister.generalError && <ErrorBox> Something unexpected happened when trying to sign up </ErrorBox>}
 
             <SignUpSubmitButtonsContainer>
                 <ButtonInverted type="submit">Sign Up</ButtonInverted>

@@ -23,6 +23,7 @@ import Image from "next/image";
 import { useState } from "react";
 import NavbarLoading from "./NavbarLoading.component";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { auth } from "@/utils/firebase";
 
 export default function Navbar() {
     const { user, setUser } = useCurrentUser();
@@ -56,8 +57,8 @@ export default function Navbar() {
                         <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s'}}/>
                         <UsernameNavbar>@{user.displayName}</UsernameNavbar>
 
-                        {user?.photoURL ? (
-                            <ProfilePic src={`${user.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
+                        {auth.currentUser?.photoURL ? (
+                            <ProfilePic src={`${auth.currentUser.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
                         ) : (
                             <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
                         )}
@@ -87,16 +88,16 @@ export default function Navbar() {
                     <NavbarLogoName>Mutantial</NavbarLogoName>
                 </NavbarLogoContainer>
                 <NavbarLinksContainer>
-                    <NavbarLink href='/dashboard'>Home</NavbarLink>
-                    <NavbarLink href='/dashboard'>Explore</NavbarLink>
-                    <NavbarLink href='/dashboard'>Guides</NavbarLink>
-                    <NavbarLink href='/dashboard'>Workouts</NavbarLink>
+                    <NavbarLink href='/'>Home</NavbarLink>
+                    <NavbarLinkDisabled href='/'>Explore</NavbarLinkDisabled>
+                    <NavbarLinkDisabled href='/'>Guides</NavbarLinkDisabled>
+                    <NavbarLinkDisabled href='/'>Workouts</NavbarLinkDisabled>
                     <UserLoggedContainer onClick={toggleProfilePopUp}>
                         <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s', cursor: 'pointer'}}/>
                         <UsernameNavbar>Not logged in</UsernameNavbar>
 
-                        {user?.photoURL ? (
-                            <ProfilePic src={`${user.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
+                        {auth.currentUser?.photoURL ? (
+                            <ProfilePic src={`${auth.currentUser.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
                         ) : (
                             <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
                         )}
