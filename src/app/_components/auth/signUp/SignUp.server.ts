@@ -45,7 +45,7 @@ export async function SignUp(user: UserCredentials): Promise<{ emailError: boole
             following: [],
             followingAmount: 0,
             followersAmount: 0,
-            profilePictureURL: auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.png',
+            profilePic: auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.png',
             email: email, 
             displayName: username,
             uid: auth.currentUser?.uid,

@@ -5,6 +5,7 @@ import {
     GoogleAuthProvider,
 } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore';
+import { getStorage, ref } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -14,7 +15,7 @@ const firebaseConfig = {
     storageBucket: "mutancia-social.appspot.com",
     messagingSenderId: "607585541200",
     appId: "1:607585541200:web:87abc3f9095881f0b50555",
-    measurementId: "G-MBLKTP28HJ"
+    measurementId: "G-MBLKTP28HJ",
 };
 
 // Initialize Firebase
@@ -24,4 +25,5 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
