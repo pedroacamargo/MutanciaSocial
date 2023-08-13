@@ -37,7 +37,7 @@ import { updateProfile } from "firebase/auth";
 
 
 export default function Page({ params }: { params: { uid: string }}) {
-    const [errorsObject, setErrorsObject] = useState({ fileTooBig: false, nameTooBig: false, bioTooBig: false })
+    const [errorsObject, setErrorsObject] = useState({ fileTooBig: false, nameTooBig: false, bioTooBig: false, userNotFound: false })
     const [editMode, setEditMode] = useState<boolean>(false);
     const [userProfile, setUserProfile] = useState<User | undefined>(undefined);
     const isUserLoading = useSelector(selectUserIsLoading);
@@ -52,8 +52,15 @@ export default function Page({ params }: { params: { uid: string }}) {
 
     useEffect(() => {
         const getUser = async () => {
-            const user = await getUserFromAuthDBWithUid(params.uid) as User;
-            setUserProfile(user);
+            const user = await getUserFromAuthDBWithUid(params.uid) as User | undefined;
+            if (user) {
+                setUserProfile(user);
+            } else {
+                setErrorsObject({
+                    ...errorsObject,
+                    userNotFound: true,
+                })
+            }
         }
         getUser();
     }, [])
@@ -120,6 +127,7 @@ export default function Page({ params }: { params: { uid: string }}) {
             fileTooBig: false,
             nameTooBig: false,
             bioTooBig: false,
+            userNotFound: false,
         })
         setImage(null)
         setImageExtension("");
@@ -155,6 +163,10 @@ export default function Page({ params }: { params: { uid: string }}) {
             console.error(err);
         }
         
+    }
+
+    if (errorsObject.userNotFound) {
+        return <h1><br/><br/>ERROR 404: USER NOT FOUND</h1>
     }
 
     if (isUserLoading || userProfile == undefined) {
