@@ -119,7 +119,7 @@ export const UserDisplayName = styled(UserFirstName)`
 
 export const UserCardBio = styled.textarea`
     width: 100%;
-    height: 75px;
+    height: 100px;
     border: 1px solid #b8b8b8;
     border-radius: 5px;
     font-family: ${font1};
@@ -129,7 +129,7 @@ export const UserCardBio = styled.textarea`
     background-color: #ececec;
 
     &:disabled {
-        height: auto;
+        height: 80px;
         padding: 0;
         background-color: white;
         border: none;
@@ -190,4 +190,9 @@ export const EditProfileDisplayName = styled.input`
         border-radius: 5px;
         color: #707070;
     }
+`
+
+export const EditProfilePictureInput = styled.input`
+    margin: 5px 0;
+    font-family: ${font1};
 `

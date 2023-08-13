@@ -63,7 +63,7 @@ export async function continueWithGoogle(): Promise<UserCookies | null> {
                     followersAmount: 0,
                     following: [],
                     followingAmount: 0,
-                    profilePictureURL: user.user.photoURL ? user.user.photoURL : '/Unknown_person.png',
+                    profilePic: user.user.photoURL ? user.user.photoURL : '/Unknown_person.png',
                 })
                 return { user: user.user, acceptedConditions: false }
             } else {

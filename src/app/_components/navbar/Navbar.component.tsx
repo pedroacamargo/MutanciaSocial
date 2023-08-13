@@ -30,7 +30,6 @@ export default function Navbar() {
     const { signOutUser } = useSignOut(setUser);
     const isUserLoading = useSelector(selectUserIsLoading);
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
-    console.log(auth.currentUser)
     
     const signOut = async () => await signOutUser();
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
