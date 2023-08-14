@@ -50,7 +50,7 @@ export default function Navbar() {
 
                 <NavbarLinksContainer>
                     <NavbarLink href='/'>Home</NavbarLink>
-                    <NavbarLinkDisabled href='/'>Explore</NavbarLinkDisabled>
+                    <NavbarLink href='/explore'>Explore</NavbarLink>
                     <NavbarLinkDisabled href='/'>Guides</NavbarLinkDisabled>
                     <NavbarLinkDisabled href='/'>Workouts</NavbarLinkDisabled>
                     <UserLoggedContainer onClick={toggleProfilePopUp}>
@@ -89,18 +89,14 @@ export default function Navbar() {
                 </NavbarLogoContainer>
                 <NavbarLinksContainer>
                     <NavbarLink href='/'>Home</NavbarLink>
-                    <NavbarLinkDisabled href='/'>Explore</NavbarLinkDisabled>
+                    <NavbarLink href='/explore'>Explore</NavbarLink>
                     <NavbarLinkDisabled href='/'>Guides</NavbarLinkDisabled>
                     <NavbarLinkDisabled href='/'>Workouts</NavbarLinkDisabled>
                     <UserLoggedContainer onClick={toggleProfilePopUp}>
                         <FaCaretDown style={{transform: `rotate(${profilePopUpOpened ? 180 : 0}deg)`, transition: '.5s', cursor: 'pointer'}}/>
                         <UsernameNavbar>Not logged in</UsernameNavbar>
 
-                        {auth.currentUser?.photoURL ? (
-                            <ProfilePic src={`${auth.currentUser.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
-                        ) : (
-                            <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
-                        )}
+                        <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
 
                         <ProfileOptionsContainer isOpened={profilePopUpOpened}>
                             <DecorationPopUp></DecorationPopUp>
