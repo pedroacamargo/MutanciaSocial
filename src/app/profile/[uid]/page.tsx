@@ -30,7 +30,7 @@ import { auth, db, storage } from "@/utils/firebase";
 import { useSelector } from "react-redux";
 import { selectUserIsLoading } from "@/redux/user/user.selector";
 import Spinner from "@/app/_components/spinner/Spinner.component";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { databases } from "@/lib/types/databases.types";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
@@ -179,9 +179,11 @@ export default function Page({ params }: { params: { uid: string }}) {
                 <ProfileContainer>
                     <UserCardWrapper>
                         <PictureContainer>
+                        
                             <ProfilePicture src={
-                                userProfile.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'
+                                `${params.uid == currentUser?.user?.uid ? auth.currentUser?.photoURL : userProfile.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
                             } />
+
                             <UserStatusPinPop>
                                 <UserStatusPinEmoji> 🦍</UserStatusPinEmoji>
                                 <UserStatusPinPopPhrase>Training</UserStatusPinPopPhrase>
@@ -219,7 +221,7 @@ export default function Page({ params }: { params: { uid: string }}) {
                     <UserCardWrapper>
                         <PictureContainer>
                             <ProfilePicture src={
-                                userProfile.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'
+                                userProfile.profilePic ? userProfile.profilePic : currentUser.user?.photoURL ? currentUser.user.photoURL : '/Unknown_person.jpg'
                             } />
                             <UserStatusPinPop>
                                 <UserStatusPinEmoji> 🦍</UserStatusPinEmoji>
