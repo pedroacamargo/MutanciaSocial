@@ -129,7 +129,7 @@ export default function Explore() {
                         )
                     }) : recommendedIsLoading ? <Spinner></Spinner> : (
                         <ExploreRecommendedContainer>
-                            <ExploreRecommendedWarning>It looks like you didn't search for any user <br /> Try searching for anyone or check recommended users</ExploreRecommendedWarning>
+                            <ExploreRecommendedWarning>It looks like you didn&apos;t search for any user <br /> Try searching for anyone or check recommended users</ExploreRecommendedWarning>
                             <ExploreRecommendedDivider>
                                 Recommended Users
                             </ExploreRecommendedDivider>
