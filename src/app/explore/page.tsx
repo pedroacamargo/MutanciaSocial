@@ -56,9 +56,9 @@ export default function Explore() {
             <ButtonBase onClick={handleSubmit}>Submit</ButtonBase>
             <div>
                 {
-                    usersFiltered.map((user) => {
+                    usersFiltered.map((user, index) => {
                         return (
-                            <div>
+                            <div key={index}>
                                 <Link href={`/profile/${user.uid}`}>{user.displayName}</Link>
                             </div>
                         )
