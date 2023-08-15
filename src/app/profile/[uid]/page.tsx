@@ -181,7 +181,8 @@ export default function Page({ params }: { params: { uid: string }}) {
                         <PictureContainer>
                         
                             <ProfilePicture src={
-                                `${params.uid == currentUser?.user?.uid ? auth.currentUser?.photoURL : userProfile.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
+                                `${params.uid == currentUser?.user?.uid ? auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
+                                    : userProfile.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
                             } />
 
                             <UserStatusPinPop>
