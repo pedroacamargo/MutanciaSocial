@@ -6,13 +6,13 @@ import { BsPeopleFill } from "react-icons/bs";
 import { BiSolidBarChartSquare } from "react-icons/bi";
 import { ButtonBase, ButtonInverted } from "@/app/GlobalStyles.styles";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useFollowers } from "@/hooks/useFollowers";
-import { getUserFromAuthDBWithUid } from "../auth/Auth.server";
 
 interface ProfileProps {
     params: { uid: string },
     userProfile: UserProfile,
+    user: UserProfile,
     setForms: Dispatch<SetStateAction<{
         headerName: string;
         bio: string;
@@ -21,21 +21,11 @@ interface ProfileProps {
     setEditMode: Dispatch<SetStateAction<boolean>>,
 }
 export default function Profile(props: ProfileProps) {
-    const { params, userProfile, setForms, setEditMode, editMode } = props;
+    const { params, userProfile, setForms, setEditMode, editMode, user } = props;
     const router = useRouter();
-    const [user, setUser] = useState<UserProfile>()
     const [disabled, setDisabled] = useState(false);
     const { followPOST, followData, followDELETE } = useFollowers(userProfile, user);
 
-    useEffect(() => {
-        const getUser = async () => {
-            if (auth.currentUser) {
-                const currentUserProf = await getUserFromAuthDBWithUid(auth.currentUser?.uid) as UserProfile;
-                setUser(currentUserProf);
-            }
-        }
-        getUser();
-    }, [])
     
     const handleEdit = () => {
         if (userProfile) {
