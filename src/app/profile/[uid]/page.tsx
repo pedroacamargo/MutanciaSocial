@@ -8,12 +8,14 @@ import { selectUserIsLoading } from "@/redux/user/user.selector";
 import Spinner from "@/app/_components/spinner/Spinner.component";
 import Profile from "@/app/_components/profile/profile.component";
 import EditProfile from "@/app/_components/profile/editProfile.component";
+import { auth } from "@/utils/firebase";
 
 
 export default function Page({ params }: { params: { uid: string }}) {
     const [errorsObject, setErrorsObject] = useState({ fileTooBig: false, nameTooBig: false, bioTooBig: false, userNotFound: false })
     const [editMode, setEditMode] = useState<boolean>(false);
     const [userProfile, setUserProfile] = useState<User | undefined>(undefined);
+    const [user, setUser] = useState<User>();
     const [forms, setForms] = useState({ headerName: '', bio: '' });
     const currentUser = useCurrentUser();
     const isUserLoading = useSelector(selectUserIsLoading);
@@ -29,9 +31,14 @@ export default function Page({ params }: { params: { uid: string }}) {
                     userNotFound: true,
                 })
             }
+            if (auth.currentUser) {
+                const currentUserProf = await getUserFromAuthDBWithUid(auth.currentUser?.uid) as User;
+                setUser(currentUserProf);
+            }
         }
         getUser();
     }, [])
+
 
     if (errorsObject.userNotFound) {
         return <h1><br/><br/>ERROR 404: USER NOT FOUND</h1>
@@ -48,6 +55,7 @@ export default function Page({ params }: { params: { uid: string }}) {
                     editMode={editMode}
                     setEditMode={setEditMode}
                     params={params}
+                    user={user as User}
                     setForms={setForms}
                     userProfile={userProfile}
                 />

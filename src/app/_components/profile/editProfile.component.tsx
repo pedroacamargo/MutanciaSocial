@@ -109,7 +109,7 @@ export default function EditProfile(props: EditProfileProps) {
                 e.target.files = null;
                 setErrorsObject({
                     ...errorsObject,
-                    fileTooBig: false,
+                    fileTooBig: true,
                 });
             }
         } catch (err) {
