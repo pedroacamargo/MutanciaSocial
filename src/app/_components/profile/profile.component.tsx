@@ -24,6 +24,7 @@ export default function Profile(props: ProfileProps) {
     const { params, userProfile, setForms, setEditMode, editMode } = props;
     const router = useRouter();
     const [user, setUser] = useState<UserProfile>()
+    const [disabled, setDisabled] = useState(false);
     const { followPOST, followData, followDELETE } = useFollowers(userProfile, user);
 
     useEffect(() => {
@@ -47,11 +48,15 @@ export default function Profile(props: ProfileProps) {
     }
 
     const handleFollow = async () => {
+        setDisabled(true)
         await followPOST();
+        setDisabled(false)
     }
-
+    
     const handleUnfollow = async () => {
+        setDisabled(true)
         await followDELETE();
+        setDisabled(false)
     }
 
     return (
@@ -88,7 +93,7 @@ export default function Profile(props: ProfileProps) {
                 {   
                     user ? (
                         userProfile?.uid == user?.uid ? <ButtonInverted style={{width: '70%'}} onClick={handleEdit}>Edit profile</ButtonInverted> : (
-                            followData.follow ? <ButtonBase onClick={handleUnfollow} style={{width: '70%'}}>Unfollow</ButtonBase> : <ButtonBase style={{width: '70%'}} onClick={handleFollow}>Follow</ButtonBase>
+                            followData.follow ? <ButtonBase disabled={disabled} onClick={handleUnfollow} style={{width: '70%'}}>Unfollow</ButtonBase> : <ButtonBase style={{width: '70%'}} disabled={disabled} onClick={handleFollow}>Follow</ButtonBase>
                         )
                     ) : (
                         <ButtonBase onClick={() => router.push('/signin')} style={{width: '70%'}}>Sign in to follow</ButtonBase>
