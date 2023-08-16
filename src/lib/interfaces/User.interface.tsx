@@ -1,7 +1,7 @@
 export interface User {
     displayName?: string,
     modifiedAt?: Date,
-    uid?: string,
+    uid: string,
     email: string,
     acceptedConditions: boolean,
     profilePic: string,

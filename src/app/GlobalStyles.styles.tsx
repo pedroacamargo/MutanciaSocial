@@ -34,6 +34,11 @@ export const ButtonBase = styled.button`
         background-color: white;
         color: black;
     }
+
+    &:disabled {
+        background-color: #0e0d0d;
+        color: #e2e2e2;
+    }
 `
 
 export const ButtonInverted = styled(ButtonBase)`
