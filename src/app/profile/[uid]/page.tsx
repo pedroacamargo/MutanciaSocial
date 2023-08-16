@@ -49,7 +49,6 @@ export default function Page({ params }: { params: { uid: string }}) {
                     setEditMode={setEditMode}
                     params={params}
                     setForms={setForms}
-                    user={currentUser.user}
                     userProfile={userProfile}
                 />
             ) : (

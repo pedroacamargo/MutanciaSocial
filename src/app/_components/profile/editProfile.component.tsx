@@ -28,8 +28,6 @@ export default function EditProfile(props: EditProfileProps) {
     const [image, setImage] = useState<string | null | undefined>(null);
     const [imageExtension, setImageExtension] = useState("");
     const [changed, setChanged] = useState(false); // check if some form changed, state used to optimize the usability
-    
-
     const removeImage = () => setImage(null);
 
     const handleSubmit = async () => {
@@ -58,7 +56,7 @@ export default function EditProfile(props: EditProfileProps) {
                     getDownloadURL(snapshot.ref).then((url) => {
                         const dbRef = collection(db, databases.authDB);
                         setDoc(doc(dbRef, user?.uid), { profilePic: url }, { merge: true })
-
+                        
                         if (auth.currentUser) {
                             console.log('Updating user profile picture... -> ',url);
                             updateProfile(auth.currentUser, { photoURL: url })
