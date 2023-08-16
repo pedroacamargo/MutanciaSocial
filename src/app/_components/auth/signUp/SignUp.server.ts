@@ -37,28 +37,29 @@ export async function SignUp(user: UserCredentials): Promise<{ emailError: boole
     try {
         await createUserWithEmailAndPassword(auth, email, password);
         
-        /** @TODO -> Change SaveInDatabase to SaveUserInDatabase */
+        if (auth.currentUser) {
 
-        await SaveUserInDataBase({ 
-            acceptedConditions: false,
-            followers: [],
-            following: [],
-            followingAmount: 0,
-            followersAmount: 0,
-            profilePic: auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.png',
-            email: email, 
-            displayName: username,
-            uid: auth.currentUser?.uid,
-            headerName: null,
-            bio: null,
-            age: null,
-            gender: null,
-            country: null,
-            height: null,
-            weight: null,
-            sports: null,
-        });
-
+            await SaveUserInDataBase({ 
+                acceptedConditions: false,
+                followers: [],
+                following: [],
+                followingAmount: 0,
+                followersAmount: 0,
+                profilePic: auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.png',
+                email: email, 
+                displayName: username,
+                uid: auth.currentUser.uid,
+                headerName: null,
+                bio: null,
+                age: null,
+                gender: null,
+                country: null,
+                height: null,
+                weight: null,
+                sports: null,
+            });
+            
+        }
 
         return {
             emailError: false,
