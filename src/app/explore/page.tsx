@@ -117,7 +117,7 @@ export default function Explore() {
                                     </ExploreCardStatsHeader>
                                     <ExploreCardBio>{user.bio}</ExploreCardBio>
                                     <AccountStatusWrapper style={{paddingLeft: "15px", position: "absolute", bottom: "10px", color: "white"}}>
-                                        <FollowersStatus><BsPeopleFill style={{marginBottom: '-2px'}}/> <strong> {user.followersAmount} </strong> Followers - <BiSolidBarChartSquare style={{marginBottom: '-2px', marginLeft: "-1px"}}/> <strong>{user.followingAmount}</strong> Posts  </FollowersStatus>
+                                        <FollowersStatus><BsPeopleFill style={{marginBottom: '-2px'}}/> <strong> {user.followersAmount} </strong> Followers - <BiSolidBarChartSquare style={{marginBottom: '-2px', marginLeft: "-1px"}}/> <strong>0</strong> Posts  </FollowersStatus>
                                     </AccountStatusWrapper>
 
                                     <ExploreCardVisitButton href={`/profile/${user.uid}`}>See profile</ExploreCardVisitButton>
