@@ -149,6 +149,15 @@ export const FollowersStatus = styled.div`
     margin-bottom: 5px;
 `
 
+export const Status = styled.span`
+    font-family: ${font1};
+    font-size: .9em;
+    cursor: pointer;
+    &:hover {
+        font-weight: 600;
+    }
+`
+
 export const ProfileDashboardContainer = styled.div`
     width: 80%;
     max-width: 800px;
@@ -195,4 +204,34 @@ export const EditProfileDisplayName = styled.input`
 export const EditProfilePictureInput = styled.input`
     margin: 5px 0;
     font-family: ${font1};
+`
+
+export const PopUp = styled.div`
+    width: 40%;
+    height: 80%;
+    background-color: #ffffffd1;
+    box-shadow: 1px 1px 10px #0000007a;
+    border-radius: 5px;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    padding: 10px;
+`
+
+export const ClosePopUp = styled.div`
+    padding: 2px 6px;
+    background-color: #e02727;
+    color: white;
+    border-radius: 100%;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-family: ${font1};
+    font-size: .7em;
+    cursor: pointer;
+
+    &:hover {
+        background-color: red;
+    }
 `
