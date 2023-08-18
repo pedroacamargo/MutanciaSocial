@@ -201,7 +201,7 @@ export default function Profile(props: ProfileProps) {
 
                             ) : (
                                     <>
-                                        <ExploreRecommendedWarning>{userProfile.headerName} doesn't have any follower yet.</ExploreRecommendedWarning>
+                                        <ExploreRecommendedWarning>{userProfile.headerName} doesn&apos;t have any follower yet.</ExploreRecommendedWarning>
                                         <ExploreRecommendedDivider style={{width: '97%'}}></ExploreRecommendedDivider>
                                     </>
                             )) : (
