@@ -8,7 +8,7 @@ import { ButtonBase, ButtonInverted } from "@/app/GlobalStyles.styles";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useFollowers } from "@/hooks/useFollowers";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { DocumentData, collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import { databases } from "@/lib/types/databases.types";
 import PopUpUser from "./popupuser.component";
 import { ExploreRecommendedDivider, ExploreRecommendedWarning } from "@/app/explore/explore.styles";
@@ -40,6 +40,8 @@ export default function Profile(props: ProfileProps) {
     const { followPOST, followData, followDELETE } = useFollowers(userProfile, user);
     const [popUp, setPopUp] = useState(false);
     const [popUpData, setPopUpData] = useState<PopUpData>({ type: null, data: { followers: null, following: null } })
+    const [lastElementFromQueryForPagination, setLastElementFromQueryForPagination] = useState<{following?: DocumentData, follower?: DocumentData}>();
+
 
     
     const handleEdit = () => {
@@ -69,13 +71,12 @@ export default function Profile(props: ProfileProps) {
     }
 
     const getProfileFollowers = async () => {
-
         if (popUpData.data.followers) {
             setPopUpData({...popUpData, type: 'Followers'});
             console.log(popUpData);
         } else {
             const authRef = collection(db, databases.authDB);
-            const q = query(authRef, where("following", "array-contains", userProfile.uid));
+            const q = query(authRef, where("following", "array-contains", userProfile.uid), limit(5));
             const querySnapshot = await getDocs(q);
             let array: UserProfile[] = [];
             
@@ -84,19 +85,19 @@ export default function Profile(props: ProfileProps) {
             })
             
             setPopUpData({ type: 'Followers', data: {...popUpData.data, followers: array } });
+            setLastElementFromQueryForPagination({...lastElementFromQueryForPagination, follower: querySnapshot.docs[querySnapshot.docs.length - 1]});
         }
         
         handlePopUp();
     }
     
     const getProfileFollowing = async () => {
-
         if (popUpData.data.following) {
             setPopUpData({...popUpData, type: 'Following'});
             console.log(popUpData);
         } else {        
             const authRef = collection(db, databases.authDB);
-            const q = query(authRef, where("followers", "array-contains", userProfile.uid));
+            const q = query(authRef, where("followers", "array-contains", userProfile.uid), limit(5));
             const querySnapshot = await getDocs(q);
             let array: UserProfile[] = [];
             
@@ -104,10 +105,39 @@ export default function Profile(props: ProfileProps) {
                 array.push(doc.data() as UserProfile);
             })
             
+            setLastElementFromQueryForPagination({...lastElementFromQueryForPagination, following: querySnapshot.docs[querySnapshot.docs.length - 1]});
             setPopUpData({ type: 'Following', data: {...popUpData.data, following: array} });
         }
         handlePopUp();
     }
+
+    const handlePagination = async () => {
+        if (lastElementFromQueryForPagination) {
+            if (popUpData.type == 'Following' && lastElementFromQueryForPagination.following) {
+
+                const next = query(collection(db, databases.authDB), where("followers", "array-contains", userProfile.uid), startAfter(lastElementFromQueryForPagination.following), limit(5));
+                const querySnapshot = await getDocs(next);
+                let array: UserProfile[] = popUpData.data.following as UserProfile[];
+                querySnapshot.docs.map((users) => {
+                    array.push(users.data() as UserProfile);
+                })
+                setLastElementFromQueryForPagination({...lastElementFromQueryForPagination ,following: querySnapshot.docs[querySnapshot.docs.length - 1]});
+                setPopUpData({ type: "Following", data: {...popUpData.data, following: array }});
+                console.log(array)
+            } else if (popUpData.type == 'Followers' && lastElementFromQueryForPagination.follower) {
+                const next = query(collection(db, databases.authDB), where("following", "array-contains", userProfile.uid), startAfter(lastElementFromQueryForPagination.follower), limit(5));
+                const querySnapshot = await getDocs(next);
+                let array: UserProfile[] = popUpData.data.followers as UserProfile[];
+                querySnapshot.docs.map((users) => {
+                    array.push(users.data() as UserProfile);
+                })
+                setLastElementFromQueryForPagination({...lastElementFromQueryForPagination, follower: querySnapshot.docs[querySnapshot.docs.length - 1]});
+                setPopUpData({ type: "Followers", data: {...popUpData.data, followers: array }});
+                console.log(array)
+            }
+        }
+    }
+
     
     return (
         <ProfileContainer>
@@ -167,7 +197,7 @@ export default function Profile(props: ProfileProps) {
                             popUpData.type == 'Followers' ? (
                                 popUpData.data.followers && popUpData.data.followers?.length > 0 ? popUpData.data.followers.map((user, index) => 
 
-                                    <PopUpUser key={index} user={user}></PopUpUser> 
+                                        popUpData.data.followers && <PopUpUser pagination={handlePagination} isLast={index === popUpData.data.followers.length - 1} key={index} user={user}></PopUpUser> 
 
                             ) : (
                                     <>
@@ -176,11 +206,12 @@ export default function Profile(props: ProfileProps) {
                                     </>
                             )) : (
                                 popUpData.data.following && popUpData.data.following?.length > 0 ? popUpData.data.following.map((user, index) => 
-                                
-                                    <PopUpUser key={index} user={user}></PopUpUser> 
+                                    <>
+                                        {popUpData.data.following && <PopUpUser pagination={handlePagination} isLast={index === popUpData.data.following.length - 1} key={index} user={user}></PopUpUser>}
+                                    </>
                                     
-                            ) : (
-                                <>
+                                    ) : (
+                                        <>
                                     <ExploreRecommendedWarning>{userProfile.headerName} is not following anyone yet.</ExploreRecommendedWarning>
                                     <ExploreRecommendedDivider style={{width: '97%'}}></ExploreRecommendedDivider>
                                 </>

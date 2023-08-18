@@ -19,7 +19,7 @@ import { db } from "@/utils/firebase";
 import { databases } from "@/lib/types/databases.types";
 import { User } from "@/lib/interfaces/User.interface";
 import Spinner from "../_components/spinner/Spinner.component"
-import Card from "../_components/profile/Card"
+import Card from "../_components/explore/Card"
 
 export default function Explore() {
     const [formInput, setFormInput] = useState("");

@@ -4,16 +4,32 @@ import { ExploreCardBio, ExploreCardContainer, ExploreCardProfilePicture, Explor
 import { AccountStatusWrapper, FollowersStatus, UserDisplayName, UserFirstName } from "@/app/profile/profile.styles";
 import { BsPeopleFill } from "react-icons/bs";
 import { BiSolidBarChartSquare } from "react-icons/bi";
+import { useEffect, useRef } from "react";
 
 interface PopUpUserProps {
     user: User,
+    isLast?: boolean,
+    pagination?: () => Promise<void>
 }
 
 export default function PopUpUser(props: PopUpUserProps) {
-    const { user } = props;
+    const { user, isLast, pagination } = props;
+    const cardRef = useRef(null);
+
+    useEffect(() => {
+        if (!cardRef?.current || !pagination) return;
+
+        const observer = new IntersectionObserver(([entry]) => {
+            if (isLast && entry.isIntersecting) {
+                pagination();
+                observer.unobserve(entry.target);
+            }
+        })
+        observer.observe(cardRef.current);
+    }, [isLast]);
 
     return (
-        <ExploreCardContainer style={{width: "100%"}}>
+        <ExploreCardContainer ref={cardRef} style={{width: "100%"}}>
 
             <ExploreCardProfilePicture style={{backgroundColor: 'white'}} src={user.profilePic ? user.profilePic : '/Unknown_person.jpg' }></ExploreCardProfilePicture>
 
