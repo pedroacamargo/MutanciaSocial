@@ -7,13 +7,13 @@ const font1 = '"Montserrat", sans-serif';
 
 export const ExploreContainer = styled.div`
     width: 100%;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 60px;
     box-sizing: border-box;
-    `
+    padding-bottom: 50px;
+`
 
 export const SearchBar = styled.input`
     padding: 10px;

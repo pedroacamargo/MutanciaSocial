@@ -11,6 +11,7 @@ import { useFollowers } from "@/hooks/useFollowers";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { databases } from "@/lib/types/databases.types";
 import PopUpUser from "./popupuser.component";
+import { ExploreRecommendedDivider, ExploreRecommendedWarning } from "@/app/explore/explore.styles";
 
 interface ProfileProps {
     params: { uid: string },
@@ -164,15 +165,26 @@ export default function Profile(props: ProfileProps) {
 
                         {
                             popUpData.type == 'Followers' ? (
-                                popUpData.data.followers && popUpData.data.followers.map((user, index) => 
+                                popUpData.data.followers && popUpData.data.followers?.length > 0 ? popUpData.data.followers.map((user, index) => 
 
                                     <PopUpUser key={index} user={user}></PopUpUser> 
 
+                            ) : (
+                                    <>
+                                        <ExploreRecommendedWarning>{userProfile.headerName} doesn't have any follower yet.</ExploreRecommendedWarning>
+                                        <ExploreRecommendedDivider style={{width: '97%'}}></ExploreRecommendedDivider>
+                                    </>
                             )) : (
-                                popUpData.data.following && popUpData.data.following.map((user, index) => 
+                                popUpData.data.following && popUpData.data.following?.length > 0 ? popUpData.data.following.map((user, index) => 
                                 
                                     <PopUpUser key={index} user={user}></PopUpUser> 
                                     
+                            ) : (
+                                <>
+                                    <ExploreRecommendedWarning>{userProfile.headerName} is not following anyone yet.</ExploreRecommendedWarning>
+                                    <ExploreRecommendedDivider style={{width: '97%'}}></ExploreRecommendedDivider>
+                                </>
+
                             ))
                         }
 

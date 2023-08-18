@@ -6,27 +6,20 @@ import {
     Bar,
     SearchBarHelper,
     SearchBarHelperState,
-    ExploreCardContainer,
-    ExploreCardProfilePicture,
-    ExploreCardStatsContainer,
-    ExploreCardStatsHeader,
-    ExploreCardBio,
-    ExploreCardVisitButton,
     ExploreRecommendedWarning,
     ExploreRecommendedContainer,
     ExploreRecommendedDivider,
 } from "./explore.styles"
-import { BsPeopleFill, BsSearch } from "react-icons/bs"
+import { BsSearch } from "react-icons/bs"
 
-import { ButtonBase, ButtonInverted } from "../GlobalStyles.styles"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ButtonInverted } from "../GlobalStyles.styles"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { DocumentData, collection, getDocs, limit, query, startAfter, where } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { databases } from "@/lib/types/databases.types";
 import { User } from "@/lib/interfaces/User.interface";
-import { AccountStatusWrapper, FollowersStatus, UserDisplayName, UserFirstName } from "../profile/profile.styles"
-import { BiSolidBarChartSquare } from "react-icons/bi"
 import Spinner from "../_components/spinner/Spinner.component"
+import Card from "../_components/profile/Card"
 
 export default function Explore() {
     const [formInput, setFormInput] = useState("");
@@ -37,26 +30,8 @@ export default function Explore() {
     const [recommendedIsLoading, setRecommendedIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
-        const getRecommendedUsers = async () => {
-            setRecommendedIsLoading(true)
-            const q = query(collection(db, databases.authDB), where("admin", "==", true));
-            const querySnapshot = await getDocs(q);
-            let array: User[] = [];
-            
-            querySnapshot.docs.map((doc) => {
-                array.push(doc.data() as User);            
-            })
-            
-            setRecommendedUsers(array);
-            setRecommendedIsLoading(false);
-        }
         getRecommendedUsers();
     }, []);
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setFormInput(e.target.value);
-        setShowHelper(true);
-    }
 
     const handleSubmit = async () => {
         const usersDBRef = collection(db, databases.authDB);
@@ -70,7 +45,6 @@ export default function Explore() {
 
         setLastElementFromQueryForPagination(querySnapshot.docs[querySnapshot.docs.length - 1]);
         setUsersFiltered(array);
-        console.table(usersFiltered)
     }
 
     const handlePagination = async () => {
@@ -83,8 +57,26 @@ export default function Explore() {
             })
             setLastElementFromQueryForPagination(querySnapshot.docs[querySnapshot.docs.length - 1]);
             setUsersFiltered(array);
-            console.table(usersFiltered)        
         }
+    }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setFormInput(e.target.value);
+        setShowHelper(true);
+    }
+
+    const getRecommendedUsers = async () => {
+        setRecommendedIsLoading(true)
+        const q = query(collection(db, databases.authDB), where("admin", "==", true));
+        const querySnapshot = await getDocs(q);
+        let array: User[] = [];
+        
+        querySnapshot.docs.map((doc) => {
+            array.push(doc.data() as User);            
+        })
+        
+        setRecommendedUsers(array);
+        setRecommendedIsLoading(false);
     }
 
     return (
@@ -106,26 +98,7 @@ export default function Explore() {
                 {
                     usersFiltered.length > 0 ? usersFiltered.map((user, index) => {
                         return (
-                            <ExploreCardContainer key={index}>
-
-                                <ExploreCardProfilePicture style={{backgroundColor: 'white'}} src={user.profilePic ? user.profilePic : '/Unknown_person.jpg' }></ExploreCardProfilePicture>
-
-                                <ExploreCardStatsContainer>
-                                    <ExploreCardStatsHeader>
-                                        <UserFirstName style={{color: "whitesmoke", margin: "5px 5px 0 10px", fontWeight: "normal"}}>{user.headerName}</UserFirstName>
-                                        <UserDisplayName style={{color: "gray", transform: "translateY(5px)"}}> - @{user.displayName}</UserDisplayName>
-                                    </ExploreCardStatsHeader>
-                                    <ExploreCardBio>{user.bio}</ExploreCardBio>
-                                    <AccountStatusWrapper style={{paddingLeft: "15px", position: "absolute", bottom: "10px", color: "white"}}>
-                                        <FollowersStatus><BsPeopleFill style={{marginBottom: '-2px'}}/> <strong> {user.followersAmount} </strong> Followers - <BiSolidBarChartSquare style={{marginBottom: '-2px', marginLeft: "-1px"}}/> <strong>0</strong> Posts  </FollowersStatus>
-                                    </AccountStatusWrapper>
-
-                                    <ExploreCardVisitButton href={`/profile/${user.uid}`}>See profile</ExploreCardVisitButton>
-
-                                </ExploreCardStatsContainer>
-
-
-                            </ExploreCardContainer>
+                            <Card pagination={handlePagination} isLast={index === usersFiltered.length - 1} user={user} key={index}></Card>
                         )
                     }) : recommendedIsLoading ? <Spinner></Spinner> : (
                         <ExploreRecommendedContainer>
@@ -136,33 +109,13 @@ export default function Explore() {
                             {
                                 recommendedUsers.map((user, index) => {
                                     return (
-                                        <ExploreCardContainer key={index} style={{width: "120%"}}>
-
-                                            <ExploreCardProfilePicture style={{backgroundColor: 'white'}} src={user.profilePic ? user.profilePic : '/Unknown_person.jpg' }></ExploreCardProfilePicture>
-
-                                            <ExploreCardStatsContainer>
-                                                <ExploreCardStatsHeader>
-                                                    <UserFirstName style={{color: "whitesmoke", margin: "5px 5px 0 10px", fontWeight: "normal"}}>{user.headerName}</UserFirstName>
-                                                    <UserDisplayName style={{color: "gray", transform: "translateY(5px)"}}> - @{user.displayName}</UserDisplayName>
-                                                </ExploreCardStatsHeader>
-                                                <ExploreCardBio>{user.bio}</ExploreCardBio>
-                                                <AccountStatusWrapper style={{paddingLeft: "15px", position: "absolute", bottom: "10px", color: "white"}}>
-                                                    <FollowersStatus><BsPeopleFill style={{marginBottom: '-2px'}}/> <strong> {user.followersAmount} </strong> Followers - <BiSolidBarChartSquare style={{marginBottom: '-2px', marginLeft: "-1px"}}/> <strong>0</strong> Posts  </FollowersStatus>
-                                                </AccountStatusWrapper>
-
-                                                <ExploreCardVisitButton href={`/profile/${user.uid}`}>See profile</ExploreCardVisitButton>
-
-                                            </ExploreCardStatsContainer>
-
-
-                                        </ExploreCardContainer>
+                                        <Card customStyle="120%" user={user} key={index}></Card>
                                     )
                                 })
                             }
                         </ExploreRecommendedContainer>
                     )
                 }
-            <ButtonBase onClick={handlePagination}>Paginate</ButtonBase>
         </ExploreContainer>
     )
 }
