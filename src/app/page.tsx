@@ -7,6 +7,14 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { databases } from "@/lib/types/databases.types";
 import { User } from "@/lib/interfaces/User.interface";
+import { 
+    MainContainer,
+    FeedContainer,
+    PostsContainer,
+
+} from "./_components/feed/home.styles";
+import CreateNewPost from "./_components/feed/newpost.component";
+import Post from "./_components/feed/post.component";
 
 export default function Dashboard() {
     const { user } = useCurrentUser()
@@ -34,6 +42,31 @@ export default function Dashboard() {
                 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Oswald:wght@400;500&family=Raleway:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet"/>
             </Helmet>
             <Navbar/>
+
+            <MainContainer>
+                
+
+                <FeedContainer>
+
+                    {user && <CreateNewPost user={user}/>}
+                    
+
+                    <PostsContainer>
+
+                        {user && <Post user={user}/>}
+                        {user && <Post user={user}/>}
+                        {user && <Post user={user}/>}
+                        {user && <Post user={user}/>}
+                        {user && <Post user={user}/>}
+
+                    </PostsContainer>
+
+
+                </FeedContainer>
+            </MainContainer>
+            
+
+
         </>
     );
 }
