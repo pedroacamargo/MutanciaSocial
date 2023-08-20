@@ -153,9 +153,9 @@ export default function Post(props: PostProps) {
                     <CommentsContainer>
 
                         {
-                            post.comments.map((commentData) => {
+                            post.comments.map((commentData, index) => {
                                 return (
-                                    <Comment commentData={commentData}/>
+                                    <Comment key={index} commentData={commentData}/>
                                 )
                             })
                         }
