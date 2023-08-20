@@ -1,15 +1,10 @@
 export interface User {
-    /* POSTS */
-    posts: string[],
-    comments: string[],
-    
-    /* Followers */
+    posts?: string[],
+    comments?: string[],
     followersAmount: number,
     followers: string[],
     followingAmount: number,
-    following: string[]
-    
-    /* Profile */
+    following: string[]    
     acceptedConditions: boolean,
     displayName?: string,
     modifiedAt?: Date,
