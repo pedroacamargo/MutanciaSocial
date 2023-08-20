@@ -38,7 +38,7 @@ export default function Welcome() {
 
     useEffect(() => {
         dispatch(fetchUserAsync() as any);
-    }, []);
+    }, [dispatch]);
 
     const nextStep = () => setStepsLeft(stepsLeft - 1);
     const previousStep = () => setStepsLeft(stepsLeft + 1);
