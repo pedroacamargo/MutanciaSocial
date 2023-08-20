@@ -64,6 +64,8 @@ export async function continueWithGoogle(): Promise<UserCookies | null> {
                     following: [],
                     followingAmount: 0,
                     profilePic: user.user.photoURL ? user.user.photoURL : '/Unknown_person.png',
+                    comments: [],
+                    posts: [],
                 })
                 return { user: user.user, acceptedConditions: false }
             } else {

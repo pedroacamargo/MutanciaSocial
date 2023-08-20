@@ -11,6 +11,23 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
     }
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: black;
+        border-radius: 0px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
 ` 
 
 export default GlobalStyle
