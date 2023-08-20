@@ -14,8 +14,8 @@ export const useFollowers =  (userProfile: User, currentUser: User | undefined) 
     const [followData, setFollowData] = useState<{follow: boolean | undefined, followersAmount: number}>({ follow: undefined, followersAmount: userProfile.followersAmount});
 
     useEffect(() => {
-        setFollowData({...followData, follow: currentUser?.following.some((uidFollowing) => userProfile.uid === uidFollowing)});
-        console.log(followData);
+        let obj = {...followData, follow: currentUser?.following.some((uidFollowing) => userProfile.uid === uidFollowing)}
+        setFollowData(obj);
     }, [currentUser])
 
     const followPOST = async () => {        

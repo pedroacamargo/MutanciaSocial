@@ -19,7 +19,7 @@ export const useCurrentUser = () => {
         };
 
         dispatch(fetchUserAsync() as any);
-    }, []);
+    }, [dispatch]);
 
     return { user, setUser };
 }

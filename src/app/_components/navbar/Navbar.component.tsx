@@ -24,14 +24,23 @@ import { useState } from "react";
 import NavbarLoading from "./NavbarLoading.component";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { auth } from "@/utils/firebase";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
     const { user, setUser } = useCurrentUser();
     const { signOutUser } = useSignOut(setUser);
     const isUserLoading = useSelector(selectUserIsLoading);
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
+    const router = useRouter();
+
+    const handleSignOut = () => {
+        signOutUser();
+        router.refresh()
+    }
     
-    const signOut = async () => await signOutUser();
+    const signOut = async () => {
+        await signOutUser();
+    } 
     const toggleProfilePopUp = () => setProfilePopUpOpened(!profilePopUpOpened);
     
     if (isUserLoading) {
@@ -73,7 +82,7 @@ export default function Navbar() {
                             <ProfilePopUpLink href='/'>My Posts</ProfilePopUpLink>
                             <ProfilePopUpLink href='/'>Settings</ProfilePopUpLink>
                             
-                            <SignOutButton onClick={signOutUser} href='/'>Sign Out</SignOutButton>
+                            <SignOutButton onClick={handleSignOut} href='/'>Sign Out</SignOutButton>
                         </ProfileOptionsContainer>
 
                     </UserLoggedContainer>
@@ -105,7 +114,7 @@ export default function Navbar() {
                             </LoggedInAsContainer>
 
                             
-                            <SignOutButton onClick={signOut} href='/signin'>Sign In</SignOutButton>
+                            <SignOutButton href='/signin'>Sign In</SignOutButton>
                         </ProfileOptionsContainer>
 
                     </UserLoggedContainer>

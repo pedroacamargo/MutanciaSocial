@@ -26,7 +26,7 @@ export default function PopUpUser(props: PopUpUserProps) {
             }
         })
         observer.observe(cardRef.current);
-    }, [isLast]);
+    }, [isLast, pagination]);
 
     return (
         <ExploreCardContainer ref={cardRef} style={{width: "100%"}}>

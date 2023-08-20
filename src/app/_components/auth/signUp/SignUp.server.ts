@@ -57,6 +57,8 @@ export async function SignUp(user: UserCredentials): Promise<{ emailError: boole
                 height: null,
                 weight: null,
                 sports: null,
+                comments: [],
+                posts: [],
             });
             
         }

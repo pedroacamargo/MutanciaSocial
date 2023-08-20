@@ -26,10 +26,13 @@ export default function Page({ params }: { params: { uid: string }}) {
             if (user) {
                 setUserProfile(user);
             } else {
-                setErrorsObject({
+
+                const errorObj = {
                     ...errorsObject,
                     userNotFound: true,
-                })
+                };
+
+                setErrorsObject(errorObj);
             }
             if (auth.currentUser) {
                 const currentUserProf = await getUserFromAuthDBWithUid(auth.currentUser?.uid) as User;

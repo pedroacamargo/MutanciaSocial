@@ -165,7 +165,7 @@ export default function Profile(props: ProfileProps) {
 
                     <AccountStatusWrapper>
                         <FollowersStatus><BsPeopleFill style={{marginBottom: '-2px'}}/> <strong> {followData.followersAmount} </strong> <Status onClick={getProfileFollowers}> Followers </Status> - <strong> {userProfile?.followingAmount} </strong> <Status onClick={getProfileFollowing}>Following</Status> </FollowersStatus>
-                        <FollowersStatus><BiSolidBarChartSquare style={{marginBottom: '-2px'}}/> <strong>0</strong> Posts </FollowersStatus>
+                        <FollowersStatus><BiSolidBarChartSquare style={{marginBottom: '-2px'}}/> <strong>{userProfile.posts ? userProfile.posts.length : '0'}</strong> Posts </FollowersStatus>
                     </AccountStatusWrapper>
 
                 </UserCardStatusWrapper>
