@@ -75,6 +75,33 @@ export const CreateNewPostInputButtonsContainer = styled(FlexContainer)`
 `
 
 
+export const SelectBoxContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+interface SelectBoxProps {
+    isselected: boolean,
+}
+
+export const SelectBox = styled.div<SelectBoxProps>`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${(props) => props.isselected ? "white" : "black"};
+    color: ${(props) => props.isselected ? "black" : "white"};
+    flex: 1;
+    height: 30px;
+    font-family: ${font1};
+    cursor: pointer;
+    transition: .6s;
+
+    &:hover {
+        background-color: ${props => !props.isselected && 'white'};
+        color: ${props => !props.isselected && 'black'};
+    }
+`
+
 
 
 
@@ -199,4 +226,5 @@ export const UserReplyContainer = styled(FlexContainer)`
     border-bottom: 1px solid #dbdbdb;
     padding-bottom: 10px;
     box-shadow: 0px 2px 2px #00000021;
+    font-family: ${font1};
 `

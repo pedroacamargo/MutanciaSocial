@@ -1,9 +1,9 @@
 'use client'
 import { Helmet } from "react-helmet-async";
 import Navbar from "./_components/navbar/Navbar.component";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { DocumentData, collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, updateDoc, where } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { databases } from "@/lib/types/databases.types";
 import { User } from "@/lib/interfaces/User.interface";
@@ -11,13 +11,20 @@ import {
     MainContainer,
     FeedContainer,
     PostsContainer,
+    SelectBox,
+    SelectBoxContainer,
 
 } from "./_components/feed/home.styles";
 import CreateNewPost from "./_components/feed/newpost.component";
 import Post from "./_components/feed/post.component";
+import { PostsData } from "@/lib/interfaces/PostsData.interface";
+import { ButtonBase } from "./GlobalStyles.styles";
 
 export default function Dashboard() {
-    const { user } = useCurrentUser()
+    const { user } = useCurrentUser();
+    const [isForYou, setIsForYou] = useState(false);
+    const [postsData, setPostsData] = useState<PostsData[]>([]);
+    const [lastElementFromQueryForPagination, setLastElementFromQueryForPagination] = useState<DocumentData>();
 
     // function to update old users that aren't registered with followers data
     useEffect(() => {
@@ -33,6 +40,30 @@ export default function Dashboard() {
         }
         updateUsers();
     }, [user])
+
+    useEffect(() => {
+        const getPosts = async () => {
+            const q = query(collection(db, databases.postsDB), orderBy("postDate", "desc"), limit(5));
+            const querySnapshot = await getDocs(q);
+            const postsArray = querySnapshot.docs.map((post) => {
+                return post.data() as PostsData;
+            })
+            setLastElementFromQueryForPagination(querySnapshot.docs[querySnapshot.docs.length - 1]);
+            setPostsData(postsArray);
+        }
+        getPosts();
+    }, [])
+
+    const pagination = async () => {
+        const next = query(collection(db, databases.postsDB), orderBy("postDate", "desc"), startAfter(lastElementFromQueryForPagination), limit(5));
+        const querySnapshot = await getDocs(next);
+        let array: PostsData[] = postsData;
+        querySnapshot.docs.map((post) => {
+            array.push(post.data() as PostsData);
+        })
+        setLastElementFromQueryForPagination(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        setPostsData(array);
+    }
 
     return (
         <>
@@ -50,23 +81,24 @@ export default function Dashboard() {
 
                     {user && <CreateNewPost user={user}/>}
                     
+                    <SelectBoxContainer>
+                        <SelectBox onClick={() => setIsForYou(true)} isselected={isForYou}> For You </SelectBox>
+                        <SelectBox onClick={() => setIsForYou(false)} isselected={!isForYou}> Following </SelectBox>
+                    </SelectBoxContainer>
 
                     <PostsContainer>
 
-                        {user && <Post user={user}/>}
-                        {user && <Post user={user}/>}
-                        {user && <Post user={user}/>}
-                        {user && <Post user={user}/>}
-                        {user && <Post user={user}/>}
+                        {
+                            postsData.map((post, index) => {
+                                return <Post key={index} user={user} post={post} islast={index === postsData.length - 1} paginate={pagination}/>
+                            })
+                        }
 
                     </PostsContainer>
 
 
                 </FeedContainer>
             </MainContainer>
-            
-
-
         </>
     );
 }
