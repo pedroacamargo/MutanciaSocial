@@ -10,9 +10,9 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url));
     }
     
-    if (authRoutes.includes(request.nextUrl.pathname) && currentUser) {
-        return NextResponse.redirect(new URL('/', request.url));
-    }
+    // if (authRoutes.includes(request.nextUrl.pathname) && currentUser) {
+    //     return NextResponse.redirect(new URL('/', request.url));
+    // }
 
     if (publicRoutes.includes(request.nextUrl.pathname) && currentUser) {
         const parsedUserJSON: UserCookies = JSON.parse(currentUser);
