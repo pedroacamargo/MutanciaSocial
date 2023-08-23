@@ -13,6 +13,10 @@ export const ExploreContainer = styled.div`
     padding-top: 60px;
     box-sizing: border-box;
     padding-bottom: 50px;
+
+    @media screen and (max-width: 780px){
+        padding-top: 0;
+    }
 `
 
 export const SearchBar = styled.input`
@@ -21,6 +25,14 @@ export const SearchBar = styled.input`
     font-family: ${font1};
     outline: none;
     border: 1px solid black;
+
+    @media screen and (max-width: 450px) {
+        width: 200px;
+    }
+
+    @media screen and (max-width: 380px) {
+        width: 150px;
+    }
 
 `
 
@@ -88,6 +100,29 @@ export const ExploreCardContainer = styled.div`
     &:hover {
         transform: translate(-4px, -2px);        
         box-shadow: 5px 5px 15px #00000060;
+    }
+
+    @media screen and (max-width: 700px){
+        display: none;
+    }
+`
+
+export const MobileExploreCardContainer = styled(Link)`
+    width: 80%;
+    text-decoration: none;
+    max-width: 1000px;
+    background-color: rgb(48, 54, 61);
+    border-radius: 5px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    display: none;
+    box-shadow: 5px 5px 10px #00000060;
+    transition: .3s;
+    transform: translate(0, 0);
+    cursor: default;
+
+    @media screen and (max-width: 700px){
+        display: flex;
     }
 `
 

@@ -1,5 +1,5 @@
 'use client'
-import { AccountStatusWrapper, FollowersStatus, PictureContainer, ProfileContainer, ProfileDashboardContainer, ProfilePicture, UserCardBio, UserCardStatusWrapper, UserCardWrapper, UserDisplayName, UserFirstName, UserStatusPinEmoji, UserStatusPinPop, UserStatusPinPopPhrase, PopUp, Status, ClosePopUp } from "@/app/profile/profile.styles";
+import { AccountStatusWrapper, FollowersStatus, PictureContainer, ProfileContainer, ProfileDashboardContainer, ProfilePicture, UserCardBio, UserCardStatusWrapper, UserCardWrapper, UserDisplayName, UserFirstName, UserStatusPinEmoji, UserStatusPinPop, UserStatusPinPopPhrase, PopUp, Status, ClosePopUp, MobileContainer, ProfileSectionWrapper, MobileProfileStatsWrapper, MobileBio } from "@/app/profile/profile.styles";
 import { auth, db, } from "@/utils/firebase";
 import { User as UserProfile } from "@/lib/interfaces/User.interface";
 import { BsPeopleFill } from "react-icons/bs";
@@ -185,6 +185,37 @@ export default function Profile(props: ProfileProps) {
             <ProfileDashboardContainer>
                 Here will be the others status
             </ProfileDashboardContainer>
+
+
+            <MobileContainer>
+                <ProfileSectionWrapper>
+                    <MobileProfileStatsWrapper>
+
+                    <UserCardStatusWrapper>
+                        <UserFirstName style={{fontSize: '1.5em'}}>{userProfile?.headerName}</UserFirstName>
+
+                        <UserDisplayName>@{userProfile?.displayName}</UserDisplayName>
+
+                        {
+                            userProfile?.bio ? <MobileBio>{userProfile.bio}</MobileBio> : <></>
+                        }
+
+                        <AccountStatusWrapper>
+                            <FollowersStatus style={{margin: '1px'}}><BsPeopleFill style={{marginBottom: '-2px'}}/> <strong> {followData.followersAmount} </strong> <Status onClick={getProfileFollowers}> Followers </Status> </FollowersStatus>
+                            <FollowersStatus style={{margin: '1px'}}><BsPeopleFill style={{marginBottom: '-2px'}}/><strong> {userProfile?.followingAmount} </strong> <Status onClick={getProfileFollowing}>Following</Status> </FollowersStatus>
+                            <FollowersStatus style={{margin: '1px'}}><BiSolidBarChartSquare style={{marginBottom: '-2px'}}/> <strong>{userProfile.posts ? userProfile.posts.length : '0'}</strong> Posts </FollowersStatus> 
+                        </AccountStatusWrapper>
+
+                    </UserCardStatusWrapper>
+
+
+                    </MobileProfileStatsWrapper>
+                    <ProfilePicture style={{width: '125px', height: '100%', borderRadius: '0'}} src={
+                        `${params.uid == user?.uid ? auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
+                            : userProfile?.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
+                    }></ProfilePicture>
+                </ProfileSectionWrapper>
+            </MobileContainer>
 
 
             {
