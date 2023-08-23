@@ -215,6 +215,16 @@ export default function Profile(props: ProfileProps) {
                             : userProfile?.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
                     }></ProfilePicture>
                 </ProfileSectionWrapper>
+                {   
+                    user ? (
+                        userProfile?.uid == user?.uid ? <ButtonInverted style={{width: '70%'}} onClick={handleEdit}>Edit profile</ButtonInverted> : (
+                            followData.follow ? <ButtonBase disabled={disabled} onClick={handleUnfollow} style={{width: '70%'}}>Unfollow</ButtonBase> : <ButtonBase style={{width: '70%'}} disabled={disabled} onClick={handleFollow}>Follow</ButtonBase>
+                        )
+                    ) : (
+                        <ButtonBase onClick={() => router.push('/signin')} style={{width: '70%'}}>Sign in to follow</ButtonBase>
+                    )
+
+                }
             </MobileContainer>
 
 
