@@ -44,7 +44,7 @@ export default function CreateNewPost(props: CreateNewPostProps) {
                 hasImage: formData.hasImage,
                 likes: 0,
                 likesArray: [],
-                postDate: `${new Date()}`,
+                postDate: new Date().getTime(),
                 postId: `${userData.uid}_${userData.posts ? userData.posts.length : 0}`,
                 userRef: userData.uid,
             }
@@ -63,7 +63,7 @@ export default function CreateNewPost(props: CreateNewPostProps) {
 
     return (
         <CreateNewPostContainer isopened={isCreateNewPostOpened} onMouseLeave={() => setIsCreateNewPostOpened(false)}>
-            <ProfilePic style={{marginLeft: '20px', marginTop: '15px'}} alt="Profile picture" src={`${user.photoURL}`} width={30} height={30}/>
+            <ProfilePic style={{marginLeft: '20px', marginTop: '15px'}} alt="Profile picture" src={`${user.photoURL ? user.photoURL : '/Unknown_person.png'}`} width={30} height={30}/>
             <CreateNewPostInputContainer>
 
                 <CreateNewPostInput onFocus={handleOnFocus} onChange={handleOnChange} placeholder="Share something with your followers..." value={formData.content}></CreateNewPostInput>
