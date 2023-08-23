@@ -8,9 +8,6 @@ import {
 } from "../auth.styles"
 import Image from "next/image"
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "@/redux/user/user.selector";
-import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { fetchUserAsync } from "@/redux/user/user.action";
 import { Helmet } from "react-helmet-async";
@@ -18,13 +15,10 @@ import LogoContainer from "@/app/_components/auth/LogoContainer.component";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const userData = useSelector(selectCurrentUser);
   
   
   useEffect(() => {
     dispatch(fetchUserAsync() as any);
-    if (userData) router.push('/');
   }, [])
   
   return (
