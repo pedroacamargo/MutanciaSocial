@@ -19,6 +19,7 @@ interface PostProps {
     post: PostsData,
     islast?: boolean,
     paginate?: () => Promise<void>,
+    isForYou: boolean,
 }
 
 interface PublishDate {
@@ -28,7 +29,7 @@ interface PublishDate {
 
 
 export default function Post(props: PostProps) {
-    const { user, post, islast, paginate } = props;
+    const { user, post, islast, paginate,isForYou } = props;
     const [isOpened, setIsOpened] = useState(false);
     const [userData, setUserData] = useState<UserData>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -39,11 +40,11 @@ export default function Post(props: PostProps) {
     const postRef = useRef(null);
 
     const calculatePublishData = () => {
-        const actualDate = new Date();
-        const postDate = new Date(post.postDate);
+        const actualDate = new Date().getTime();
+        const postDate = post.postDate;
 
 
-        const secondsDiff = Math.floor((actualDate.getTime() - postDate.getTime()) / 1000);
+        const secondsDiff = Math.floor((actualDate - postDate) / 1000);
         if (secondsDiff < 60) return setPublishDate({ value: secondsDiff, scope: 'second' });
 
         const minutesDiff = Math.floor(secondsDiff / 60);
@@ -75,7 +76,7 @@ export default function Post(props: PostProps) {
         getUserPostData();
         checkIfIsLiked();
         calculatePublishData()
-    }, [])
+    }, [isForYou])
     
     const handleLike = async () => {
         if(loadingLike) return;
@@ -123,7 +124,7 @@ export default function Post(props: PostProps) {
 
                     <ProfilePic alt="Profile pic" src={`${isLoading ? '/Unknown_person.png' : userData?.profilePic}`} height={30} width={30}></ProfilePic>
                     <PostHeaderStats>
-                        <PostHeaderName>{userData?.headerName}</PostHeaderName>
+                        <PostHeaderName >{userData?.headerName}</PostHeaderName>
                         <PostHeaderPostTime>Published {publishDate.value} {
                             publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}s`
                         } ago</PostHeaderPostTime>
