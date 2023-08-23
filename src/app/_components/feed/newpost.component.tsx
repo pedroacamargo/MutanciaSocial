@@ -44,7 +44,7 @@ export default function CreateNewPost(props: CreateNewPostProps) {
                 hasImage: formData.hasImage,
                 likes: 0,
                 likesArray: [],
-                postDate: `${new Date()}`,
+                postDate: new Date().getTime(),
                 postId: `${userData.uid}_${userData.posts ? userData.posts.length : 0}`,
                 userRef: userData.uid,
             }

@@ -8,7 +8,7 @@ export interface PostsData {
     }[]
     // Postid -> uid_userData.posts.length
     postId: string,
-    postDate: string,
+    postDate: number,
     userRef: string,
     content: string,
     hasImage: boolean,
