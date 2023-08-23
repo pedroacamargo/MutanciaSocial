@@ -9,7 +9,14 @@ export const ProfileContainer = styled.div`
     align-items: flex-start;
     flex-direction: row;
     height: 100vh; // remove this later
-    padding: 70px 0 0 0;
+    padding-top: 70px;
+
+    @media screen and (max-width: 780px) {
+        padding: 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
 `
 
 export const UserCardWrapper = styled.div`
@@ -21,6 +28,11 @@ export const UserCardWrapper = styled.div`
     padding: 50px;
     margin-right: 50px;
     border-right: 1px solid #cfcfcf;
+
+    @media screen and (max-width: 780px) {
+        display: none;
+    }
+
 `
 
 export const PictureContainer = styled.div`
@@ -102,13 +114,24 @@ export const UserCardStatusWrapper = styled.div`
     align-items: flex-start;
     flex-direction: column;
     width: 70%;
+    
+    @media screen and (max-width: 780px) {
+        width: 100%;
+        padding: 10px;
+        padding-left: 25px;
+    }
 `
 
 export const UserFirstName = styled.h1`
+    text-decoration: none;
     font-family: ${font1};
     font-size: 1.7em;
     font-weight: bold;
     white-space: nowrap;
+
+    @media screen and (max-width: 450px) {
+        font-size: 1.3em;
+    }
 `
 
 export const UserDisplayName = styled(UserFirstName)`
@@ -135,6 +158,10 @@ export const UserCardBio = styled.textarea`
         border: none;
         margin-bottom: 10px;
     }
+
+    @media screen and (max-width: 780px) {
+        height: 100px;
+    }
 `
 
 export const AccountStatusWrapper = styled.div`
@@ -147,6 +174,10 @@ export const FollowersStatus = styled.div`
     font-size: .9em;
     width: 120%;
     margin-bottom: 5px;
+
+    @media screen and (max-width: 780px) {
+        margin: 0;
+    }
 `
 
 export const Status = styled.span`
@@ -163,6 +194,10 @@ export const ProfileDashboardContainer = styled.div`
     max-width: 800px;
     height: 100vh;
     padding: 20px;
+    @media screen and (max-width: 780px) {
+        display: none;
+    }
+
 `
 
 export const EditProfileInputLabel = styled.label`
@@ -207,7 +242,7 @@ export const EditProfilePictureInput = styled.input`
 `
 
 export const PopUp = styled.div`
-    width: 40%;
+    width: 80%;
     height: 80%;
     background-color: #ffffffd1;
     box-shadow: 1px 1px 10px #0000007a;
@@ -234,4 +269,61 @@ export const ClosePopUp = styled.div`
     &:hover {
         background-color: red;
     }
+`
+
+
+
+
+
+
+
+
+
+/* Mobile */
+export const MobileContainer = styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @media screen and (max-width: 780px) {
+        display: flex;
+    }
+`
+
+export const ProfileSectionWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #00000063;
+    box-shadow: 2px 2px 10px #0000004e;
+    width: 100%;
+    background-color: #eeeded;
+`
+
+export const MobileProfileStatsWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 400px;
+    padding-bottom: 10px;
+
+    @media screen and (max-width: 530px) {
+        width: 300px;
+    }
+
+    @media screen and (max-width: 440px) {
+        width: 50%;
+    }
+`
+
+export const MobileBio = styled.div`
+    width: 100%;
+    font-size: .9em;
+    padding-bottom: 5px;
+    font-family: ${font1};
 `

@@ -98,7 +98,7 @@ export default function Explore() {
                 {
                     usersFiltered.length > 0 ? usersFiltered.map((user, index) => {
                         return (
-                            <Card pagination={handlePagination} isLast={index === usersFiltered.length - 1} user={user} key={index}></Card>
+                            <Card customStyle="80%" pagination={handlePagination} isLast={index === usersFiltered.length - 1} user={user} key={index}></Card>
                         )
                     }) : recommendedIsLoading ? <Spinner></Spinner> : (
                         <ExploreRecommendedContainer>
