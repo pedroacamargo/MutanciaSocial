@@ -22,6 +22,10 @@ export const FeedContainer = styled.div`
     border-right: 1px solid #dbdbdb;
     display: flex;
     flex-direction: column;
+
+    @media screen and (max-width: 780px){
+        padding-top: 0;
+    }
 `
 
 interface CreateNewPostContainerProps {
@@ -65,6 +69,10 @@ export const CreateNewPostInput = styled.textarea`
 
     @media screen and (max-width: 600px) {
         font-size: 1em;
+    }
+
+    @media screen and (max-width: 400px) {
+        font-size: .85em;
     }
 `
 

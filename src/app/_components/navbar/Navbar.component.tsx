@@ -13,7 +13,9 @@ import {
     ProfilePopUpLink,
     SignOutButton,
     LoggedInAsContainer,
-    NavbarLinkDisabled
+    NavbarLinkDisabled,
+    MobileNavbarContainer,
+    MobileLink
 } from "./Navbar.styles";
 import { useSelector } from "react-redux";
 import { selectUserIsLoading } from '@/redux/user/user.selector';
@@ -25,6 +27,8 @@ import NavbarLoading from "./NavbarLoading.component";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { auth } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
+import { AiFillHome, AiOutlineSearch } from "react-icons/ai";
+import { PiSignInBold } from "react-icons/pi"
 
 export default function Navbar() {
     const { user, setUser } = useCurrentUser();
@@ -50,6 +54,7 @@ export default function Navbar() {
     return (
         <>
         {user?.displayName ? 
+        <>
             <NavbarContainer>
 
                 <NavbarLogoContainer>
@@ -89,8 +94,27 @@ export default function Navbar() {
                 </NavbarLinksContainer>
             </NavbarContainer> 
 
-            : 
 
+            <MobileNavbarContainer>
+
+                <MobileLink href={'/'}>
+                    <AiFillHome></AiFillHome>
+                </MobileLink>
+                <MobileLink href={'/explore'}>
+                    <AiOutlineSearch></AiOutlineSearch>
+                </MobileLink>
+                <MobileLink href={`/profile/${user.uid}`}>
+                    {auth.currentUser?.photoURL ? (
+                        <ProfilePic style={{width: '25px', height: '25px'}} src={`${auth.currentUser.photoURL}`} alt="Mutancia Social Logo" width={45} height={45}/>
+                    ) : (
+                        <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
+                    )}                
+                </MobileLink>
+
+            </MobileNavbarContainer>
+        </>
+            : 
+        <>
             <NavbarContainer>
                 <NavbarLogoContainer>
                     <Image src="/Mutancia-Social-Black.png" alt="Mutancia Social Logo" width={45} height={45}/>
@@ -120,6 +144,23 @@ export default function Navbar() {
                     </UserLoggedContainer>
                 </NavbarLinksContainer>
             </NavbarContainer>
+
+            <MobileNavbarContainer>
+
+                <MobileLink href={'/'}>
+                    <AiFillHome></AiFillHome>
+                </MobileLink>
+                <MobileLink href={'/explore'}>
+                    <AiOutlineSearch></AiOutlineSearch>
+                </MobileLink>
+                <MobileLink href={`/signin`}>
+                    <PiSignInBold></PiSignInBold>
+                </MobileLink>
+
+            </MobileNavbarContainer>
+
+
+        </>
         }
         </>
     );

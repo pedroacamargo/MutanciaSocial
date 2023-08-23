@@ -22,6 +22,15 @@ export const NavbarContainer = styled.div`
     background-color: #f1f0f0;
     border-bottom: 1px solid #dad6d6;
     box-shadow: 1px 1px 5px #746e6e58;
+
+    @media screen and (max-width: 1000px) {
+        padding: 5px 0px;
+        width: 100%;
+    }
+
+    @media screen and (max-width: 780px){
+        display: none;
+    }
 `
 
 export const NavbarLogoContainer = styled.div`
@@ -29,6 +38,7 @@ export const NavbarLogoContainer = styled.div`
     align-items: center;
     justify-content: center;
     cursor: default;
+    padding-left: 10px;
 `
 
 export const NavbarLogoName = styled.span`
@@ -241,4 +251,32 @@ export const UserProfilePictureLoadingContainer = styled.div`
 
 export const UserProfilePictureLoadingSkeleton = styled(UserNameLoadingSkeleton)`
     height: 40px;
+`
+
+export const MobileNavbarContainer = styled(NavbarContainer)`
+    width: 100%;
+    bottom: 0;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 0;
+    border-top: 1px solid black;
+    box-shadow: 0px -1px 10px #00000071;
+    display: none;
+    height: 35px;
+
+    @media screen and (max-width: 780px){
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+`
+
+export const MobileLink = styled(Link)`
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 1.5em;
+
 `
