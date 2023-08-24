@@ -11,6 +11,7 @@ import { collection, doc, setDoc, updateDoc } from "firebase/firestore"
 import { auth, db } from "@/utils/firebase"
 import { databases } from "@/lib/types/databases.types"
 import { PostsData } from "@/lib/interfaces/PostsData.interface"
+import LoadingBar from "./LoadingBar.component"
 
 interface CreateNewPostProps {
     user: User,
@@ -23,12 +24,14 @@ export default function CreateNewPost(props: CreateNewPostProps) {
         content: "",
         hasImage: false
     })
-
+    const [loadingCompletion, setLoadingCompletion] = useState(0);
+    console.log(new Date().getTimezoneOffset())
     const handleOnFocus = () => setIsCreateNewPostOpened(!isCreateNewPostOpened);
 
     const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => setFormData({hasImage: false, content: e.target.value});
 
     const handleSubmitPost = async () => {
+        setLoadingCompletion(1);
         if (formData.content.length < 9) {
             alert("Please, make a post with more than 8 characters!");
             return;
@@ -36,6 +39,7 @@ export default function CreateNewPost(props: CreateNewPostProps) {
             alert("Max characters boundaries passed! Post with 500+ characters is not allowed!");
             return;
         } else {
+            setLoadingCompletion(25);
             const userData = await getUserFromAuthDBWithUid(user.uid) as UserData;
             const docData: PostsData = {
                 comments: [],
@@ -47,16 +51,18 @@ export default function CreateNewPost(props: CreateNewPostProps) {
                 postId: `${userData.uid}_${userData.posts ? userData.posts.length : 0}`,
                 userRef: userData.uid,
             }
-
+            
             const newUserPostsArray = userData.posts ? [...userData.posts, docData.postId] : [docData.postId];
-
+            setLoadingCompletion(40);
+            
             await updateDoc(doc(db, databases.authDB, userData.uid), { posts: newUserPostsArray });
+            setLoadingCompletion(99);
             await setDoc(doc(db, databases.postsDB, docData.postId), docData);
-            alert('done');
             setFormData({
                 content: "",
                 hasImage: false,
             })
+            setLoadingCompletion(100);
         }
     }
 
@@ -75,6 +81,9 @@ export default function CreateNewPost(props: CreateNewPostProps) {
 
             </CreateNewPostInputContainer>
             
+
+
+            <LoadingBar completion={loadingCompletion}></LoadingBar>
         </CreateNewPostContainer>
     )
 }
