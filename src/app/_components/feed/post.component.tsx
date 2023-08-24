@@ -124,7 +124,7 @@ export default function Post(props: PostProps) {
 
                     <ProfilePic alt="Profile pic" src={`${isLoading ? '/Unknown_person.png' : userData?.profilePic}`} height={30} width={30}></ProfilePic>
                     <PostHeaderStats>
-                        <PostHeaderName >{userData?.headerName}</PostHeaderName>
+                        <PostHeaderName >{userData?.headerName ? userData.headerName : userData?.displayName}</PostHeaderName>
                         <PostHeaderPostTime>Published {publishDate.value} {
                             publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}s`
                         } ago</PostHeaderPostTime>
@@ -165,7 +165,7 @@ export default function Post(props: PostProps) {
                     {
                         (user) ? 
                             <UserReplyContainer>
-                                <ProfilePic style={{marginLeft: '10px', marginTop: '20px', marginRight: '-10px'}} alt="Profile picture" src={`${user.photoURL}`} width={30} height={30}/>
+                                <ProfilePic style={{marginLeft: '10px', marginTop: '20px', marginRight: '-10px'}} alt="Profile picture" src={`${userData?.profilePic}`} width={30} height={30}/>
                                 <CreateNewPostInputContainer style={{paddingBottom: '0'}}>
 
                                     <CreateNewPostInput style={{fontSize: '1em', height: '150px'}} placeholder="Write a comment here"></CreateNewPostInput>

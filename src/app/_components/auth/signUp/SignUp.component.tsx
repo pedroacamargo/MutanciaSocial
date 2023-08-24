@@ -150,7 +150,7 @@ export default function SignUpComponent() {
             </SignUpSubmitButtonsContainer>
 
             
-            { isLoading ? <LoadingMomentum display={`${true}`}/> : <></>}
+            { isLoading && <LoadingMomentum display={`${true}`}/> }
 
 
         </SignUpForm>

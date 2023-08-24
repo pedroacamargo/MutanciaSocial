@@ -8,7 +8,7 @@ import { User } from "firebase/auth"
 import { User as UserData } from "@/lib/interfaces/User.interface"
 import { getUserFromAuthDBWithUid } from "../auth/Auth.server"
 import { collection, doc, setDoc, updateDoc } from "firebase/firestore"
-import { db } from "@/utils/firebase"
+import { auth, db } from "@/utils/firebase"
 import { databases } from "@/lib/types/databases.types"
 import { PostsData } from "@/lib/interfaces/PostsData.interface"
 
@@ -23,7 +23,6 @@ export default function CreateNewPost(props: CreateNewPostProps) {
         content: "",
         hasImage: false
     })
-
 
     const handleOnFocus = () => setIsCreateNewPostOpened(!isCreateNewPostOpened);
 
@@ -63,7 +62,7 @@ export default function CreateNewPost(props: CreateNewPostProps) {
 
     return (
         <CreateNewPostContainer isopened={isCreateNewPostOpened} onMouseLeave={() => setIsCreateNewPostOpened(false)}>
-            <ProfilePic style={{marginLeft: '20px', marginTop: '15px'}} alt="Profile picture" src={`${user.photoURL ? user.photoURL : '/Unknown_person.png'}`} width={30} height={30}/>
+            <ProfilePic style={{marginLeft: '20px', marginTop: '15px'}} alt="Profile picture" src={`${auth.currentUser ? auth.currentUser.photoURL : '/Unknown_person.png'}`} width={30} height={30}/>
             <CreateNewPostInputContainer>
 
                 <CreateNewPostInput onFocus={handleOnFocus} onChange={handleOnChange} placeholder="Share something with your followers..." value={formData.content}></CreateNewPostInput>
