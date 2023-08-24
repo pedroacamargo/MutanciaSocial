@@ -278,5 +278,27 @@ export const MobileLink = styled(Link)`
     align-items: center;
     color: black;
     font-size: 1.5em;
+`
 
+export const SurePopUp = styled.div`
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #0000005a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+export const PopUpAlert = styled.div`
+    background-color: white;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 `

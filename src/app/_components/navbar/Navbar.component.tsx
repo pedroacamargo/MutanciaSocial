@@ -15,7 +15,9 @@ import {
     LoggedInAsContainer,
     NavbarLinkDisabled,
     MobileNavbarContainer,
-    MobileLink
+    MobileLink,
+    SurePopUp,
+    PopUpAlert
 } from "./Navbar.styles";
 import { useSelector } from "react-redux";
 import { selectUserIsLoading } from '@/redux/user/user.selector';
@@ -29,12 +31,15 @@ import { auth } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 import { AiFillHome, AiOutlineSearch } from "react-icons/ai";
 import { PiSignInBold } from "react-icons/pi"
+import { PostHeaderName } from "../feed/home.styles";
+import { ButtonBase, ButtonInverted } from "@/app/GlobalStyles.styles";
 
 export default function Navbar() {
     const { user, setUser } = useCurrentUser();
     const { signOutUser } = useSignOut(setUser);
     const isUserLoading = useSelector(selectUserIsLoading);
     const [profilePopUpOpened, setProfilePopUpOpened] = useState(false);
+    const [isPopUpOpened, setIsPopUpOpened] = useState(false);
     const router = useRouter();
 
     const handleSignOut = () => {
@@ -110,7 +115,16 @@ export default function Navbar() {
                         <ProfilePic src="/Unknown_person.png" alt="Mutancia Social Logo" width={45} height={45}/>
                     )}                
                 </MobileLink>
-
+                <PiSignInBold onClick={() => setIsPopUpOpened(true)}></PiSignInBold>
+                <SurePopUp style={{display: isPopUpOpened ? "flex" : "none"}}>
+                    <PopUpAlert>
+                        <PostHeaderName>Do you want to sign out?</PostHeaderName>
+                        <div style={{display: 'flex'}}>
+                            <ButtonBase onClick={handleSignOut}>Yes</ButtonBase>
+                            <ButtonInverted onClick={() => setIsPopUpOpened(false)}>No</ButtonInverted>
+                        </div>
+                    </PopUpAlert>
+                </SurePopUp>
             </MobileNavbarContainer>
         </>
             : 
