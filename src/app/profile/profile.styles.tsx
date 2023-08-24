@@ -327,3 +327,9 @@ export const MobileBio = styled.div`
     padding-bottom: 5px;
     font-family: ${font1};
 `
+
+export const ButtonsWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+`

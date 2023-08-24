@@ -40,14 +40,17 @@ export default function Post(props: PostProps) {
     const postRef = useRef(null);
 
     const calculatePublishData = () => {
-        const actualDate = new Date().getTime();
+        const offSet = new Date().getTimezoneOffset() ;
+        const actualDate = new Date().getTime() + ((offSet / 1000) / 60);
         const postDate = post.postDate;
+        console.log(actualDate)
+        console.log(offSet * 60 * 1000)
 
 
         const secondsDiff = Math.floor((actualDate - postDate) / 1000);
         if (secondsDiff < 60) return setPublishDate({ value: secondsDiff, scope: 'second' });
 
-        const minutesDiff = Math.floor(secondsDiff / 60);
+        const minutesDiff = Math.floor((secondsDiff) / 60);
         if (minutesDiff < 60) return setPublishDate({ value: minutesDiff, scope: 'minute' });
 
         const hourDiff = Math.floor(minutesDiff / 60);
