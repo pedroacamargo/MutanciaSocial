@@ -24,7 +24,7 @@ interface PostProps {
 
 interface PublishDate {
     value: number,
-    scope: 'second' | 'minute' | 'hour' | 'day' | 'month',
+    scope: 'second' | 'minute' | 'hour' | 'day' | 'month' | 'recently',
 }
 
 
@@ -40,14 +40,17 @@ export default function Post(props: PostProps) {
     const postRef = useRef(null);
 
     const calculatePublishData = () => {
-        const offSet = new Date().getTimezoneOffset() ;
-        const actualDate = new Date().getTime() + ((offSet / 1000) / 60);
+        const offSet = new Date().getTimezoneOffset() * 60 * 1000;
+        const actualDate = new Date().getTime() + offSet;
         const postDate = post.postDate;
-        console.log(actualDate)
-        console.log(offSet * 60 * 1000)
-
+        // const localDate = new Date(new Date().getTime() + offSet);
+        // console.log(localDate)
+        // console.log(new Date(post.postDate))
+        // console.log(new Date((new Date().getTime()) + ((new Date().getTimezoneOffset() * 60) * 1000)))
 
         const secondsDiff = Math.floor((actualDate - postDate) / 1000);
+        // console.log(secondsDiff)
+        if (secondsDiff < 0) return setPublishDate({ value: 1, scope: 'recently' })
         if (secondsDiff < 60) return setPublishDate({ value: secondsDiff, scope: 'second' });
 
         const minutesDiff = Math.floor((secondsDiff) / 60);
@@ -128,9 +131,9 @@ export default function Post(props: PostProps) {
                     <ProfilePic alt="Profile pic" src={`${isLoading ? '/Unknown_person.png' : userData?.profilePic}`} height={30} width={30}></ProfilePic>
                     <PostHeaderStats>
                         <PostHeaderName >{userData?.headerName ? userData.headerName : userData?.displayName}</PostHeaderName>
-                        <PostHeaderPostTime>Published {publishDate.value} {
+                        <PostHeaderPostTime>Published {publishDate.scope != 'recently' ? publishDate.value : ''} {
                             publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}s`
-                        } ago</PostHeaderPostTime>
+                        } {publishDate.scope != 'recently' && 'ago'} </PostHeaderPostTime>
                     </PostHeaderStats>
                 </PostHeader>
                 <PostContent>{post.content}</PostContent>
