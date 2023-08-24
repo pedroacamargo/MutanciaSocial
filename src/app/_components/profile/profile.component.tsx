@@ -217,11 +217,11 @@ export default function Profile(props: ProfileProps) {
                 </ProfileSectionWrapper>
                 {   
                     user ? (
-                        userProfile?.uid == user?.uid ? <ButtonInverted style={{width: '70%'}} onClick={handleEdit}>Edit profile</ButtonInverted> : (
-                            followData.follow ? <ButtonBase disabled={disabled} onClick={handleUnfollow} style={{width: '70%'}}>Unfollow</ButtonBase> : <ButtonBase style={{width: '70%'}} disabled={disabled} onClick={handleFollow}>Follow</ButtonBase>
+                        userProfile?.uid == user?.uid ? <ButtonBase style={{width: '100%', borderRadius: '0', margin: '0', height: '20px', fontSize: '.75em'}} onClick={handleEdit}>Edit profile</ButtonBase> : (
+                            followData.follow ? <ButtonBase disabled={disabled} onClick={handleUnfollow} style={{width: '100%', borderRadius: '0', margin: '0', height: '20px', fontSize: '.75em'}}>Unfollow</ButtonBase> : <ButtonBase style={{width: '100%', borderRadius: '0', margin: '0', height: '20px', fontSize: '.75em'}} disabled={disabled} onClick={handleFollow}>Follow</ButtonBase>
                         )
                     ) : (
-                        <ButtonBase onClick={() => router.push('/signin')} style={{width: '70%'}}>Sign in to follow</ButtonBase>
+                        <ButtonBase onClick={() => router.push('/signin')} style={{width: '100%', borderRadius: '0', margin: '0', height: '20px', fontSize: '.75em'}}>Sign in to follow</ButtonBase>
                     )
 
                 }

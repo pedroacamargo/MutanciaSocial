@@ -17,7 +17,6 @@ export const useAuth = () => {
         if (isLogged && auth.currentUser?.uid) {
             const userDoc = await getUserFromAuthDBWithUid(auth.currentUser.uid);
             if (userDoc) {
-                dispatch(fetchUserAsync() as any);
                 Cookies.set("currentUser", JSON.stringify({ user: auth.currentUser, acceptedConditions: userDoc.acceptedConditions }), { secure: true });
                 return auth.currentUser
             }
@@ -34,7 +33,6 @@ export const useAuth = () => {
             
             if (!response.emailError && !response.passwordError && !response.usernameError && auth.currentUser) {
                 updateProfile(auth.currentUser, { displayName: username })
-                dispatch(fetchUserAsync() as any);
             } else {
                 console.log("Sign Up failed :(");
             } 
