@@ -8,7 +8,6 @@ export const ProfileContainer = styled.div`
     justify-content: center;
     align-items: flex-start;
     flex-direction: row;
-    height: 100vh; // remove this later
     padding-top: 70px;
 
     @media screen and (max-width: 780px) {
@@ -27,7 +26,6 @@ export const UserCardWrapper = styled.div`
     width: 400px;
     padding: 50px;
     margin-right: 50px;
-    border-right: 1px solid #cfcfcf;
 
     @media screen and (max-width: 780px) {
         display: none;
@@ -192,12 +190,14 @@ export const Status = styled.span`
 export const ProfileDashboardContainer = styled.div`
     width: 80%;
     max-width: 800px;
-    height: 100vh;
+    height: 87vh;
     padding: 20px;
+    overflow: auto;
     @media screen and (max-width: 780px) {
         display: none;
     }
-
+    border-left: 1px solid #b8b8b8;
+    
 `
 
 export const EditProfileInputLabel = styled.label`

@@ -19,7 +19,7 @@ interface PostProps {
     post: PostsData,
     islast?: boolean,
     paginate?: () => Promise<void>,
-    isForYou: boolean,
+    isForYou?: boolean,
 }
 
 interface PublishDate {

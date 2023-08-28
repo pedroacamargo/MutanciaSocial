@@ -6,17 +6,21 @@ import { BsPeopleFill } from "react-icons/bs";
 import { BiSolidBarChartSquare } from "react-icons/bi";
 import { ButtonBase, ButtonInverted } from "@/app/GlobalStyles.styles";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useFollowers } from "@/hooks/useFollowers";
 import { DocumentData, collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import { databases } from "@/lib/types/databases.types";
 import PopUpUser from "./popupuser.component";
 import { ExploreRecommendedDivider, ExploreRecommendedWarning } from "@/app/explore/explore.styles";
+import { PostsData } from "@/lib/interfaces/PostsData.interface";
+import Post from "../feed/post.component";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { User } from "firebase/auth";
 
 interface ProfileProps {
     params: { uid: string },
     userProfile: UserProfile,
-    user: UserProfile,
+    user: User | null,
     setForms: Dispatch<SetStateAction<{
         headerName: string;
         bio: string;
@@ -37,13 +41,40 @@ export default function Profile(props: ProfileProps) {
     const { params, userProfile, setForms, setEditMode, editMode, user } = props;
     const router = useRouter();
     const [disabled, setDisabled] = useState(false);
-    const { followPOST, followData, followDELETE } = useFollowers(userProfile, user);
+    const { followPOST, followData, followDELETE } = useFollowers(userProfile, userProfile);
     const [popUp, setPopUp] = useState(false);
     const [popUpData, setPopUpData] = useState<PopUpData>({ type: null, data: { followers: null, following: null } })
     const [lastElementFromQueryForPagination, setLastElementFromQueryForPagination] = useState<{following?: DocumentData, follower?: DocumentData}>();
+    const [postsArray, setPostsArray] = useState<PostsData[]>([])
+    const [lastPost, setLastPost] = useState<DocumentData | null>();
+    console.log(postsArray)
 
+    useEffect(() => {
+        const getPosts = async () => {
+            const q = query(collection(db, databases.postsDB), where("postId", "in", userProfile.posts), limit(5));
+                    const querySnapshot = await getDocs(q);
+                    let array: PostsData[] = [];
+                    querySnapshot.forEach((doc) => {
+                        array.push(doc.data() as PostsData);
+                    });
+                    setPostsArray(array);
+                    setLastPost(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        }
+        getPosts();
+    }, []);
 
-    
+    const paginatePosts = async () => {
+        if (lastPost == undefined) return;
+        const next = query(collection(db, databases.postsDB), startAfter(lastPost), where("postId", "in", userProfile.posts), limit(5));
+        const querySnapshot = await getDocs(next);
+        let array: PostsData[] = postsArray;
+        querySnapshot.docs.map((post) => {
+            array.push(post.data() as PostsData);
+        })
+        setLastPost(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        setPostsArray(array);
+    }
+
     const handleEdit = () => {
         if (userProfile) {
             setEditMode(!editMode);
@@ -183,7 +214,13 @@ export default function Profile(props: ProfileProps) {
             </UserCardWrapper>
 
             <ProfileDashboardContainer>
-                Here will be the others status
+                { (user) &&
+                    postsArray.map((post, index) => {
+                        return (
+                            <Post key={index} post={post} user={user} islast={index === postsArray.length - 1} paginate={paginatePosts}/>
+                        );
+                    })
+                }
             </ProfileDashboardContainer>
 
 
