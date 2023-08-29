@@ -80,8 +80,6 @@ export default function CreateNewPost(props: CreateNewPostProps) {
                 </CreateNewPostInputButtonsContainer>
 
             </CreateNewPostInputContainer>
-            
-
 
             <LoadingBar completion={loadingCompletion}></LoadingBar>
         </CreateNewPostContainer>
