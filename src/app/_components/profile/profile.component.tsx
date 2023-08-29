@@ -20,7 +20,8 @@ import { User } from "firebase/auth";
 interface ProfileProps {
     params: { uid: string },
     userProfile: UserProfile,
-    user: User | null,
+    user: UserProfile | null,
+    authUser: User | null,
     setForms: Dispatch<SetStateAction<{
         headerName: string;
         bio: string;
@@ -38,10 +39,10 @@ interface PopUpData {
 }
 
 export default function Profile(props: ProfileProps) {
-    const { params, userProfile, setForms, setEditMode, editMode, user } = props;
+    const { params, userProfile, setForms, setEditMode, editMode, user, authUser } = props;
     const router = useRouter();
     const [disabled, setDisabled] = useState(false);
-    const { followPOST, followData, followDELETE } = useFollowers(userProfile, userProfile);
+    const { followPOST, followData, followDELETE } = useFollowers(userProfile, user);
     const [popUp, setPopUp] = useState(false);
     const [popUpData, setPopUpData] = useState<PopUpData>({ type: null, data: { followers: null, following: null } })
     const [lastElementFromQueryForPagination, setLastElementFromQueryForPagination] = useState<{following?: DocumentData, follower?: DocumentData}>();
@@ -51,14 +52,16 @@ export default function Profile(props: ProfileProps) {
 
     useEffect(() => {
         const getPosts = async () => {
-            const q = query(collection(db, databases.postsDB), where("postId", "in", userProfile.posts), orderBy("postDate", "desc"), limit(5));
-                    const querySnapshot = await getDocs(q);
-                    let array: PostsData[] = [];
-                    querySnapshot.forEach((doc) => {
-                        array.push(doc.data() as PostsData);
-                    });
-                    setPostsArray(array);
-                    setLastPost(querySnapshot.docs[querySnapshot.docs.length - 1]);
+            if (userProfile.posts && userProfile.posts.length > 0) {
+                const q = query(collection(db, databases.postsDB), where("postId", "in", userProfile.posts), orderBy("postDate", "desc"), limit(5));
+                const querySnapshot = await getDocs(q);
+                let array: PostsData[] = [];
+                querySnapshot.forEach((doc) => {
+                    array.push(doc.data() as PostsData);
+                });
+                setPostsArray(array);
+                setLastPost(querySnapshot.docs[querySnapshot.docs.length - 1]);
+            }
         }
         getPosts();
     }, []);
@@ -176,8 +179,7 @@ export default function Profile(props: ProfileProps) {
                 <PictureContainer>
                 
                     <ProfilePicture src={
-                        `${params.uid == userProfile?.uid ? auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
-                            : userProfile?.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
+                        `${userProfile?.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
                     } />
 
                     <UserStatusPinPop>
@@ -214,12 +216,12 @@ export default function Profile(props: ProfileProps) {
             </UserCardWrapper>
 
             <ProfileDashboardContainer>
-                { (user) &&
+                { (user) && postsArray.length > 0 ?
                     postsArray.map((post, index) => {
                         return (
-                            <Post key={index} post={post} user={user} islast={index === postsArray.length - 1} paginate={paginatePosts}/>
+                            <Post key={index} post={post} user={authUser} islast={index === postsArray.length - 1} paginate={paginatePosts}/>
                         );
-                    })
+                    }) : <ExploreRecommendedWarning>@{userProfile.displayName} hasn&apos;t posted anything yet.</ExploreRecommendedWarning>
                 }
             </ProfileDashboardContainer>
 
@@ -264,12 +266,12 @@ export default function Profile(props: ProfileProps) {
                 }
 
                 <MobileProfileDashboardContainer>
-                { (user) &&
+                { (user) && postsArray.length > 0 ?
                     postsArray.map((post, index) => {
                         return (
-                            <Post key={index} post={post} user={user} islast={index === postsArray.length - 1} paginate={paginatePosts}/>
+                            <Post key={index} post={post} user={authUser} islast={index === postsArray.length - 1} paginate={paginatePosts}/>
                         );
-                    })
+                    }) : <ExploreRecommendedWarning>@{userProfile.displayName} hasn&apos;t posted anything yet.</ExploreRecommendedWarning>
                 }
                 </MobileProfileDashboardContainer>
             </MobileContainer>

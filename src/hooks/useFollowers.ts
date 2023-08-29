@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
  * @param uid - User which you would like to apply the action
  * @param currentUser - The current user (Stored in the 'authentication' database)
  */
-export const useFollowers =  (userProfile: User, currentUser: User | undefined) => {
+export const useFollowers =  (userProfile: User, currentUser: User | undefined | null) => {
     const [followData, setFollowData] = useState<{follow: boolean | undefined, followersAmount: number}>({ follow: undefined, followersAmount: userProfile.followersAmount});
 
     useEffect(() => {

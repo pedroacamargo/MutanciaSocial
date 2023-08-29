@@ -257,6 +257,7 @@ export const EditProfilePictureInput = styled.input`
 export const PopUp = styled.div`
     width: 80%;
     height: 80%;
+    max-width: 1000px;
     background-color: #ffffffd1;
     box-shadow: 1px 1px 10px #0000007a;
     border-radius: 5px;

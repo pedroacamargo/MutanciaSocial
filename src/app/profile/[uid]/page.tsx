@@ -18,6 +18,7 @@ export default function Page({ params }: { params: { uid: string }}) {
     const [errorsObject, setErrorsObject] = useState({ fileTooBig: false, nameTooBig: false, bioTooBig: false, userNotFound: false })
     const [editMode, setEditMode] = useState<boolean>(false);
     const [userProfile, setUserProfile] = useState<User | undefined>(undefined);
+    const [currentUserProfile, setCurrentUserProfile] = useState<User | null>(null);
     const [forms, setForms] = useState({ headerName: '', bio: '' });
     const currentUser = useCurrentUser();
     const isUserLoading = useSelector(selectUserIsLoading);
@@ -25,9 +26,10 @@ export default function Page({ params }: { params: { uid: string }}) {
     useEffect(() => {
         const getUser = async () => {
             const user = await getUserFromAuthDBWithUid(params.uid) as User | undefined;
-
+            const currentUserProfile = auth.currentUser && await getUserFromAuthDBWithUid(auth.currentUser.uid) as User;
             if (user) {
                 setUserProfile(user);
+                setCurrentUserProfile(currentUserProfile);
             } else {
 
                 const errorObj = {
@@ -56,7 +58,8 @@ export default function Page({ params }: { params: { uid: string }}) {
                     editMode={editMode}
                     setEditMode={setEditMode}
                     params={params}
-                    user={currentUser.user}
+                    user={currentUserProfile}
+                    authUser={currentUser.user}
                     setForms={setForms}
                     userProfile={userProfile}
                 />
