@@ -1,5 +1,5 @@
 'use client'
-import { AccountStatusWrapper, FollowersStatus, PictureContainer, ProfileContainer, ProfileDashboardContainer, ProfilePicture, UserCardBio, UserCardStatusWrapper, UserCardWrapper, UserDisplayName, UserFirstName, UserStatusPinEmoji, UserStatusPinPop, UserStatusPinPopPhrase, PopUp, Status, ClosePopUp, MobileContainer, ProfileSectionWrapper, MobileProfileStatsWrapper, MobileBio } from "@/app/profile/profile.styles";
+import { AccountStatusWrapper, FollowersStatus, PictureContainer, ProfileContainer, ProfileDashboardContainer, ProfilePicture, UserCardBio, UserCardStatusWrapper, UserCardWrapper, UserDisplayName, UserFirstName, UserStatusPinEmoji, UserStatusPinPop, UserStatusPinPopPhrase, PopUp, Status, ClosePopUp, MobileContainer, ProfileSectionWrapper, MobileProfileStatsWrapper, MobileBio, MobileProfileDashboardContainer } from "@/app/profile/profile.styles";
 import { auth, db, } from "@/utils/firebase";
 import { User as UserProfile } from "@/lib/interfaces/User.interface";
 import { BsPeopleFill } from "react-icons/bs";
@@ -51,7 +51,7 @@ export default function Profile(props: ProfileProps) {
 
     useEffect(() => {
         const getPosts = async () => {
-            const q = query(collection(db, databases.postsDB), where("postId", "in", userProfile.posts), limit(5));
+            const q = query(collection(db, databases.postsDB), where("postId", "in", userProfile.posts), orderBy("postDate", "desc"), limit(5));
                     const querySnapshot = await getDocs(q);
                     let array: PostsData[] = [];
                     querySnapshot.forEach((doc) => {
@@ -65,7 +65,7 @@ export default function Profile(props: ProfileProps) {
 
     const paginatePosts = async () => {
         if (lastPost == undefined) return;
-        const next = query(collection(db, databases.postsDB), startAfter(lastPost), where("postId", "in", userProfile.posts), limit(5));
+        const next = query(collection(db, databases.postsDB), where("postId", "in", userProfile.posts), orderBy("postDate", "desc"), startAfter(lastPost), limit(5));
         const querySnapshot = await getDocs(next);
         let array: PostsData[] = postsArray;
         querySnapshot.docs.map((post) => {
@@ -176,7 +176,7 @@ export default function Profile(props: ProfileProps) {
                 <PictureContainer>
                 
                     <ProfilePicture src={
-                        `${params.uid == user?.uid ? auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
+                        `${params.uid == userProfile?.uid ? auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
                             : userProfile?.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
                     } />
 
@@ -247,7 +247,7 @@ export default function Profile(props: ProfileProps) {
 
 
                     </MobileProfileStatsWrapper>
-                    <ProfilePicture style={{width: '125px', height: '100%', borderRadius: '0'}} src={
+                    <ProfilePicture style={{width: '125px', height: '175px', borderRadius: '0'}} src={
                         `${params.uid == user?.uid ? auth.currentUser?.photoURL ? auth.currentUser.photoURL : '/Unknown_person.jpg'
                             : userProfile?.profilePic ? userProfile.profilePic : '/Unknown_person.jpg'}`
                     }></ProfilePicture>
@@ -262,6 +262,16 @@ export default function Profile(props: ProfileProps) {
                     )
 
                 }
+
+                <MobileProfileDashboardContainer>
+                { (user) &&
+                    postsArray.map((post, index) => {
+                        return (
+                            <Post key={index} post={post} user={user} islast={index === postsArray.length - 1} paginate={paginatePosts}/>
+                        );
+                    })
+                }
+                </MobileProfileDashboardContainer>
             </MobileContainer>
 
 

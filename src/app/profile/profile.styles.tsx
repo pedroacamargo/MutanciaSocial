@@ -200,6 +200,19 @@ export const ProfileDashboardContainer = styled.div`
     
 `
 
+export const MobileProfileDashboardContainer = styled.div`
+    width: 100%;
+    max-width: 800px;
+    height: 87vh;
+    padding: 20px;
+    display: none;
+    box-sizing: border-box;
+    @media screen and (max-width: 780px) {
+        display: block;
+    }
+`
+
+
 export const EditProfileInputLabel = styled.label`
     font-size: 1em;
     font-weight: bold;
